@@ -1,5 +1,5 @@
-import smbus
-import
+import smbus #Python 3
+import time
 
 bus = smbus.SMBus(1) #Pass
 
@@ -14,4 +14,5 @@ def readData():
 
 while True:
     data = readData()
+    print(data)
     time.sleep(1)
