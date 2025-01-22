@@ -10,9 +10,9 @@ class writeFailure(Exception):
 class i2cio:
   def __init__(self, address):
     self.bus = smbus.SMBus(1)
-    self.target_address = 0x08
+    self.target_address = address
 
-  def writeData(self,data):
+  def writeData(self, data -> [int]):
     byte_data = [ord(c) for c in data]
     cmd = [0x00]
     try:
