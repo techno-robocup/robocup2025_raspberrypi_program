@@ -1,5 +1,5 @@
 import time
-from i2cio.i2cio import i2cio  # 正しいインポート形式で
+from i2cio.i2cio     import i2cio  # 正しいインポート形式で
 
 if __name__ == "__main__":
     i2c_device = i2cio(0x08)  # I2Cアドレスを設定
