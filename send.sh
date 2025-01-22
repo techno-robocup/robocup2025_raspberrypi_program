@@ -1,0 +1,1 @@
+rsync -av --delete . robo@roboberry.local:i2ctest
