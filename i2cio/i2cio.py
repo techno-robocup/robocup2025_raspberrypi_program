@@ -1,4 +1,5 @@
 import smbus
+import time
 
 class readFailure(Exception):
   pass
