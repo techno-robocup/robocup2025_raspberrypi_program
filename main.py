@@ -11,9 +11,6 @@ if __name__ == "__main__":
             # メッセージを送信
             i2c_device.writeData(message)
 
-            # データを受信（例：最大16バイト）
-            data = i2c_device.readData(num_bytes=16)  # 読み取るバイト数を指定
-            print(f"Received data: {data}")
         except Exception as e:
             print(f"Error: {e}")
 
