@@ -16,13 +16,13 @@ class i2cio:
     byte_data = [ord(c) for c in data]
     cmd = [0x00]
     try:
-      self.bus.write_i2c_block_data(ADDRESS,cmd,byte_data)
+      self.bus.write_i2c_block_data(self.target_address,cmd,byte_data)
     except:
       raise writeFailure
 
   def readData(self):
     try:
-      data = self.bus.read_byte(address)
+      data = self.bus.read_byte(self.target_address)
       recived_message = ''.join(chr(b)for b in data if b != 0)
     except:
       raise readFailure
