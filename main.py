@@ -7,7 +7,7 @@ ADDRESS = 0x08
 def writeData():
     byte_data = [ord(c) for c in data]
     try:
-        bus.write_i2c_block_data(ADDRESS, ,0x00,byte_data)
+        bus.write_i2c_block_data(ADDRESS,0x00,byte_data)
     except:
         print("Error cannot write data")
         return -1
