@@ -8,7 +8,7 @@ if __name__ == "__main__":
         message = input("Input message: ")
 
         try:
-            send_data = lsit(message.split())
+            send_data = list(message.split())
             send_data = [ int(i) for i in range(send_data) ]
             i2c_device.writeData(send_data)
 
