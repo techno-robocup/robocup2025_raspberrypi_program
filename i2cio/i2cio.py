@@ -14,7 +14,7 @@ class i2cio:
 
   def writeData(self, data:list[int]):
     cmd = [0x00]
-    self.bus.write_i2c_block_data(self.target_address,cmd,byte_data)
+    self.bus.write_i2c_block_data(self.target_address,cmd,data)
 
   def readData(self):
     data = self.bus.read_byte(self.target_address)
