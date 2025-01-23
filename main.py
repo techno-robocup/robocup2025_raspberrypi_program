@@ -2,7 +2,7 @@ import time
 from i2cio.i2cio     import i2cio
 
 if __name__ == "__main__":
-    i2c_device = i2cio(0x08)  # I2Cアドレスを設定
+    i2c_device = i2cio(0x08)
 
     while True:
         message = input("Input message: ")
