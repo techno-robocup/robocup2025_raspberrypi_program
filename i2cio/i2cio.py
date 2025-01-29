@@ -17,11 +17,10 @@ class i2cio:
     #(address(int), cmd(int), data(list[int]))
     self.bus.write_i2c_block_data(self.target_address,cmd,data)
 
-  def returnbits(self,cmd:int):
-    if cmd == 0x03:
-      self.bus.write_i2c_byte(self.target_address,0x88)
-
   def readData(self):
-    data = self.bus.read_byte(self.target_address)
-    recived_message = ''.join(chr(b)for b in data if b != 0)
+    data = 0x00
+    try:
+      data = self.bus.read_byte(self.target_address)
+    except:
+      return None
     return data
