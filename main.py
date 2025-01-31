@@ -12,10 +12,12 @@ if __name__ == "__main__":
                 continue
             if data == 0x01:
                 break
-        a, b = map(int, input("Input two num: ").split())
-        i2c_device.writeData([a, b])
+        a = list(map(int, input("Input two num: ").split()))
+        i2c_device.writeData(a)
         while True:
             data = i2c_device.readData()
             if data is None:
+                continue
+            if data == 0x00:
                 continue
             break
