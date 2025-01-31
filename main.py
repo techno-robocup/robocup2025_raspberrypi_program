@@ -1,6 +1,6 @@
 import time
 import random
-from i2cio.i2cio     import i2cio
+from i2cio.i2cio import i2cio
 
 if __name__ == "__main__":
     i2c_device = i2cio(0x08)
