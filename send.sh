@@ -1,1 +1,1 @@
-rsync -av --delete . robo@roboberry.local:i2ctest
+rsync -av --delete --exclude .direnv/ . robo@roboberry.local:i2ctest
