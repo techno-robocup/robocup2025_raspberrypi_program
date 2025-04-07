@@ -33,9 +33,9 @@ class Camera:
         self.lores_size = lores_size
         self.pre_callback_func = pre_callback_func
         self.cam = Picamera2(self.PORT)
-        cam.preview_configuration.main.size = self.size
-        cam.preview_configuration.main.format = self.format
-        cam.configure(
+        self.cam.preview_configuration.main.size = self.size
+        self.cam.preview_configuration.main.format = self.format
+        self.cam.configure(
             cam.create_preview_configuration(
                 main={
                     "size": self.size,
@@ -46,8 +46,8 @@ class Camera:
                     "format": self.format
                 },
             ))
-        cam.pre_callback = self.pre_callback_func
-        cam.set_controls(self.controls)
+        self.cam.pre_callback = self.pre_callback_func
+        self.cam.set_controls(self.controls)
 
     def start_cam(self):
         """
@@ -56,7 +56,7 @@ class Camera:
     This method starts the camera using the configuration set during initialization.
     """
 
-        cam.start()
+        self.cam.start()
 
     def stop_cam(self):
         """
@@ -65,7 +65,7 @@ class Camera:
     This method stops the camera from capturing video using the configuration set during initialization.
     """
 
-        cam.stop()
+        self.cam.stop()
 
 from libcamera import controls
 
