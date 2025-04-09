@@ -1,7 +1,6 @@
 from typing import Callable
 from picamera2 import Picamera2
-import settings
-
+import modules.settings
 
 class Camera:
 
@@ -14,7 +13,7 @@ class Camera:
 
       Args:
           PORT (int): The port number for the camera.
-          controls (dict[str, any]): A dictionary of camera control settings.
+          controls (dict[str, any]): A dictionary of camera control modules.settings.
           size (tuple[int, int]): The resolution size for the main camera configuration.
           formats (str): The format for the camera output.
           lores_size (tuple[int, int]): The resolution size for the low-resolution camera configuration.
@@ -33,7 +32,7 @@ class Camera:
         self.cam.preview_configuration.main.size = self.size
         self.cam.preview_configuration.main.format = self.format
         self.cam.configure(
-            cam.create_preview_configuration(
+            self.cam.create_preview_configuration(
                 main={
                     "size": self.size,
                     "format": self.format
@@ -71,17 +70,17 @@ class Camera:
 
 
 Rescue_Camera = Camera(
-    PORT=settings.Rescue_Camera_PORT,
-    controls=settings.Rescue_Camera_Controls,
-    size=settings.Rescue_Camera_size,
-    formats=settings.Rescue_Camera_formats,
-    lores_size=settings.Rescue_Camera_lores_size,
-    pre_callback_func=settings.Rescue_Camera_Pre_Callback_func)
+    PORT=modules.settings.Rescue_Camera_PORT,
+    controls=modules.settings.Rescue_Camera_Controls,
+    size=modules.settings.Rescue_Camera_size,
+    formats=modules.settings.Rescue_Camera_formats,
+    lores_size=modules.settings.Rescue_Camera_lores_size,
+    pre_callback_func=modules.settings.Rescue_Camera_Pre_Callback_func)
 
 Linetrace_Camera = Camera(
-    PORT=settings.Linetrace_Camera_PORT,
-    controls=settings.Linetrace_Camera_Controls,
-    size=settings.Linetrace_Camera_size,
-    formats=settings.Linetrace_Camera_formats,
-    lores_size=settings.Linetrace_Camera_lores_size,
-    pre_callback_func=settings.Linetrace_Camera_Pre_Callback_func)
+    PORT=modules.settings.Linetrace_Camera_PORT,
+    controls=modules.settings.Linetrace_Camera_Controls,
+    size=modules.settings.Linetrace_Camera_size,
+    formats=modules.settings.Linetrace_Camera_formats,
+    lores_size=modules.settings.Linetrace_Camera_lores_size,
+    pre_callback_func=modules.settings.Linetrace_Camera_Pre_Callback_func)
