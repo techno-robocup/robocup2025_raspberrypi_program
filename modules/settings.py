@@ -1,5 +1,6 @@
 from libcamera import controls
 from picamera2 import MappedArray
+import cv2
 
 DEBUG_MODE = False
 
@@ -9,8 +10,10 @@ def Rescue_Camera_Pre_callback(request):
 
 
 def Linetrace_Camera_Pre_callback(request):
-    pass
-
+    with MappedArray(request, "lores") as m:
+        current = m.array
+        cv2.imshow("Lowres", current)
+        cv2.waitKey(1)
 
 Rescue_Camera_PORT = 1
 Rescue_Camera_Controls = {
