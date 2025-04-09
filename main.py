@@ -1,23 +1,10 @@
 import time
 import random
 from modules.i2cio import i2cio
+from modules.camera import Rescue_Camera, Linetrace_Camera
+from time import sleep
 
 if __name__ == "__main__":
-    i2c_device = i2cio(0x08)
-    while True:
-        # Wait while next available
-        while True:
-            data = i2c_device.readData()
-            if data is None:
-                continue
-            if data == 0x01:
-                break
-        a = list(map(int, input("Input two num: ").split()))
-        i2c_device.writeData(a)
-        while True:
-            data = i2c_device.readData()
-            if data is None:
-                continue
-            if data == 0x00:
-                continue
-            break
+    Linetrace_Camera.start_cam()
+    sleep(1)
+    Linetrace_Camera.stop_cam()
