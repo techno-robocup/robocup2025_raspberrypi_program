@@ -1,4 +1,5 @@
 from libcamera import controls
+from picamera2 import MappedArray
 
 DEBUG_MODE = False
 
