@@ -4,6 +4,8 @@ import cv2
 
 DEBUG_MODE = False
 
+if DEBUG_MODE:
+    callbackcnt=0
 
 def Rescue_Camera_Pre_callback(request):
     pass
