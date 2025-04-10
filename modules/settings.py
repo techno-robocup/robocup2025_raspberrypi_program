@@ -14,8 +14,6 @@ def Rescue_Camera_Pre_callback(request):
 def Linetrace_Camera_Pre_callback(request):
     with MappedArray(request, "lores") as m:
         current = m.array
-        cv2.imshow("Lowres", current)
-        cv2.waitKey(1)
 
 Rescue_Camera_PORT = 1
 Rescue_Camera_Controls = {
