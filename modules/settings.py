@@ -12,6 +12,8 @@ def Rescue_Camera_Pre_callback(request):
 
 
 def Linetrace_Camera_Pre_callback(request):
+    if DEBUG_MODE:
+        print("precallback called")
     with MappedArray(request, "lores") as m:
         current = m.array
         if DEBUG_MODE:
