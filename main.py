@@ -6,5 +6,6 @@ from time import sleep
 
 if __name__ == "__main__":
     Linetrace_Camera.start_cam()
-    sleep(1)
+    while True:
+        pass
     Linetrace_Camera.stop_cam()
