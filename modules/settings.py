@@ -14,6 +14,11 @@ def Rescue_Camera_Pre_callback(request):
 def Linetrace_Camera_Pre_callback(request):
     with MappedArray(request, "lores") as m:
         current = m.array
+        if DEBUG_MODE:
+            callbackcnt += 1
+            if callbackcnt % 10 == 0:
+                image_bgr = cv2.cvtColor(current, cv2.COLOR_RGB2BGR)
+                cv2.imwrite(f"bin/{str(callbackcnt)}.jpg", image_bgr)
 
 Rescue_Camera_PORT = 1
 Rescue_Camera_Controls = {
