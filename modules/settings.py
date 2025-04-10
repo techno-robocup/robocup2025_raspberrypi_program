@@ -2,10 +2,9 @@ from libcamera import controls
 from picamera2 import MappedArray
 import cv2
 
-DEBUG_MODE = False
+DEBUG_MODE = True
 
-if DEBUG_MODE:
-    callbackcnt=0
+callbackcnt=0
 
 def Rescue_Camera_Pre_callback(request):
     pass
