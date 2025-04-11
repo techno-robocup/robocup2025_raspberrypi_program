@@ -4,7 +4,7 @@ import cv2
 import time
 
 DEBUG_MODE = True
-
+Black_White_Threshold = 50
 
 def Rescue_Camera_Pre_callback(request):
     pass
@@ -12,12 +12,13 @@ def Rescue_Camera_Pre_callback(request):
 
 def Linetrace_Camera_Pre_callback(request):
     if DEBUG_MODE:
-        print("precallback called")
+        print("precallback called", str(time.time()))
     with MappedArray(request, "lores") as m:
         current = m.array
         if DEBUG_MODE:
-            image_bgr = cv2.cvtColor(current, cv2.COLOR_RGB2BGR)
-            cv2.imwrite(f"bin/{str(int(time.time()))}.jpg", image_bgr)
+            image_bgr = cv2.cvtColor(current, cv2.COLOR_RGB2GRAY)
+            _, frame = cv2.threshold(image_bgr, Black_White_Threshold, 255, cv2.THRESH_BINARY)
+            cv2.imwrite(f"bin/{str(time.time())}.jpg", frame)
 
 Rescue_Camera_PORT = 1
 Rescue_Camera_Controls = {
