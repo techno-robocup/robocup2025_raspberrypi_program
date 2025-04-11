@@ -4,7 +4,7 @@ import cv2
 import time
 
 DEBUG_MODE = True
-Black_White_Threshold = 50
+Black_White_Threshold = 100
 
 def Rescue_Camera_Pre_callback(request):
     pass
