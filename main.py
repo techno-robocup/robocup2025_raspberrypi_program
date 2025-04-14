@@ -14,7 +14,7 @@ Rescue_Camera = modules.camera.Camera(
     lores_size=modules.settings.Rescue_Camera_lores_size,
     pre_callback_func=modules.settings.Rescue_Camera_Pre_Callback_func)
 
-Linetrace_Camera = Camera(
+Linetrace_Camera = modules.camera.Camera(
     PORT=modules.settings.Linetrace_Camera_PORT,
     controls=modules.settings.Linetrace_Camera_Controls,
     size=modules.settings.Linetrace_Camera_size,
