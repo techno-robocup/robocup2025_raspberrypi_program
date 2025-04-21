@@ -5,7 +5,6 @@ import modules.camera
 import modules.settings
 from time import sleep
 
-
 Rescue_Camera = modules.camera.Camera(
     PORT=modules.settings.Rescue_Camera_PORT,
     controls=modules.settings.Rescue_Camera_Controls,
@@ -23,7 +22,7 @@ Linetrace_Camera = modules.camera.Camera(
     pre_callback_func=modules.settings.Linetrace_Camera_Pre_Callback_func)
 
 if __name__ == "__main__":
-    Linetrace_Camera.start_cam()
-    while True:
-        pass
-    Linetrace_Camera.stop_cam()
+  Linetrace_Camera.start_cam()
+  while True:
+    pass
+  Linetrace_Camera.stop_cam()
