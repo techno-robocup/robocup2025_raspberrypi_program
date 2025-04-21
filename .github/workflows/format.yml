@@ -1,0 +1,32 @@
+name: Format Python Code
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '**.py'
+      - '.style.yapf'
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+
+    - name: Install YAPF
+      run: pip install yapf
+
+    - name: Format Python files
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        yapf --style .style.yapf --in-place --recursive .
+        git add .
+        git diff --quiet && git diff --staged --quiet || (git commit -m "style: format Python files with YAPF" && git push) 
