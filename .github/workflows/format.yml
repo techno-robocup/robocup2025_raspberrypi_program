@@ -16,13 +16,22 @@ jobs:
       with:
         python-version: '3.x'
 
+    - name: Cache pip packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-v1
+        restore-keys: |
+          ${{ runner.os }}-pip-v1
+
     - name: Install YAPF
-      run: pip install yapf
+      run: |
+        pip install yapf
 
     - name: Format Python files
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
         yapf --style .style.yapf --in-place --recursive --exclude "modules/*.py" .
-        git add .
+        git add *.py
         git diff --quiet && git diff --staged --quiet || (git commit -m "style: format Python files with YAPF" && git push) 
