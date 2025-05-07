@@ -1,4 +1,6 @@
 name: Ruff lint
+permissions:
+  contents: write
 
 on:
   push:
