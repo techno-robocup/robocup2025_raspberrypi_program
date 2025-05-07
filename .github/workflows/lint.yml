@@ -29,4 +29,14 @@ jobs:
 
     - name: Lint Python files
       run: |
-        ruff check .
+        ruff check . --fix
+    
+    - name: Push when lint errors are fixed
+      run: |
+        if [ -n "$(git status --porcelain)" ]; then
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .
+          git commit -m 'Fix lint errors'
+          git push
+        fi
