@@ -1,9 +1,6 @@
-import time
-import random
 import modules.i2cio
 import modules.camera
 import modules.settings
-from time import sleep
 
 Rescue_Camera = modules.camera.Camera(
     PORT=modules.settings.Rescue_Camera_PORT,
