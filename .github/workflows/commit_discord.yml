@@ -9,4 +9,4 @@ jobs:
     steps:
       - name: Send Discord Message
         run: |
-          curl -X POST -H "Content-Type: application/json" -d '${{ github.actor}}が${{ github.event.repository.name }}にpushした！ありがとう！' ${{ secrets.DISCORD_WEBHOOK_URL }}
+          curl -X POST -F 'content=${{ github.actor}}が${{ github.event.repository.name }}にpushした！ありがとう！' "${{ secrets.DISCORD_WEBHOOK_URL }}"
