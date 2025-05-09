@@ -10,4 +10,5 @@ jobs:
       - name: Send Discord Message
         run: |
           curl -X POST -F 'content=${{ github.actor}}が${{ github.event.repository.name }}にpushした！ありがとう！
-          コミットメッセージ：${{ github.event.head_commit.message }}' "${{ secrets.DISCORD_WEBHOOK_URL }}"
+          コミットメッセージ：${{ github.event.head_commit.message }}
+          コミットURL：https://github.com/${{ github.repository }}/commit/${{ github.sha }}' "${{ secrets.DISCORD_WEBHOOK_URL }}"
