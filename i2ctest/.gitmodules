@@ -1,3 +1,0 @@
-[submodule "raspberrypi module"]
-	path = modules
-	url = https://github.com/techno-robocup/robocup2025_raspberrypi_library
