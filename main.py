@@ -31,5 +31,5 @@ def serial_read():
 if __name__ == "__main__":
   Linetrace_Camera.start_cam()
   while True:
-    serial_read()
+    pass
   Linetrace_Camera.stop_cam()
