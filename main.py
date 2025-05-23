@@ -1,6 +1,3 @@
-import modules.i2cio
-import modules.camera
-import modules.settings
 import serial
 
 # Rescue_Camera = modules.camera.Camera(
