@@ -25,6 +25,8 @@ logger.info("PROGRAM START")
 
 if __name__ == "__main__":
   logger.debug("PROCESS STARTED")
+  uart_io = modules.uart.UART_CON()
+  uart_io.init_connection()
   # Linetrace_Camera.start_cam()
   while True:
     pass
