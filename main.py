@@ -1,6 +1,12 @@
 import serial
 from serial.tools import list_ports
 import modules.uart
+import modules.log
+logger = get_logger()
+
+logger.info("PROGRAM START")
+
+
 
 # Rescue_Camera = modules.camera.Camera(
 #     PORT=modules.settings.Rescue_Camera_PORT,
@@ -20,6 +26,7 @@ import modules.uart
 
 
 if __name__ == "__main__":
+  logger.debug("PROCESS STARTED")
   # Linetrace_Camera.start_cam()
   while True:
     pass
