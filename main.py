@@ -1,7 +1,4 @@
 import serial
-import modules.camera
-import modules.settings
-import modules.i2cio
 from serial.tools import list_ports
 
 # Rescue_Camera = modules.camera.Camera(
