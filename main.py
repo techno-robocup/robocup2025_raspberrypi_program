@@ -1,5 +1,6 @@
 import serial
 from serial.tools import list_ports
+import modules.uart
 
 # Rescue_Camera = modules.camera.Camera(
 #     PORT=modules.settings.Rescue_Camera_PORT,
