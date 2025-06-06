@@ -2,7 +2,7 @@ import serial
 from serial.tools import list_ports
 import modules.uart
 import modules.log
-logger = get_logger()
+logger = modules.log.get_logger()
 
 logger.info("PROGRAM START")
 
