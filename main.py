@@ -2,6 +2,8 @@ import modules.uart
 import modules.log
 from modules.uart import Message
 import time
+import traceback
+import sys
 
 logger = modules.log.get_logger()
 
@@ -42,10 +44,12 @@ if __name__ == "__main__":
       message_id += 1
     # Linetrace_Camera.stop_cam()
   except KeyboardInterrupt:
-    logger.debug("STOPPING PROCESS BY KeyboardInterrupt")
+    logger.info(f"STOPPING PROCESS BY KeyboardInterrupt at line {sys.exc_info()[2].tb_lineno}")
+    logger.info(f"Traceback:\n{traceback.format_exc()}")
   except Exception as e:
-    logger.error(f"An error occurred: {e}")
-    logger.error(f"Traceback: {traceback.format_exc()}")
+    logger.error(f"Critical error: {str(e)}")
+    logger.error(f"Error occurred at line {sys.exc_info()[2].tb_lineno}")
+    logger.error(f"Traceback:\n{traceback.format_exc()}")
   finally:
-    logger.debug("PROCESS ENDED")
+    logger.info("PROCESS ENDED")
     uart_io.close()
