@@ -1,5 +1,7 @@
 import modules.uart
 import modules.log
+from modules.uart import Message
+
 logger = modules.log.get_logger()
 
 logger.info("PROCESS STARTED")
@@ -31,8 +33,7 @@ if __name__ == "__main__":
     # Linetrace_Camera.start_cam()
     while True:
       logger.debug(f"SENDING TEST MESSAGE {message_id}")
-      uart_io.send_message(f"{message_id}", "TEST MESSAGE")
-      
+      uart_io.send_message(Message(message_id, "TEST MESSAGE"))
       message_id += 1
     # Linetrace_Camera.stop_cam()
   except KeyboardInterrupt:
