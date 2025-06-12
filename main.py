@@ -35,6 +35,10 @@ if __name__ == "__main__":
       logger.debug(f"SENDING TEST MESSAGE {message_id}")
       uart_io.send_message(Message(message_id, "TEST MESSAGE"))
       message_id += 1
+      time.sleep(1)
+      logger.debug(f"RECEIVING MESSAGE {message_id}")
+      message = uart_io.receive_message()
+      logger.debug(f"RECEIVED MESSAGE {message}")
     # Linetrace_Camera.stop_cam()
   except KeyboardInterrupt:
     logger.debug("STOPPING PROCESS BY KeyboardInterrupt")
