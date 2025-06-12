@@ -2,9 +2,7 @@ import modules.uart
 import modules.log
 logger = modules.log.get_logger()
 
-logger.info("PROGRAM START")
-
-
+logger.info("PROCESS STARTED")
 
 # Rescue_Camera = modules.camera.Camera(
 #     PORT=modules.settings.Rescue_Camera_PORT,
@@ -22,12 +20,22 @@ logger.info("PROGRAM START")
 #     lores_size=modules.settings.Linetrace_Camera_lores_size,
 #     pre_callback_func=modules.settings.Linetrace_Camera_Pre_Callback_func)
 
+uart_io = modules.uart.UART_CON()
+uart_io.init_connection()
+
+logger.info("OBJECTS INITIALIZED")
 
 if __name__ == "__main__":
-  logger.debug("PROCESS STARTED")
-  uart_io = modules.uart.UART_CON()
-  uart_io.init_connection()
-  # Linetrace_Camera.start_cam()
-  while True:
-    pass
-  # Linetrace_Camera.stop_cam()
+  try:
+    # Linetrace_Camera.start_cam()
+    while True:
+      pass
+    # Linetrace_Camera.stop_cam()
+  except KeyboardInterrupt:
+    logger.debug("STOPPING PROCESS BY KeyboardInterrupt")
+  except Exception as e:
+    logger.error(f"An error occurred: {e}")
+    logger.error(f"Traceback: {traceback.format_exc()}")
+  finally:
+    logger.debug("PROCESS ENDED")
+    uart_io.close()
