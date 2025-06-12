@@ -25,11 +25,15 @@ uart_io.init_connection()
 
 logger.info("OBJECTS INITIALIZED")
 
+message_id = 0
 if __name__ == "__main__":
   try:
     # Linetrace_Camera.start_cam()
     while True:
-      pass
+      logger.debug(f"SENDING TEST MESSAGE {message_id}")
+      uart_io.send_message(f"{message_id}", "TEST MESSAGE")
+      
+      message_id += 1
     # Linetrace_Camera.stop_cam()
   except KeyboardInterrupt:
     logger.debug("STOPPING PROCESS BY KeyboardInterrupt")
