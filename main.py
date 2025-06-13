@@ -51,6 +51,6 @@ if __name__ == "__main__":
     logger.error(f"Error occurred at line {sys.exc_info()[2].tb_lineno}")
     logger.error(f"Traceback:\n{traceback.format_exc()}")
   finally:
-    logger.info("PROCESS ENDED")
     uart_io.close()
     Linetrace_Camera.stop_cam()
+    logger.info("PROCESS ENDED")
