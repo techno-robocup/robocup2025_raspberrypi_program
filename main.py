@@ -26,7 +26,6 @@ logger.info("PROCESS STARTED")
 #     pre_callback_func=modules.settings.Linetrace_Camera_Pre_Callback_func)
 
 uart_io = modules.uart.UART_CON()
-uart_io.init_connection()
 
 logger.info("OBJECTS INITIALIZED")
 
