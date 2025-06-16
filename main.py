@@ -39,7 +39,7 @@ def fix_to_range(x : int, min_num : int, max_num : int):
   return max(min_num, min(x, max_num))
 
 def compute_moving_value(current_slope : int):
-  return math.sqrt(1 / current_slope)
+  return modules.settings.computing_P * math.sqrt(1 / current_slope)
 
 message_id = 0
 if __name__ == "__main__":
