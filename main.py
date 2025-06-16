@@ -30,6 +30,9 @@ uart_io = modules.uart.UART_CON()
 
 Linetrace_Camera.start_cam()
 
+def send_speed(l : int, r : int):
+  uart_io.send_message(Message(0, f"MOTOR {l} {r}"))
+  return
 logger.info("OBJECTS INITIALIZED")
 
 message_id = 0
