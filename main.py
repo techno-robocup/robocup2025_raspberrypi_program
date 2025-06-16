@@ -30,9 +30,12 @@ uart_io = modules.uart.UART_CON()
 
 Linetrace_Camera.start_cam()
 
-def send_speed(l : int, r : int):
+
+def send_speed(l: int, r: int):
   uart_io.send_message(Message(0, f"MOTOR {l} {r}"))
   return
+
+
 logger.info("OBJECTS INITIALIZED")
 
 message_id = 0
@@ -47,7 +50,9 @@ if __name__ == "__main__":
       logger.debug(f"RECEIVED MESSAGE {message}")
       message_id += 1
   except KeyboardInterrupt:
-    logger.info(f"STOPPING PROCESS BY KeyboardInterrupt at line {sys.exc_info()[2].tb_lineno}")
+    logger.info(
+        f"STOPPING PROCESS BY KeyboardInterrupt at line {sys.exc_info()[2].tb_lineno}"
+    )
     logger.info(f"Traceback:\n{traceback.format_exc()}")
   except Exception as e:
     logger.error(f"Critical error: {str(e)}")
