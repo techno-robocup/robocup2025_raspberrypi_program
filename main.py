@@ -39,12 +39,10 @@ message_id = 0
 if __name__ == "__main__":
   try:
     while True:
-      logger.debug(f"SENDING TEST MESSAGE {message_id}")
-      uart_io.send_message(Message(message_id, "TEST MESSAGE"))
-      time.sleep(1)
-      logger.debug(f"RECEIVING MESSAGE {message_id}")
+      uart_io.send_message(Message(message_id, "GET button"))
       message = uart_io.receive_message()
-      logger.debug(f"RECEIVED MESSAGE {message}")
+      if message.getMessage() == "OFF":
+        continue
       message_id += 1
   except KeyboardInterrupt:
     logger.info(f"STOPPING PROCESS BY KeyboardInterrupt at line {sys.exc_info()[2].tb_lineno}")
