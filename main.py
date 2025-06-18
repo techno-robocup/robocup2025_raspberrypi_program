@@ -33,7 +33,7 @@ Linetrace_Camera.start_cam()
 
 
 def send_speed(l: int, r: int):
-  uart_io.send_message(Message(0, f"MOTOR {l} {r}"))
+  uart_io.send_message(Message(0, f"MOTOR {int(l)} {int(r)}"))
   return
 
 
