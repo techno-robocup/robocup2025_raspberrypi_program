@@ -38,11 +38,14 @@ def send_speed(l: int, r: int):
 
 logger.info("OBJECTS INITIALIZED")
 
-def fix_to_range(x : int, min_num : int, max_num : int):
+
+def fix_to_range(x: int, min_num: int, max_num: int):
   return max(min_num, min(x, max_num))
 
-def compute_moving_value(current_slope : int):
+
+def compute_moving_value(current_slope: int):
   return modules.settings.computing_P * math.sqrt(1 / current_slope)
+
 
 message_id = 0
 if __name__ == "__main__":
@@ -58,7 +61,8 @@ if __name__ == "__main__":
       logger.debug(f"CURRENT SLOPE: {current_slope}")
       moving_value = compute_moving_value(current_slope)
       logger.debug(f"MOVING VALUE: {moving_value}")
-      send_speed(fix_to_range(1500 + moving_value, 1000, 2000), fix_to_range(1500 - moving_value, 1000, 2000))
+      send_speed(fix_to_range(1500 + moving_value, 1000, 2000),
+                 fix_to_range(1500 - moving_value, 1000, 2000))
       message_id += 1
   except KeyboardInterrupt:
     logger.info(
