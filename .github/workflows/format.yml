@@ -1,12 +1,13 @@
 name: Format Python Code
 
+permissions:
+  contents: write
+  
 on:
   push:
 
 jobs:
   format:
-    permissions:
-      write
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
