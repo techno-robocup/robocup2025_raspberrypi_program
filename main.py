@@ -56,14 +56,14 @@ if __name__ == "__main__":
       message = uart_io.receive_message()
       if message.getMessage() == "OFF":
         logger.debug("BUTTON OFF")
-        continue
-      logger.debug("BUTTON ON")
-      current_slope = modules.settings.lastblackline
-      logger.debug(f"CURRENT SLOPE: {current_slope}")
-      moving_value = compute_moving_value(current_slope)
-      logger.debug(f"MOVING VALUE: {moving_value}")
-      send_speed(fix_to_range(1500 + moving_value, 1000, 2000),
-                 fix_to_range(1500 - moving_value, 1000, 2000))
+      else:
+        logger.debug("BUTTON ON")
+        current_slope = modules.settings.lastblackline
+        logger.debug(f"CURRENT SLOPE: {current_slope}")
+        moving_value = compute_moving_value(current_slope)
+        logger.debug(f"MOVING VALUE: {moving_value}")
+        send_speed(fix_to_range(1500 + moving_value, 1000, 2000),
+                   fix_to_range(1500 - moving_value, 1000, 2000))
       message_id += 1
   except KeyboardInterrupt:
     logger.info(
