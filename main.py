@@ -63,7 +63,7 @@ if __name__ == "__main__":
         moving_value = compute_moving_value(current_slope)
         logger.debug(f"MOVING VALUE: {moving_value}")
         send_speed(fix_to_range(1500 + moving_value, 1000, 2000),
-                  fix_to_range(1500 - moving_value, 1000, 2000))
+                   fix_to_range(1500 - moving_value, 1000, 2000))
       message_id += 1
   except KeyboardInterrupt:
     logger.info(
