@@ -31,9 +31,10 @@ uart_io = modules.uart.UART_CON()
 
 Linetrace_Camera.start_cam()
 
+message_id = 0
 
 def send_speed(left_value: int, right_value: int):
-  uart_io.send_message(Message(0,
+  uart_io.send_message(Message(message_id,
                                f"MOTOR {int(left_value)} {int(right_value)}"))
   return
 
@@ -49,7 +50,6 @@ def compute_moving_value(current_slope: int):
   return modules.settings.computing_P * math.sqrt(1 / current_slope)
 
 
-message_id = 0
 if __name__ == "__main__":
   try:
     while True:
@@ -63,8 +63,9 @@ if __name__ == "__main__":
         logger.debug(f"CURRENT SLOPE: {current_slope}")
         moving_value = compute_moving_value(current_slope)
         logger.debug(f"MOVING VALUE: {moving_value}")
-        send_speed(fix_to_range(1500 + moving_value, 1000, 2000),
-                   fix_to_range(1500 - moving_value, 1000, 2000))
+        # send_speed(fix_to_range(1500 + moving_value, 1000, 2000),
+        #            fix_to_range(1500 - moving_value, 1000, 2000))
+        send_speed(2000,2000)
       message_id += 1
   except KeyboardInterrupt:
     logger.info(
