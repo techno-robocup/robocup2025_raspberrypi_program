@@ -33,9 +33,10 @@ Linetrace_Camera.start_cam()
 
 message_id = 0
 
+
 def send_speed(left_value: int, right_value: int):
-  uart_io.send_message(Message(message_id,
-                               f"MOTOR {int(left_value)} {int(right_value)}"))
+  uart_io.send_message(
+      Message(message_id, f"MOTOR {int(left_value)} {int(right_value)}"))
   return
 
 
@@ -65,7 +66,7 @@ if __name__ == "__main__":
         logger.debug(f"MOVING VALUE: {moving_value}")
         # send_speed(fix_to_range(1500 + moving_value, 1000, 2000),
         #            fix_to_range(1500 - moving_value, 1000, 2000))
-        send_speed(2000,2000)
+        send_speed(2000, 2000)
       message_id += 1
   except KeyboardInterrupt:
     logger.info(
