@@ -53,12 +53,10 @@ def compute_moving_value(current_slope: int):
 if __name__ == "__main__":
   try:
     while True:
-      # uart_io.send_message(Message(message_id, "GET button"))
-      # message = uart_io.receive_message()
-      # if message.getMessage() == "OFF":
-      #   logger.debug("BUTTON OFF")
-      if False:
-        pass
+      uart_io.send_message(Message(message_id, "GET button"))
+      message = uart_io.receive_message()
+      if message.getMessage() == "OFF":
+        logger.debug("BUTTON OFF")
       else:
         logger.debug("BUTTON ON")
         current_slope = modules.settings.lastblackline
