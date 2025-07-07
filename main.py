@@ -69,7 +69,7 @@ if __name__ == "__main__":
         for i in range(1000, 2000, 100):
           send_speed(i, i)
           time.sleep(1)
-        print(f"MESSAGE: {message.getMessage()}")
+          print(f"MESSAGE: {message.getMessage()}")
       message_id += 1
   except KeyboardInterrupt:
     logger.info(
