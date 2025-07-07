@@ -67,6 +67,7 @@ if __name__ == "__main__":
         # send_speed(fix_to_range(1500 + moving_value, 1000, 2000),
         #            fix_to_range(1500 - moving_value, 1000, 2000))
         send_speed(2000, 2000)
+        print(f"MESSAGE: {message.getMessage()}")
       message_id += 1
   except KeyboardInterrupt:
     logger.info(
