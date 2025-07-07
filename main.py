@@ -5,6 +5,7 @@ from modules.uart import Message
 import traceback
 import sys
 import math
+import time
 
 logger = modules.log.get_logger()
 
