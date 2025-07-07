@@ -2,7 +2,6 @@ import modules.uart
 import modules.log
 import modules.camera
 from modules.uart import Message
-import time
 import traceback
 import sys
 import math
