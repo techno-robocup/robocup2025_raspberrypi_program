@@ -77,7 +77,7 @@ if __name__ == "__main__":
         #   print(f"MESSAGE: {message.getMessage()}")
         get_ultrasonic_distance()
         time.sleep(0.1)
-        print("MESSAGE: ", message.getMessage())
+        print("MESSAGE: ", message)
       message_id += 1
   except KeyboardInterrupt:
     logger.info(
