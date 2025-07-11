@@ -39,9 +39,11 @@ def send_speed(left_value: int, right_value: int):
       Message(message_id, f"MOTOR {int(left_value)} {int(right_value)}"))
   return
 
+
 def get_ultrasonic_distance():
   uart_io.send_message(Message(message_id, "GET ultrasonic"))
   return
+
 
 logger.info("OBJECTS INITIALIZED")
 
