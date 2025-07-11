@@ -59,8 +59,9 @@ def compute_moving_value(current_slope: int):
 if __name__ == "__main__":
   try:
     while True:
-      uart_io.send_message(Message(message_id, "GET button"))
-      message = uart_io.receive_message()
+      # uart_io.send_message(Message(message_id, "GET button"))
+      # message = uart_io.receive_message()
+      message = Message(1, "ON")
       if message != False and message.getMessage() == "OFF":
         logger.debug("BUTTON OFF")
       else:
@@ -77,7 +78,7 @@ if __name__ == "__main__":
         #   print(f"MESSAGE: {message.getMessage()}")
         get_ultrasonic_distance()
         time.sleep(0.1)
-        print("MESSAGE: ", message)
+        print("MESSAGE: ", uart_io.receive_message().getMessage())
       message_id += 1
   except KeyboardInterrupt:
     logger.info(
