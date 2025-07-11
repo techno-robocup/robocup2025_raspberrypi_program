@@ -61,7 +61,7 @@ if __name__ == "__main__":
     while True:
       uart_io.send_message(Message(message_id, "GET button"))
       message = uart_io.receive_message()
-      if message != false and message.getMessage() == "OFF":
+      if message != False and message.getMessage() == "OFF":
         logger.debug("BUTTON OFF")
       else:
         logger.debug("BUTTON ON")
