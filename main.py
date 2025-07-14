@@ -67,8 +67,10 @@ if __name__ == "__main__":
       else:
         logger.debug("BUTTON ON")
         uart_io.send_message(Message(message_id, "Wire 0"))
+        print("MESSAGE: ", uart_io.receive_message().getMessage())
         time.sleep(1)
         uart_io.send_message(Message(message_id, "Wire 1"))
+        print("MESSAGE: ", uart_io.receive_message().getMessage())
         time.sleep(1)
       message_id += 1
   except KeyboardInterrupt:
