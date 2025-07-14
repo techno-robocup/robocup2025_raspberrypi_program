@@ -66,7 +66,9 @@ if __name__ == "__main__":
         logger.debug("BUTTON OFF")
       else:
         logger.debug("BUTTON ON")
-        send_speed(1600, 1400)
+        get_ultrasonic_distance()
+        time.sleep(0.1)
+        print("MESSAGE: ", uart_io.receive_message().getMessage())
       message_id += 1
   except KeyboardInterrupt:
     logger.info(
