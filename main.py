@@ -66,7 +66,7 @@ if __name__ == "__main__":
         logger.debug("BUTTON OFF")
       else:
         logger.debug("BUTTON ON")
-        send_speed(1600, 1600)
+        send_speed(1600, 1400)
       message_id += 1
   except KeyboardInterrupt:
     logger.info(
