@@ -6,8 +6,6 @@ This script tests all major components to ensure they're working correctly.
 """
 
 import sys
-import os
-import traceback
 from typing import List, Tuple
 
 def test_imports() -> Tuple[bool, List[str]]:
@@ -110,8 +108,6 @@ def test_algorithm_functions() -> Tuple[bool, List[str]]:
     success = True
     
     try:
-        import modules.settings
-        import numpy as np
         
         # Test fix_to_range function
         from main import fix_to_range
