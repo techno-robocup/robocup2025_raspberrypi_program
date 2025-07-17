@@ -89,6 +89,7 @@ def get_ultrasonic_distance() -> Optional[float]:
     logger.error(f"Failed to get ultrasonic distance: {e}")
     return None
 
+
 def send_wire_command(wire_number: int) -> Message:
   """
     Send wire command via UART.
