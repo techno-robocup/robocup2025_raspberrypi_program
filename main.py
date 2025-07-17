@@ -89,6 +89,31 @@ def get_ultrasonic_distance() -> Optional[float]:
     logger.error(f"Failed to get ultrasonic distance: {e}")
     return None
 
+def send_wire_command(wire_number: int) -> Message:
+  """
+    Send wire command via UART.
+    
+    Args:
+        wire_number: Wire number to send
+        
+    Returns:
+        Message: Message object if message sent successfully, None otherwise
+  """
+  global message_id
+  message_id += 1
+  try:
+    uart_io.send_message(Message(message_id, f"Wire {wire_number}"))
+    while True:
+      response = uart_io.receive_message()
+      if response and response.getId() == message_id:
+        return response
+      elif not response:
+        break
+    return None
+  except Exception as e:
+    logger.error(f"Failed to send wire command: {e}")
+    return None
+
 
 logger.info("OBJECTS INITIALIZED")
 
@@ -142,14 +167,12 @@ def main_loop():
         logger.debug("BUTTON ON")
 
         # Test wire commands
-        uart_io.send_message(Message(message_id, "Wire 0"))
-        response = uart_io.receive_message()
+        response = send_wire_command(0)
         if response:
           print("MESSAGE: ", response.getMessage())
         time.sleep(1)
 
-        uart_io.send_message(Message(message_id, "Wire 1"))
-        response = uart_io.receive_message()
+        response = send_wire_command(1)
         if response:
           print("MESSAGE: ", response.getMessage())
         time.sleep(1)
