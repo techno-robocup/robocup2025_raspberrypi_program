@@ -173,6 +173,7 @@ if __name__ == "__main__":
     try:
       uart_io.close()
       Linetrace_Camera.stop_cam()
+      Rescue_Camera.stop_cam()
       logger.info("PROCESS ENDED")
     except Exception as e:
       logger.error(f"Error during cleanup: {e}")
