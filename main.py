@@ -73,10 +73,13 @@ def get_ultrasonic_distance() -> Optional[float]:
         Optional[float]: Distance reading or None if failed
     """
   try:
-    uart_io.send_message(Message(message_id, "GET ultrasonic"))
-    response = uart_io.receive_message()
-    if response and response.getMessage().isdigit():
-      return float(response.getMessage())
+    while True:
+      uart_io.send_message(Message(message_id, "GET ultrasonic"))
+      response = uart_io.receive_message()
+      if response and response.getId() == message_id:
+        return float(response.getMessage())
+      elif not response:
+        break
     return None
   except Exception as e:
     logger.error(f"Failed to get ultrasonic distance: {e}")
