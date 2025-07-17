@@ -56,6 +56,8 @@ def send_speed(left_value: int, right_value: int) -> bool:
     Returns:
         bool: True if message sent successfully, False otherwise
     """
+  global message_id
+  message_id += 1
   try:
     uart_io.send_message(
         Message(message_id, f"MOTOR {int(left_value)} {int(right_value)}"))
@@ -73,6 +75,8 @@ def get_ultrasonic_distance() -> Optional[float]:
         Optional[float]: Distance reading or None if failed
     """
   try:
+    global message_id
+    message_id += 1
     while True:
       uart_io.send_message(Message(message_id, "GET ultrasonic"))
       response = uart_io.receive_message()
