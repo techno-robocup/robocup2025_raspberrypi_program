@@ -8,25 +8,28 @@ This script handles installation of dependencies and project setup.
 from setuptools import setup, find_packages
 import os
 
+
 # Read requirements from requirements.txt
 def read_requirements():
-    """Read requirements from requirements.txt file."""
-    requirements = []
-    if os.path.exists('requirements.txt'):
-        with open('requirements.txt', 'r') as f:
-            for line in f:
-                line = line.strip()
-                if line and not line.startswith('#'):
-                    requirements.append(line)
-    return requirements
+  """Read requirements from requirements.txt file."""
+  requirements = []
+  if os.path.exists('requirements.txt'):
+    with open('requirements.txt', 'r') as f:
+      for line in f:
+        line = line.strip()
+        if line and not line.startswith('#'):
+          requirements.append(line)
+  return requirements
+
 
 # Read README for long description
 def read_readme():
-    """Read README file for long description."""
-    if os.path.exists('README.md'):
-        with open('README.md', 'r', encoding='utf-8') as f:
-            return f.read()
-    return "RoboCup 2025 Raspberry Pi robotics program"
+  """Read README file for long description."""
+  if os.path.exists('README.md'):
+    with open('README.md', 'r', encoding='utf-8') as f:
+      return f.read()
+  return "RoboCup 2025 Raspberry Pi robotics program"
+
 
 setup(
     name="robocup2025-raspberrypi",

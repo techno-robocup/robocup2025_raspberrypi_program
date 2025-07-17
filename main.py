@@ -46,7 +46,7 @@ message_id = 0
 
 
 def send_speed(left_value: int, right_value: int) -> bool:
-    """
+  """
     Send motor speed commands via UART.
     
     Args:
@@ -56,38 +56,38 @@ def send_speed(left_value: int, right_value: int) -> bool:
     Returns:
         bool: True if message sent successfully, False otherwise
     """
-    try:
-        uart_io.send_message(
-            Message(message_id, f"MOTOR {int(left_value)} {int(right_value)}"))
-        return True
-    except Exception as e:
-        logger.error(f"Failed to send speed command: {e}")
-        return False
+  try:
+    uart_io.send_message(
+        Message(message_id, f"MOTOR {int(left_value)} {int(right_value)}"))
+    return True
+  except Exception as e:
+    logger.error(f"Failed to send speed command: {e}")
+    return False
 
 
 def get_ultrasonic_distance() -> Optional[float]:
-    """
+  """
     Get ultrasonic sensor distance reading.
     
     Returns:
         Optional[float]: Distance reading or None if failed
     """
-    try:
-        uart_io.send_message(Message(message_id, "GET ultrasonic"))
-        response = uart_io.receive_message()
-        if response and response.getMessage().isdigit():
-            return float(response.getMessage())
-        return None
-    except Exception as e:
-        logger.error(f"Failed to get ultrasonic distance: {e}")
-        return None
+  try:
+    uart_io.send_message(Message(message_id, "GET ultrasonic"))
+    response = uart_io.receive_message()
+    if response and response.getMessage().isdigit():
+      return float(response.getMessage())
+    return None
+  except Exception as e:
+    logger.error(f"Failed to get ultrasonic distance: {e}")
+    return None
 
 
 logger.info("OBJECTS INITIALIZED")
 
 
 def fix_to_range(x: int, min_num: int, max_num: int) -> int:
-    """
+  """
     Clamp a value to a specified range.
     
     Args:
@@ -98,11 +98,11 @@ def fix_to_range(x: int, min_num: int, max_num: int) -> int:
     Returns:
         int: Clamped value
     """
-    return max(min_num, min(x, max_num))
+  return max(min_num, min(x, max_num))
 
 
 def compute_moving_value(current_slope: int) -> float:
-    """
+  """
     Compute motor movement value based on line slope.
     
     Args:
@@ -111,65 +111,65 @@ def compute_moving_value(current_slope: int) -> float:
     Returns:
         float: Computed movement value
     """
-    if current_slope == 0:
-        return 0.0
-    return modules.settings.computing_P * math.sqrt(1 / abs(current_slope))
+  if current_slope == 0:
+    return 0.0
+  return modules.settings.computing_P * math.sqrt(1 / abs(current_slope))
 
 
 def main_loop():
-    """Main control loop for the robotics program."""
-    global message_id
-    
-    try:
-        while True:
-            # TODO: Uncomment when button functionality is implemented
-            # uart_io.send_message(Message(message_id, "GET button"))
-            # message = uart_io.receive_message()
-            
-            # Temporary hardcoded button state for testing
-            message = Message(1, "ON")
-            
-            if message and message.getMessage() == "OFF":
-                logger.debug("BUTTON OFF")
-            else:
-                logger.debug("BUTTON ON")
-                
-                # Test wire commands
-                uart_io.send_message(Message(message_id, "Wire 0"))
-                response = uart_io.receive_message()
-                if response:
-                    print("MESSAGE: ", response.getMessage())
-                time.sleep(1)
-                
-                uart_io.send_message(Message(message_id, "Wire 1"))
-                response = uart_io.receive_message()
-                if response:
-                    print("MESSAGE: ", response.getMessage())
-                time.sleep(1)
-                
-            message_id += 1
-            
-    except KeyboardInterrupt:
-        logger.info("STOPPING PROCESS BY KeyboardInterrupt")
-    except Exception as e:
-        logger.error(f"Critical error: {str(e)}")
-        logger.error(f"Error occurred at line {sys.exc_info()[2].tb_lineno}")
-        logger.error(f"Traceback:\n{traceback.format_exc()}")
+  """Main control loop for the robotics program."""
+  global message_id
+
+  try:
+    while True:
+      # TODO: Uncomment when button functionality is implemented
+      # uart_io.send_message(Message(message_id, "GET button"))
+      # message = uart_io.receive_message()
+
+      # Temporary hardcoded button state for testing
+      message = Message(1, "ON")
+
+      if message and message.getMessage() == "OFF":
+        logger.debug("BUTTON OFF")
+      else:
+        logger.debug("BUTTON ON")
+
+        # Test wire commands
+        uart_io.send_message(Message(message_id, "Wire 0"))
+        response = uart_io.receive_message()
+        if response:
+          print("MESSAGE: ", response.getMessage())
+        time.sleep(1)
+
+        uart_io.send_message(Message(message_id, "Wire 1"))
+        response = uart_io.receive_message()
+        if response:
+          print("MESSAGE: ", response.getMessage())
+        time.sleep(1)
+
+      message_id += 1
+
+  except KeyboardInterrupt:
+    logger.info("STOPPING PROCESS BY KeyboardInterrupt")
+  except Exception as e:
+    logger.error(f"Critical error: {str(e)}")
+    logger.error(f"Error occurred at line {sys.exc_info()[2].tb_lineno}")
+    logger.error(f"Traceback:\n{traceback.format_exc()}")
 
 
 if __name__ == "__main__":
+  try:
+    main_loop()
+  except KeyboardInterrupt:
+    logger.info("PROCESS INTERRUPTED BY USER")
+  except Exception as e:
+    logger.error(f"Fatal error: {str(e)}")
+    logger.error(f"Traceback:\n{traceback.format_exc()}")
+  finally:
+    # Cleanup
     try:
-        main_loop()
-    except KeyboardInterrupt:
-        logger.info("PROCESS INTERRUPTED BY USER")
+      uart_io.close()
+      Linetrace_Camera.stop_cam()
+      logger.info("PROCESS ENDED")
     except Exception as e:
-        logger.error(f"Fatal error: {str(e)}")
-        logger.error(f"Traceback:\n{traceback.format_exc()}")
-    finally:
-        # Cleanup
-        try:
-            uart_io.close()
-            Linetrace_Camera.stop_cam()
-            logger.info("PROCESS ENDED")
-        except Exception as e:
-            logger.error(f"Error during cleanup: {e}")
+      logger.error(f"Error during cleanup: {e}")
