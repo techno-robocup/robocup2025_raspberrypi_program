@@ -168,14 +168,9 @@ def main_loop():
         logger.debug("BUTTON ON")
 
         # Test wire commands
-        response = send_wire_command(0)
-        if response:
-          print("MESSAGE: ", response.getMessage())
+        send_speed(2000,2000)
         time.sleep(1)
-
-        response = send_wire_command(1)
-        if response:
-          print("MESSAGE: ", response.getMessage())
+        send_speed(1000,1000)
         time.sleep(1)
 
       message_id += 1
@@ -193,6 +188,7 @@ if __name__ == "__main__":
     main_loop()
   except KeyboardInterrupt:
     logger.info("PROCESS INTERRUPTED BY USER")
+    send_speed(1500,1500)
   except Exception as e:
     logger.error(f"Fatal error: {str(e)}")
     logger.error(f"Traceback:\n{traceback.format_exc()}")
