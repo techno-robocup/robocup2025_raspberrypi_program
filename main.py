@@ -164,16 +164,16 @@ def main_loop():
 
       if message and message.getMessage() == "OFF":
         # logger.debug("BUTTON OFF")
-        reply=send_speed(1500,1500)
+        reply = send_speed(1500, 1500)
         logger.debug(f"!!!{reply}!!!")
       else:
         # logger.debug("BUTTON ON")
 
         # Test wire commands
-        reply=send_speed(1200,1200)
+        reply = send_speed(1200, 1200)
         logger.debug(f"!!!{reply}!!!")
         time.sleep(1)
-        reply=send_speed(1700,1700)
+        reply = send_speed(1700, 1700)
         logger.debug(f"!!!{reply}!!!")
         time.sleep(1)
 
@@ -181,7 +181,7 @@ def main_loop():
 
   except KeyboardInterrupt:
     logger.info("STOPPING PROCESS BY KeyboardInterrupt")
-    send_speed(1500,1500)
+    send_speed(1500, 1500)
   except Exception as e:
     logger.error(f"Critical error: {str(e)}")
     logger.error(f"Error occurred at line {sys.exc_info()[2].tb_lineno}")
@@ -204,6 +204,6 @@ if __name__ == "__main__":
       Linetrace_Camera.stop_cam()
       Rescue_Camera.stop_cam()
       logger.info("PROCESS ENDED")
-      send_speed(1500,1500)
+      send_speed(1500, 1500)
     except Exception as e:
       logger.error(f"Error during cleanup: {e}")
