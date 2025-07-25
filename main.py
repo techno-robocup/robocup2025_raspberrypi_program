@@ -40,12 +40,12 @@ Linetrace_Camera = modules.camera.Camera(
 uart_io = modules.uart.UART_CON()
 
 # Start the line tracing camera
-Linetrace_Camera.start_cam()
+# Linetrace_Camera.start_cam()
 
 message_id = 0
 
 
-def send_speed(left_value: int, right_value: int) -> bool:
+def send_speed(left_value: int, right_value: int) -> Message:
   """
     Send motor speed commands via UART.
     
@@ -54,17 +54,17 @@ def send_speed(left_value: int, right_value: int) -> bool:
         right_value: Right motor speed value
         
     Returns:
-        bool: True if message sent successfully, False otherwise
+        Message: Message object if message sent successfully, None otherwise
     """
   global message_id
   message_id += 1
   try:
     uart_io.send_message(
         Message(message_id, f"MOTOR {int(left_value)} {int(right_value)}"))
-    return True
+    return uart_io.receive_message()
   except Exception as e:
     logger.error(f"Failed to send speed command: {e}")
-    return False
+    return None
 
 
 def get_ultrasonic_distance() -> Optional[float]:
@@ -159,24 +159,29 @@ def main_loop():
       # uart_io.send_message(Message(message_id, "GET button"))
       # message = uart_io.receive_message()
 
-      # Temporary hardcoded button state for testing
+      # # Temporary hardcoded button state for testing
       message = Message(1, "ON")
 
       if message and message.getMessage() == "OFF":
-        logger.debug("BUTTON OFF")
+        # logger.debug("BUTTON OFF")
+        reply=send_speed(1500,1500)
+        logger.debug(f"!!!{reply}!!!")
       else:
-        logger.debug("BUTTON ON")
+        # logger.debug("BUTTON ON")
 
         # Test wire commands
-        send_speed(2000,2000)
+        reply=send_speed(1200,1200)
+        logger.debug(f"!!!{reply}!!!")
         time.sleep(1)
-        send_speed(1000,1000)
+        reply=send_speed(1700,1700)
+        logger.debug(f"!!!{reply}!!!")
         time.sleep(1)
 
       message_id += 1
 
   except KeyboardInterrupt:
     logger.info("STOPPING PROCESS BY KeyboardInterrupt")
+    send_speed(1500,1500)
   except Exception as e:
     logger.error(f"Critical error: {str(e)}")
     logger.error(f"Error occurred at line {sys.exc_info()[2].tb_lineno}")
@@ -199,5 +204,6 @@ if __name__ == "__main__":
       Linetrace_Camera.stop_cam()
       Rescue_Camera.stop_cam()
       logger.info("PROCESS ENDED")
+      send_speed(1500,1500)
     except Exception as e:
       logger.error(f"Error during cleanup: {e}")
