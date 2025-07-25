@@ -193,7 +193,7 @@ if __name__ == "__main__":
     main_loop()
   except KeyboardInterrupt:
     logger.info("PROCESS INTERRUPTED BY USER")
-    send_speed(1500,1500)
+    send_speed(1500, 1500)
   except Exception as e:
     logger.error(f"Fatal error: {str(e)}")
     logger.error(f"Traceback:\n{traceback.format_exc()}")
