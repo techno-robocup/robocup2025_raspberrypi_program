@@ -134,7 +134,7 @@ def fix_to_range(x: int, min_num: int, max_num: int) -> int:
   return max(min_num, min(x, max_num))
 
 
-def compute_moving_value(current_slope: int) -> float:
+def compute_moving_value(current_theta: int) -> float:
   """
     Compute motor movement value based on line slope.
     
@@ -144,9 +144,7 @@ def compute_moving_value(current_slope: int) -> float:
     Returns:
         float: Computed movement value
     """
-  if current_slope == 0:
-    return 0.0
-  return modules.settings.computing_P * math.sqrt(1 / abs(current_slope))
+  return modules.settings.computing_P * current_theta
 
 
 def main_loop():
@@ -167,12 +165,22 @@ def main_loop():
         reply = send_speed(1500, 1500)
         logger.debug(f"!!!{reply}!!!")
       else:
-        # logger.debug("BUTTON ON")
+        logger.debug(f"Slope: {modules.settings.slope}")
+        current_theta = math.atan(modules.settings.slope)
+        if current_theta < 0:
+          current_theta += math.pi
+        logger.debug(f"Theta: {current_theta}")
+        if current_theta > math.pi // 2:
+          current_theta-=math.pi // 2
+          logger.debug(f"Current theta: {current_theta}")
+          send_speed(fix_to_range(1700-compute_moving_value(current_theta),1000,2000),fix_to_range(1700+compute_moving_value(current_theta),1000,2000))
+        elif current_theta < math.pi // 2:
+          current_theta = math.pi // 2 - current_theta
+          logger.debug(f"Current theta: {current_theta}")
+          send_speed(fix_to_range(1700+modules.settings.computing_P*current_theta,1000,2000),fix_to_range(1700-modules.settings.computing_P*current_theta,1000,2000))
+        else:
+          send_speed(1700,1700)
 
-        # Test wire commands
-        reply = send_speed(1600, 1400)
-        logger.debug(f"!!!{reply}!!!")
-        time.sleep(1)
 
       message_id += 1
 
