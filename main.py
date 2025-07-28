@@ -12,7 +12,6 @@ from modules.uart import Message
 import traceback
 import sys
 import math
-import time
 from typing import Optional
 
 logger = modules.log.get_logger()
