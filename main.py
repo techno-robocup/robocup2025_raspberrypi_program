@@ -40,7 +40,7 @@ Linetrace_Camera = modules.camera.Camera(
 uart_io = modules.uart.UART_CON()
 
 # Start the line tracing camera
-# Linetrace_Camera.start_cam()
+Linetrace_Camera.start_cam()
 
 message_id = 0
 
@@ -156,11 +156,11 @@ def main_loop():
   try:
     while True:
       # TODO: Uncomment when button functionality is implemented
-      # uart_io.send_message(Message(message_id, "GET button"))
-      # message = uart_io.receive_message()
+      uart_io.send_message(Message(message_id, "GET button"))
+      message = uart_io.receive_message()
 
       # # Temporary hardcoded button state for testing
-      message = Message(1, "ON")
+      # message = Message(1, "ON")
 
       if message and message.getMessage() == "OFF":
         # logger.debug("BUTTON OFF")
@@ -170,10 +170,7 @@ def main_loop():
         # logger.debug("BUTTON ON")
 
         # Test wire commands
-        reply = send_speed(1200, 1200)
-        logger.debug(f"!!!{reply}!!!")
-        time.sleep(1)
-        reply = send_speed(1700, 1700)
+        reply = send_speed(1600, 1400)
         logger.debug(f"!!!{reply}!!!")
         time.sleep(1)
 
