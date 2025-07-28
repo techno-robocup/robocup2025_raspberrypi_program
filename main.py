@@ -169,7 +169,7 @@ def main_loop():
       else:
         logger.debug(f"Slope: {modules.settings.slope}")
         if modules.settings.slope is None:
-          send_speed(default_speed-10,default_speed-10)
+          send_speed(default_speed - 10, default_speed - 10)
           continue
         current_theta = math.atan(modules.settings.slope)
         if current_theta < 0:
