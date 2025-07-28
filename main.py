@@ -146,6 +146,7 @@ def compute_moving_value(current_theta: int) -> float:
     """
   return modules.settings.computing_P * current_theta
 
+default_speed = 1700
 
 def main_loop():
   """Main control loop for the robotics program."""
@@ -173,13 +174,13 @@ def main_loop():
         if current_theta > math.pi // 2:
           current_theta-=math.pi // 2
           logger.debug(f"Current theta: {current_theta}")
-          send_speed(fix_to_range(1700-compute_moving_value(current_theta),1000,2000),fix_to_range(1700+compute_moving_value(current_theta),1000,2000))
+          send_speed(fix_to_range(default_speed-compute_moving_value(current_theta),1000,2000),fix_to_range(default_speed+compute_moving_value(current_theta),1000,2000))
         elif current_theta < math.pi // 2:
           current_theta = math.pi // 2 - current_theta
           logger.debug(f"Current theta: {current_theta}")
-          send_speed(fix_to_range(1700+modules.settings.computing_P*current_theta,1000,2000),fix_to_range(1700-modules.settings.computing_P*current_theta,1000,2000))
+          send_speed(fix_to_range(default_speed+modules.settings.computing_P*current_theta,1000,2000),fix_to_range(default_speed-modules.settings.computing_P*current_theta,1000,2000))
         else:
-          send_speed(1700,1700)
+          send_speed(default_speed-10,default_speed-10)
 
 
       message_id += 1
