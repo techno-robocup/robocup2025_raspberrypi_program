@@ -206,6 +206,9 @@ def main_loop():
             all_checks[0] = True if i[2] == 1 else False
             all_checks[1] = True if i[3] == 1 else False
           logger.debug(f"Green marks {all_checks}")
+          if all_checks[0] or all_checks[1]:
+            send_speed(default_speed, default_speed)
+            time.sleep(1)
           if all_checks[0] and all_checks[1]:
             send_speed(1700, 1300)
             time.sleep(2)
