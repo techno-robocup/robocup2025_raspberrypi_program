@@ -58,13 +58,19 @@ def send_speed(left_value: int, right_value: int) -> Message:
     """
   global message_id
   message_id += 1
-  try:
+  if modules.settings.stop_requested:
+    logger.debug("Red stop----")
     uart_io.send_message(
-        Message(message_id, f"MOTOR {int(left_value)} {int(right_value)}"))
+        Message(message_id, f"MOTOR 1500 1500"))
     return uart_io.receive_message()
-  except Exception as e:
-    logger.error(f"Failed to send speed command: {e}")
-    return None
+  else:
+    try:
+      uart_io.send_message(
+          Message(message_id, f"MOTOR {int(left_value)} {int(right_value)}"))
+      return uart_io.receive_message()
+    except Exception as e:
+      logger.error(f"Failed to send speed command: {e}")
+      return None
 
 
 def get_ultrasonic_distance() -> Optional[float]:
