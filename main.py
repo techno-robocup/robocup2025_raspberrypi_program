@@ -197,7 +197,7 @@ def main_loop():
         else:
           send_speed(default_speed - 10, default_speed - 10)
         if modules.settings.green_black_detected:
-          all_checks = [False, False] # [left, right]
+          all_checks = [False, False]  # [left, right]
           for i in modules.settings.green_black_detected:
             if i[0] == 1:
               continue
