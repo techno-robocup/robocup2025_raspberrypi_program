@@ -167,7 +167,9 @@ def main_loop():
         # logger.debug("BUTTON OFF")
         reply = send_speed(1500, 1500)
         logger.debug(f"!!!{reply}!!!")
+        Linetrace_Camera.stop_cam()
       else:
+        Linetrace_Camera.start_cam()
         logger.debug(f"Slope: {modules.settings.slope}")
         if modules.settings.slope is None:
           send_speed(default_speed - 10, default_speed - 10)
