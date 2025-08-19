@@ -210,10 +210,10 @@ def main_loop():
             send_speed(1700, 1300)
             time.sleep(2)
           elif all_checks[0]:
-            send_speed(1300, 1700)
+            send_speed(1700, 1300)
             time.sleep(1)
           elif all_checks[1]:
-            send_speed(1700, 1300)
+            send_speed(1300, 1700)
             time.sleep(1)
 
       message_id += 1
