@@ -60,8 +60,7 @@ def send_speed(left_value: int, right_value: int) -> Message:
   message_id += 1
   if modules.settings.stop_requested:
     logger.debug("Red stop----")
-    uart_io.send_message(
-        Message(message_id, "MOTOR 1500 1500"))
+    uart_io.send_message(Message(message_id, "MOTOR 1500 1500"))
     return uart_io.receive_message()
   else:
     try:
