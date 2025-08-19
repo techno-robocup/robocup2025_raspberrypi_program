@@ -195,6 +195,25 @@ def main_loop():
                   1000, 2000))
         else:
           send_speed(default_speed - 10, default_speed - 10)
+        if modules.settings.green_black_detected:
+          all_checks = [False, False] # [left, right]
+          for i in modules.settings.green_black_detected:
+            if i[0] == 1:
+              continue
+            if i[1] == 0:
+              continue
+            all_checks[0] = True if i[2] == 1 else False
+            all_checks[1] = True if i[3] == 1 else False
+          logger.debug(f"Green marks {all_checks}")
+          if all_checks[0] and all_checks[1]:
+            send_speed(1700, 1300)
+            time.sleep(2)
+          elif all_checks[0]:
+            send_speed(1300, 1700)
+            time.sleep(1)
+          elif all_checks[1]:
+            send_speed(1700, 1300)
+            time.sleep(1)
 
       message_id += 1
 
