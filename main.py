@@ -202,26 +202,25 @@ def main_loop():
         else:
           send_speed(default_speed - 10, default_speed - 10)
         if modules.settings.green_black_detected:
-          all_checks = [False, False, False, False]  # [botom, top, left, right]
+          all_checks = [False, False]  # [left, right]
           for i in modules.settings.green_black_detected:
-            all_checks[0] = True if i[0] == 1 else False
-            all_checks[1] = True if i[1] == 1 else False
-            all_checks[2] = True if i[2] == 1 else False
-            all_checks[3] = True if i[3] == 1 else False
+            if i[0] == 1:
+              continue
+            if i[1] == 0:
+              continue
+            all_checks[0] = True if i[2] == 1 else False
+            all_checks[1] = True if i[3] == 1 else False
           logger.debug(f"Green marks {all_checks}")
-          if all_checks[0]:
+          if all_checks[0] or all_checks[1]:
             send_speed(default_speed, default_speed)
             time.sleep(1)
-          if all_checks[2] or all_checks[3]:
-            send_speed(default_speed, default_speed)
-            time.sleep(1)
-          if all_checks[2] and all_checks[3]:
+          if all_checks[0] and all_checks[1]:
             send_speed(1750, 1250)
             time.sleep(5)
-          elif all_checks[2]:
+          elif all_checks[0]:
             send_speed(1750, 1250)
             time.sleep(2)
-          elif all_checks[3]:
+          elif all_checks[1]:
             send_speed(1200, 1750)
             time.sleep(2)
 
