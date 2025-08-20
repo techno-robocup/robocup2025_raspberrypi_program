@@ -215,10 +215,10 @@ def main_loop():
             send_speed(default_speed, default_speed)
             time.sleep(1)
           if all_checks[0] and all_checks[1]:
-            send_speed(1700, 1300)
+            send_speed(1750, 1250)
             time.sleep(5)
           elif all_checks[0]:
-            send_speed(1700, 1300)
+            send_speed(1750, 1250)
             time.sleep(5)
           elif all_checks[1]:
             send_speed(1300, 1700)
