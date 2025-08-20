@@ -216,10 +216,10 @@ def main_loop():
             time.sleep(1)
           if all_checks[0] and all_checks[1]:
             send_speed(1700, 1300)
-            time.sleep(2)
+            time.sleep(3.5)
           elif all_checks[0]:
             send_speed(1700, 1300)
-            time.sleep(2)
+            time.sleep(3.5)
           elif all_checks[1]:
             send_speed(1300, 1700)
             time.sleep(2)
