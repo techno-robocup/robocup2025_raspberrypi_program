@@ -208,21 +208,23 @@ def main_loop():
               continue
             if i[1] == 0:
               continue
-            all_checks[0] = True if i[2] == 1 else False
-            all_checks[1] = True if i[3] == 1 else False
+            if i[2] == 1:
+              all_checks[0] = True
+            if i[3] == 1:
+              all_checks[1] = True
           logger.debug(f"Green marks {all_checks}")
           if all_checks[0] or all_checks[1]:
             send_speed(default_speed, default_speed)
             time.sleep(1)
-          if all_checks[0] and all_checks[1]:
-            send_speed(1750, 1250)
-            time.sleep(5)
-          elif all_checks[0]:
-            send_speed(1750, 1250)
-            time.sleep(2)
-          elif all_checks[1]:
-            send_speed(1200, 1750)
-            time.sleep(2)
+            if all_checks[0] and all_checks[1]:
+              send_speed(1750, 1250)
+              time.sleep(5)
+            elif all_checks[0]:
+              send_speed(1750, 1250)
+              time.sleep(2)
+            elif all_checks[1]:
+              send_speed(1200, 1750)
+              time.sleep(2)
 
       message_id += 1
 
