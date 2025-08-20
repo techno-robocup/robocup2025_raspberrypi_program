@@ -43,6 +43,7 @@ uart_io = modules.uart.UART_CON()
 Linetrace_Camera.start_cam()
 
 message_id = 0
+is_rescue = False
 
 
 def send_speed(left_value: int, right_value: int) -> Message:
@@ -161,17 +162,11 @@ def main_loop():
 
   try:
     while True:
-      # TODO: Uncomment when button functionality is implemented
       uart_io.send_message(Message(message_id, "GET button"))
       message = uart_io.receive_message()
 
-      # # Temporary hardcoded button state for testing
-      # message = Message(1, "ON")
-
       if message and message.getMessage() == "OFF":
-        # logger.debug("BUTTON OFF")
         reply = send_speed(1500, 1500)
-        logger.debug(f"!!!{reply}!!!")
       else:
         logger.debug(f"Slope: {modules.settings.slope}")
         if modules.settings.slope is None:
