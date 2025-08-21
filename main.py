@@ -8,6 +8,7 @@ for line following and rescue operations.
 import modules.uart
 import modules.log
 import modules.camera
+import modules.settings
 from modules.uart import Message
 import traceback
 import sys
