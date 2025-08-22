@@ -158,75 +158,79 @@ default_speed = 1700
 
 
 def main_loop():
-  """Main control loop for the robotics program."""
-  global message_id
+    """Main control loop for the robotics program."""
+    global message_id
 
-  try:
-    if is_rescue:
-      pass
-    else:
-      logger.debug(f"Slope: {modules.settings.slope}")
-      if modules.settings.slope is None:
-        send_speed(default_speed - 10, default_speed - 10)
-        continue
-      current_theta = math.atan(modules.settings.slope)
-      if current_theta < 0:
-        current_theta += math.pi
-      logger.debug(f"Theta: {current_theta}")
-      if current_theta > math.pi // 2:
-        current_theta -= math.pi // 2
-        logger.debug(f"Current theta: {current_theta}")
-        send_speed(
-            fix_to_range(default_speed - compute_moving_value(current_theta),
-                          1000, 2000),
-            fix_to_range(default_speed + compute_moving_value(current_theta),
-                          1000, 2000))
-      elif current_theta < math.pi // 2:
-        current_theta = math.pi // 2 - current_theta
-        logger.debug(f"Current theta: {current_theta}")
-        send_speed(
-            fix_to_range(
-                default_speed + modules.settings.computing_P * current_theta,
-                1000, 2000),
-            fix_to_range(
-                default_speed - modules.settings.computing_P * current_theta,
-                1000, 2000))
-      else:
-        send_speed(default_speed - 10, default_speed - 10)
-      if modules.settings.green_black_detected:
-        all_checks = [False, False]  # [left, right]
-        for i in modules.settings.green_black_detected:
-          if i[0] == 1:
-            continue
-          if i[1] == 0:
-            continue
-          if i[2] == 1:
-            all_checks[0] = True
-          if i[3] == 1:
-            all_checks[1] = True
-        logger.debug(f"Green marks {all_checks}")
-        if all_checks[0] or all_checks[1]:
-          send_speed(default_speed, default_speed)
-          time.sleep(1)
-          if all_checks[0] and all_checks[1]:
-            send_speed(1750, 1250)
-            time.sleep(5)
-          elif all_checks[0]:
-            send_speed(1750, 1250)
-            time.sleep(2)
-          elif all_checks[1]:
-            send_speed(1200, 1750)
-            time.sleep(2)
+    try:
+        while True:  # ← ループが必要
+            if is_rescue:
+                pass
+            else:
+                logger.debug(f"Slope: {modules.settings.slope}")
+                if modules.settings.slope is None:
+                    send_speed(default_speed - 10, default_speed - 10)
+                    continue   # ← OK（ループの中だから）
 
-  message_id += 1
+                current_theta = math.atan(modules.settings.slope)
+                if current_theta < 0:
+                    current_theta += math.pi
+                logger.debug(f"Theta: {current_theta}")
 
-  except KeyboardInterrupt:
-    logger.info("STOPPING PROCESS BY KeyboardInterrupt")
-    send_speed(1500, 1500)
-  except Exception as e:
-    logger.error(f"Critical error: {str(e)}")
-    logger.error(f"Error occurred at line {sys.exc_info()[2].tb_lineno}")
-    logger.error(f"Traceback:\n{traceback.format_exc()}")
+                if current_theta > math.pi / 2:   # ← / に修正
+                    current_theta -= math.pi / 2
+                    logger.debug(f"Current theta: {current_theta}")
+                    send_speed(
+                        fix_to_range(default_speed - compute_moving_value(current_theta),
+                                      1000, 2000),
+                        fix_to_range(default_speed + compute_moving_value(current_theta),
+                                      1000, 2000))
+                elif current_theta < math.pi / 2:
+                    current_theta = math.pi / 2 - current_theta
+                    logger.debug(f"Current theta: {current_theta}")
+                    send_speed(
+                        fix_to_range(
+                            default_speed + modules.settings.computing_P * current_theta,
+                            1000, 2000),
+                        fix_to_range(
+                            default_speed - modules.settings.computing_P * current_theta,
+                            1000, 2000))
+                else:
+                    send_speed(default_speed - 10, default_speed - 10)
+
+                if modules.settings.green_black_detected:
+                    all_checks = [False, False]  # [left, right]
+                    for i in modules.settings.green_black_detected:
+                        if i[0] == 1:
+                            continue
+                        if i[1] == 0:
+                            continue
+                        if i[2] == 1:
+                            all_checks[0] = True
+                        if i[3] == 1:
+                            all_checks[1] = True
+                    logger.debug(f"Green marks {all_checks}")
+                    if all_checks[0] or all_checks[1]:
+                        send_speed(default_speed, default_speed)
+                        time.sleep(1)
+                        if all_checks[0] and all_checks[1]:
+                            send_speed(1750, 1250)
+                            time.sleep(5)
+                        elif all_checks[0]:
+                            send_speed(1750, 1250)
+                            time.sleep(2)
+                        elif all_checks[1]:
+                            send_speed(1200, 1750)
+                            time.sleep(2)
+
+            message_id += 1  # ← ループの中でインクリメント
+
+    except KeyboardInterrupt:
+        logger.info("STOPPING PROCESS BY KeyboardInterrupt")
+        send_speed(1500, 1500)
+    except Exception as e:
+        logger.error(f"Critical error: {str(e)}")
+        logger.error(f"Error occurred at line {sys.exc_info()[2].tb_lineno}")
+        logger.error(f"Traceback:\n{traceback.format_exc()}")
 
 
 if __name__ == "__main__":
