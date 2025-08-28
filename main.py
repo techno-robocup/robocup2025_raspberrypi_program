@@ -238,6 +238,7 @@ if __name__ == "__main__":
         main_loop()
       else:
         send_speed(1500, 1500)
+        modules.settings.stop_requested = False
   except KeyboardInterrupt:
     logger.info("PROCESS INTERRUPTED BY USER")
     send_speed(1500, 1500)
