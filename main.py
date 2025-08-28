@@ -223,7 +223,6 @@ def main_loop():
               send_speed(1200, 1750)
               time.sleep(2)
 
-
   except KeyboardInterrupt:
     logger.info("STOPPING PROCESS BY KeyboardInterrupt")
     send_speed(1500, 1500)
