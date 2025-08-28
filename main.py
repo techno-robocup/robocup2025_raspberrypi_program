@@ -160,6 +160,7 @@ default_speed = 1700
 def main_loop():
   """Main control loop for the robotics program."""
   global message_id
+  message_id += 1
 
   try:
     while True:  # ← ループが必要
@@ -222,7 +223,6 @@ def main_loop():
               send_speed(1200, 1750)
               time.sleep(2)
 
-      message_id += 1  # ← ループの中でインクリメント
 
   except KeyboardInterrupt:
     logger.info("STOPPING PROCESS BY KeyboardInterrupt")
