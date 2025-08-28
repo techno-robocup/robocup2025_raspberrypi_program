@@ -189,10 +189,10 @@ def main_loop():
         logger.debug(f"Current theta: {current_theta}")
         send_speed(
             fix_to_range(
-                default_speed + modules.settings.computing_P * current_theta,
+                default_speed + compute_moving_value(current_theta),
                 1000, 2000),
             fix_to_range(
-                default_speed - modules.settings.computing_P * current_theta,
+                default_speed - compute_moving_value(current_theta),
                 1000, 2000))
       else:
         send_speed(default_speed - 10, default_speed - 10)
