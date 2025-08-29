@@ -215,10 +215,10 @@ def main_loop():
             time.sleep(5)
           elif all_checks[0]:
             send_speed(1750, 1250)
-            time.sleep(2)
+            time.sleep(1.5)
           elif all_checks[1]:
             send_speed(1200, 1750)
-            time.sleep(2)
+            time.sleep(1.5)
 
   except KeyboardInterrupt:
     logger.info("STOPPING PROCESS BY KeyboardInterrupt")
