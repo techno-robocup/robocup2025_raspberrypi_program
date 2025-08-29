@@ -197,6 +197,7 @@ def main_loop():
 
       if modules.settings.green_black_detected:
         all_checks = [False, False]  # [left, right]
+        should_detect = False
         for i in modules.settings.green_black_detected:
           if i[0] == 1:
             continue
@@ -206,10 +207,14 @@ def main_loop():
             all_checks[0] = True
           if i[3] == 1:
             all_checks[1] = True
+        for i in modules.settings.green_marks:
+          if i[1] > modules.settings.Linetrace_Camera_lores_height // 2:
+            should_detect = True
+            break
         logger.debug(f"Green marks {all_checks}")
-        if all_checks[0] or all_checks[1]:
+        if (all_checks[0] or all_checks[1]) and should_detect:
           send_speed(default_speed, default_speed)
-          time.sleep(1)
+          time.sleep(0.5)
           if all_checks[0] and all_checks[1]:
             send_speed(1750, 1250)
             time.sleep(5)
