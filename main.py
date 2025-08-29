@@ -166,7 +166,6 @@ def main_loop():
     if is_rescue:
       pass
     else:
-      logger.debug(f"Slope: {modules.settings.slope}")
       if modules.settings.slope is None:
         send_speed(default_speed - 10, default_speed - 10)
         return
@@ -174,11 +173,9 @@ def main_loop():
       current_theta = math.atan(modules.settings.slope)
       if current_theta < 0:
         current_theta += math.pi
-      logger.debug(f"Theta: {current_theta}")
 
       if current_theta > math.pi / 2:  # ← / に修正
         current_theta -= math.pi / 2
-        logger.debug(f"Current theta: {current_theta}")
         send_speed(
             fix_to_range(default_speed - compute_moving_value(current_theta),
                          1000, 2000),
@@ -186,7 +183,6 @@ def main_loop():
                          1000, 2000))
       elif current_theta < math.pi / 2:
         current_theta = math.pi / 2 - current_theta
-        logger.debug(f"Current theta: {current_theta}")
         send_speed(
             fix_to_range(default_speed + compute_moving_value(current_theta),
                          1000, 2000),
@@ -211,7 +207,6 @@ def main_loop():
           if i[1] > modules.settings.Linetrace_Camera_lores_height // 2:
             should_detect = True
             break
-        logger.debug(f"Green marks {all_checks}")
         if (all_checks[0] or all_checks[1]) and should_detect:
           send_speed(default_speed, default_speed)
           time.sleep(0.5)
