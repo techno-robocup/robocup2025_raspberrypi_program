@@ -245,7 +245,6 @@ if __name__ == "__main__":
         modules.settings.stop_requested = False
         modules.settings.is_rescue_area = False
 
-
   except KeyboardInterrupt:
     logger.info("PROCESS INTERRUPTED BY USER")
     send_speed(1500, 1500)
