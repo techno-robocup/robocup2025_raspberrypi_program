@@ -64,6 +64,10 @@ def send_speed(left_value: int, right_value: int) -> Message:
     logger.debug("Red stop----")
     uart_io.send_message(Message(message_id, "MOTOR 1500 1500"))
     return uart_io.receive_message()
+  if modules.settings.is_rescue_area:
+    logger.debug("Rescue Start----")
+    uart_io.send_message(Message(message_id, "MOTOR 1500 1500"))
+    return uart_io.receive_message()
   else:
     try:
       uart_io.send_message(
@@ -239,6 +243,9 @@ if __name__ == "__main__":
       else:
         send_speed(1500, 1500)
         modules.settings.stop_requested = False
+        modules.settings.is_rescue_area = False
+
+
   except KeyboardInterrupt:
     logger.info("PROCESS INTERRUPTED BY USER")
     send_speed(1500, 1500)
