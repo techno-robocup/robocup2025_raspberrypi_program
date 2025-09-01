@@ -158,7 +158,7 @@ def main_loop():
 
   try:
     if modules.settings.is_rescue_area:
-      pass
+      modules.settings.is_rescue_area = False
     else:
       if modules.settings.stop_requested:
         send_speed(1500, 1500)
