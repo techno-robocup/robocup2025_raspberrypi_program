@@ -44,7 +44,6 @@ uart_io = modules.uart.UART_CON()
 Linetrace_Camera.start_cam()
 
 message_id = 0
-is_rescue = False
 
 
 def send_speed(left_value: int, right_value: int) -> Message:
@@ -60,21 +59,13 @@ def send_speed(left_value: int, right_value: int) -> Message:
     """
   global message_id
   message_id += 1
-  if modules.settings.stop_requested:
-    uart_io.send_message(Message(message_id, "MOTOR 1500 1500"))
+  try:
+    uart_io.send_message(
+        Message(message_id, f"MOTOR {int(left_value)} {int(right_value)}"))
     return uart_io.receive_message()
-  if modules.settings.is_rescue_area:
-    logger.debug("Rescue Start----")
-    uart_io.send_message(Message(message_id, "MOTOR 1500 1500"))
-    return uart_io.receive_message()
-  else:
-    try:
-      uart_io.send_message(
-          Message(message_id, f"MOTOR {int(left_value)} {int(right_value)}"))
-      return uart_io.receive_message()
-    except Exception as e:
-      logger.error(f"Failed to send speed command: {e}")
-      return None
+  except Exception as e:
+    logger.error(f"Failed to send speed command: {e}")
+    return None
 
 
 def get_ultrasonic_distance() -> Optional[float]:
@@ -166,9 +157,12 @@ def main_loop():
   message_id += 1
 
   try:
-    if is_rescue:
+    if modules.settings.is_rescue_area:
       pass
     else:
+      if modules.settings.stop_requested:
+        send_speed(1500, 1500)
+        return
       if modules.settings.slope is None:
         send_speed(default_speed - 10, default_speed - 10)
         return
