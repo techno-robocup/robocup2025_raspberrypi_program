@@ -148,7 +148,20 @@ def compute_moving_value(current_theta: int) -> float:
   return modules.settings.computing_P * current_theta
 
 
-default_speed = 1700
+default_speed = 1750
+
+def compute_default_speed() -> int:
+  global default_speed
+  if modules.settings.slope is None:
+    return default_speed
+  current_theta = math.atan(modules.settings.slope)
+  if current_theta < 0:
+    current_theta += math.pi
+  if current_theta > math.pi / 2:
+    current_theta -= math.pi / 2
+  elif current_theta < -math.pi / 2:
+    current_theta += math.pi / 2
+  return default_speed - current_theta * 30
 
 
 def main_loop():
