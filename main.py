@@ -179,7 +179,7 @@ def main_loop():
         logger.debug("Red stop")
         return
       if modules.settings.slope is None:
-        send_speed(default_speed - 10, default_speed - 10)
+        send_speed(compute_default_speed() - 10, compute_default_speed() - 10)
         return
 
       current_theta = math.atan(modules.settings.slope)
@@ -189,19 +189,19 @@ def main_loop():
       if current_theta > math.pi / 2:  # ← / に修正
         current_theta -= math.pi / 2
         send_speed(
-            fix_to_range(default_speed - compute_moving_value(current_theta),
+            fix_to_range(compute_default_speed() - compute_moving_value(current_theta),
                          1000, 2000),
-            fix_to_range(default_speed + compute_moving_value(current_theta),
+            fix_to_range(compute_default_speed() + compute_moving_value(current_theta),
                          1000, 2000))
       elif current_theta < math.pi / 2:
         current_theta = math.pi / 2 - current_theta
         send_speed(
-            fix_to_range(default_speed + compute_moving_value(current_theta),
+            fix_to_range(compute_default_speed() + compute_moving_value(current_theta),
                          1000, 2000),
-            fix_to_range(default_speed - compute_moving_value(current_theta),
+            fix_to_range(compute_default_speed() - compute_moving_value(current_theta),
                          1000, 2000))
       else:
-        send_speed(default_speed - 10, default_speed - 10)
+        send_speed(compute_default_speed() - 10, compute_default_speed() - 10)
 
       if modules.settings.green_black_detected:
         all_checks = [False, False]  # [left, right]
@@ -220,7 +220,7 @@ def main_loop():
             should_detect = True
             break
         if (all_checks[0] or all_checks[1]) and should_detect:
-          send_speed(default_speed, default_speed)
+          send_speed(compute_default_speed(), compute_default_speed())
           time.sleep(0.5)
           if all_checks[0] and all_checks[1]:
             send_speed(1750, 1250)
