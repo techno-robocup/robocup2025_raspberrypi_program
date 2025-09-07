@@ -189,17 +189,21 @@ def main_loop():
       if current_theta > math.pi / 2:  # ← / に修正
         current_theta -= math.pi / 2
         send_speed(
-            fix_to_range(compute_default_speed() - compute_moving_value(current_theta),
-                         1000, 2000),
-            fix_to_range(compute_default_speed() + compute_moving_value(current_theta),
-                         1000, 2000))
+            fix_to_range(
+                compute_default_speed() - compute_moving_value(current_theta),
+                1000, 2000),
+            fix_to_range(
+                compute_default_speed() + compute_moving_value(current_theta),
+                1000, 2000))
       elif current_theta < math.pi / 2:
         current_theta = math.pi / 2 - current_theta
         send_speed(
-            fix_to_range(compute_default_speed() + compute_moving_value(current_theta),
-                         1000, 2000),
-            fix_to_range(compute_default_speed() - compute_moving_value(current_theta),
-                         1000, 2000))
+            fix_to_range(
+                compute_default_speed() + compute_moving_value(current_theta),
+                1000, 2000),
+            fix_to_range(
+                compute_default_speed() - compute_moving_value(current_theta),
+                1000, 2000))
       else:
         send_speed(compute_default_speed() - 10, compute_default_speed() - 10)
 
