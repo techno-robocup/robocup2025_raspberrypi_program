@@ -150,6 +150,7 @@ def compute_moving_value(current_theta: int) -> float:
 
 default_speed = 1750
 
+
 def compute_default_speed() -> int:
   global default_speed
   if modules.settings.slope is None:
