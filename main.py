@@ -156,7 +156,7 @@ def compute_default_speed() -> int:
   global default_speed
   if modules.settings.slope is None:
     return default_speed
-  
+
   current_theta = math.atan(modules.settings.slope)
   # Normalize theta to [0, π]
   if current_theta < 0:
@@ -166,7 +166,7 @@ def compute_default_speed() -> int:
     current_theta -= math.pi / 2
   elif current_theta < -math.pi / 2:
     current_theta += math.pi / 2
-    
+
   return int(default_speed - current_theta * 50)
 
 
