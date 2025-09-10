@@ -22,20 +22,20 @@ logger.info("PROCESS STARTED")
 
 # Initialize camera objects
 Rescue_Camera = modules.camera.Camera(
-    PORT=modules.settings.Rescue_Camera_PORT,
-    controls=modules.settings.Rescue_Camera_Controls,
-    size=modules.settings.Rescue_Camera_size,
-    formats=modules.settings.Rescue_Camera_formats,
-    lores_size=modules.settings.Rescue_Camera_lores_size,
-    pre_callback_func=modules.settings.Rescue_Camera_Pre_Callback_func)
+    PORT=modules.settings.RESCUE_CAMERA_PORT,
+    controls=modules.settings.RESCUE_CAMERA_CONTROLS,
+    size=modules.settings.RESCUE_CAMERA_SIZE,
+    formats=modules.settings.RESCUE_CAMERA_FORMATS,
+    lores_size=modules.settings.RESCUE_CAMERA_LORES_SIZE,
+    pre_callback_func=modules.settings.RESCUE_CAMERA_PRE_CALLBACK_FUNC)
 
 Linetrace_Camera = modules.camera.Camera(
-    PORT=modules.settings.Linetrace_Camera_PORT,
-    controls=modules.settings.Linetrace_Camera_Controls,
-    size=modules.settings.Linetrace_Camera_size,
-    formats=modules.settings.Linetrace_Camera_formats,
-    lores_size=modules.settings.Linetrace_Camera_lores_size,
-    pre_callback_func=modules.settings.Linetrace_Camera_Pre_Callback_func)
+    PORT=modules.settings.LINETRACE_CAMERA_PORT,
+    controls=modules.settings.LINETRACE_CAMERA_CONTROLS,
+    size=modules.settings.LINETRACE_CAMERA_SIZE,
+    formats=modules.settings.LINETRACE_CAMERA_FORMATS,
+    lores_size=modules.settings.LINETRACE_CAMERA_LORES_SIZE,
+    pre_callback_func=modules.settings.LINETRACE_CAMERA_PRE_CALLBACK_FUNC)
 
 # Initialize UART communication
 uart_io = modules.uart.UART_CON()
@@ -135,34 +135,39 @@ def fix_to_range(x: int, min_num: int, max_num: int) -> int:
   return max(min_num, min(x, max_num))
 
 
-def compute_moving_value(current_theta: int) -> float:
+def compute_moving_value(current_theta: float) -> float:
   """
     Compute motor movement value based on line slope.
     
     Args:
-        current_slope: Current line slope
+        current_theta: Current line slope
         
     Returns:
         float: Computed movement value
     """
-  return modules.settings.computing_P * current_theta
+  return modules.settings.COMPUTING_P * current_theta
 
 
 default_speed = 1750
 
 
 def compute_default_speed() -> int:
+  """Compute default speed based on current slope."""
   global default_speed
   if modules.settings.slope is None:
     return default_speed
+  
   current_theta = math.atan(modules.settings.slope)
+  # Normalize theta to [0, π]
   if current_theta < 0:
     current_theta += math.pi
+  # Normalize to [-π/2, π/2]
   if current_theta > math.pi / 2:
     current_theta -= math.pi / 2
   elif current_theta < -math.pi / 2:
     current_theta += math.pi / 2
-  return default_speed - current_theta * 50
+    
+  return int(default_speed - current_theta * 50)
 
 
 def main_loop():
@@ -220,7 +225,7 @@ def main_loop():
           if i[3] == 1:
             all_checks[1] = True
         for i in modules.settings.green_marks:
-          if i[1] > modules.settings.Linetrace_Camera_lores_height // 2:
+          if i[1] > modules.settings.LINETRACE_CAMERA_LORES_HEIGHT // 2:
             should_detect = True
             break
         if (all_checks[0] or all_checks[1]) and should_detect:
