@@ -137,15 +137,20 @@ def fix_to_range(x: int, min_num: int, max_num: int) -> int:
 
 def compute_moving_value(current_theta: float) -> float:
   """
-    Compute motor movement value based on line slope.
+    Compute motor movement value using PID controller.
     
     Args:
-        current_theta: Current line slope
+        current_theta: Current line slope as error signal
         
     Returns:
-        float: Computed movement value
+        float: PID controller output
     """
-  return modules.settings.COMPUTING_P * current_theta
+  return modules.settings.pid_controller.compute(current_theta)
+
+
+def reset_pid_controller():
+  """Reset the PID controller state."""
+  modules.settings.pid_controller.reset()
 
 
 default_speed = 1750
@@ -184,6 +189,7 @@ def main_loop():
         logger.debug("Red stop")
         return
       if modules.settings.slope is None:
+        reset_pid_controller()  # Reset PID when line is lost
         send_speed(compute_default_speed() - 10, compute_default_speed() - 10)
         return
 
@@ -252,12 +258,14 @@ def main_loop():
 
 if __name__ == "__main__":
   try:
+    reset_pid_controller()  # Initialize PID controller
     while True:
       uart_io.send_message(Message(message_id, "GET button"))
       message = uart_io.receive_message()
       if message and message.getMessage() == "ON":
         main_loop()
       else:
+        reset_pid_controller()  # Reset PID when stopped
         send_speed(1500, 1500)
         modules.settings.stop_requested = False
         modules.settings.is_rescue_area = False
