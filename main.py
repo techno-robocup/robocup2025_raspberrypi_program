@@ -148,7 +148,7 @@ def compute_moving_value(current_theta: float) -> float:
   return modules.settings.COMPUTING_P * current_theta
 
 
-default_speed = 1700
+default_speed = 1750
 
 
 def compute_default_speed() -> int:
