@@ -180,29 +180,80 @@ def main_loop():
         send_speed(compute_default_speed() - 10, compute_default_speed() - 10)
         return
 
+<<<<<<< HEAD
       current_theta = math.atan(modules.settings.slope)
       if current_theta < 0:
         current_theta += math.pi
+||||||| 8e4decd
+      # Calculate angle from y-axis (vertical) - same as compute_default_speed
+      if modules.settings.slope == 0:
+        current_theta = 0  # Horizontal line
+      else:
+        current_theta = math.atan(1 / modules.settings.slope)  # Angle from y-axis
+=======
+      # Calculate angle from y-axis (vertical) - same as compute_default_speed
+      if modules.settings.slope == 0:
+        current_theta = 0  # Horizontal line
+      else:
+        current_theta = math.atan(1 /
+                                  modules.settings.slope)  # Angle from y-axis
+>>>>>>> 8e0b0e86a885e6a5e543d086e8af5b286d8ded86
 
       if current_theta > math.pi / 2:  # ← / に修正
         current_theta -= math.pi / 2
         send_speed(
             fix_to_range(
+<<<<<<< HEAD
                 compute_default_speed() - compute_moving_value(current_theta),
                 1000, 2000),
+||||||| 8e4decd
+                compute_default_speed() - compute_moving_value(abs(current_theta)),
+                1000, 2000),
+=======
+                compute_default_speed() -
+                compute_moving_value(abs(current_theta)), 1000, 2000),
+>>>>>>> 8e0b0e86a885e6a5e543d086e8af5b286d8ded86
             fix_to_range(
+<<<<<<< HEAD
                 compute_default_speed() + compute_moving_value(current_theta),
                 1000, 2000))
       elif current_theta < math.pi / 2:
         current_theta = math.pi / 2 - current_theta
+||||||| 8e4decd
+                compute_default_speed() + compute_moving_value(abs(current_theta)),
+                1000, 2000))
+      elif current_theta < 0:  # Left turn
+=======
+                compute_default_speed() +
+                compute_moving_value(abs(current_theta)), 1000, 2000))
+      elif current_theta < 0:  # Left turn
+>>>>>>> 8e0b0e86a885e6a5e543d086e8af5b286d8ded86
         send_speed(
             fix_to_range(
+<<<<<<< HEAD
                 compute_default_speed() + compute_moving_value(current_theta),
                 1000, 2000),
+||||||| 8e4decd
+                compute_default_speed() + compute_moving_value(abs(current_theta)),
+                1000, 2000),
+=======
+                compute_default_speed() +
+                compute_moving_value(abs(current_theta)), 1000, 2000),
+>>>>>>> 8e0b0e86a885e6a5e543d086e8af5b286d8ded86
             fix_to_range(
+<<<<<<< HEAD
                 compute_default_speed() - compute_moving_value(current_theta),
                 1000, 2000))
       else:
+||||||| 8e4decd
+                compute_default_speed() - compute_moving_value(abs(current_theta)),
+                1000, 2000))
+      else:  # Straight line
+=======
+                compute_default_speed() -
+                compute_moving_value(abs(current_theta)), 1000, 2000))
+      else:  # Straight line
+>>>>>>> 8e0b0e86a885e6a5e543d086e8af5b286d8ded86
         send_speed(compute_default_speed() - 10, compute_default_speed() - 10)
 
       if modules.settings.green_black_detected:
