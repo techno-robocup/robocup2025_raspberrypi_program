@@ -158,12 +158,7 @@ def compute_default_speed() -> int:
   if modules.settings.slope is None:
     return default_speed
 
-  # Calculate angle from y-axis (vertical)
-  if modules.settings.slope == 0:
-    current_theta = 0  # Horizontal line, 0 degrees from y-axis
-  else:
-    current_theta = math.atan(1 / modules.settings.slope)  # Angle from y-axis
-  
+  current_theta = math.atan(modules.settings.slope)
   # Use absolute angle directly - larger angles = more turning = slower speed
   return int(default_speed - abs(current_theta) * 150)
 
@@ -185,30 +180,29 @@ def main_loop():
         send_speed(compute_default_speed() - 10, compute_default_speed() - 10)
         return
 
-      # Calculate angle from y-axis (vertical) - same as compute_default_speed
-      if modules.settings.slope == 0:
-        current_theta = 0  # Horizontal line
-      else:
-        current_theta = math.atan(1 / modules.settings.slope)  # Angle from y-axis
+      current_theta = math.atan(modules.settings.slope)
+      if current_theta < 0:
+        current_theta += math.pi
 
-      # Determine turning direction based on angle sign
-      if current_theta > 0:  # Right turn
+      if current_theta > math.pi / 2:  # ← / に修正
+        current_theta -= math.pi / 2
         send_speed(
             fix_to_range(
-                compute_default_speed() - compute_moving_value(abs(current_theta)),
+                compute_default_speed() - compute_moving_value(current_theta),
                 1000, 2000),
             fix_to_range(
-                compute_default_speed() + compute_moving_value(abs(current_theta)),
+                compute_default_speed() + compute_moving_value(current_theta),
                 1000, 2000))
-      elif current_theta < 0:  # Left turn
+      elif current_theta < math.pi / 2:
+        current_theta = math.pi / 2 - current_theta
         send_speed(
             fix_to_range(
-                compute_default_speed() + compute_moving_value(abs(current_theta)),
+                compute_default_speed() + compute_moving_value(current_theta),
                 1000, 2000),
             fix_to_range(
-                compute_default_speed() - compute_moving_value(abs(current_theta)),
+                compute_default_speed() - compute_moving_value(current_theta),
                 1000, 2000))
-      else:  # Straight line
+      else:
         send_speed(compute_default_speed() - 10, compute_default_speed() - 10)
 
       if modules.settings.green_black_detected:
