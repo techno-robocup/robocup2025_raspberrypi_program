@@ -1,1 +1,1 @@
-yapf --style .style.yapf --in-place --recursive .
+yapf --style .style.yapf --in-place --recursive . --exclude .direnv/
