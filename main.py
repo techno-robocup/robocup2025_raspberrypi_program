@@ -153,7 +153,7 @@ def reset_pid_controller():
   modules.settings.pid_controller.reset()
 
 
-default_speed = 1750
+default_speed = 1700
 
 
 def compute_default_speed() -> int:
