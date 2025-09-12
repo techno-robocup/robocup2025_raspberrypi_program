@@ -159,11 +159,8 @@ def compute_default_speed() -> int:
     return default_speed
 
   current_theta = math.atan(modules.settings.slope)
-  # Normalize theta to [0, π]
-  if current_theta < 0:
-    current_theta += math.pi
-
-  return int(default_speed - abs(current_theta - math.pi) * 90)
+  # Use absolute angle directly - larger angles = more turning = slower speed
+  return int(default_speed - abs(current_theta) * 90)
 
 
 def main_loop():
