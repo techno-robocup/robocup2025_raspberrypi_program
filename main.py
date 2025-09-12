@@ -253,7 +253,6 @@ if __name__ == "__main__":
         main_loop()
       else:
         send_speed(1500, 1500)
-        modules.settings.read_red = 0
         modules.settings.stop_requested = False
         modules.settings.is_rescue_area = False
 
