@@ -162,13 +162,8 @@ def compute_default_speed() -> int:
   # Normalize theta to [0, π]
   if current_theta < 0:
     current_theta += math.pi
-  # Normalize to [-π/2, π/2]
-  if current_theta > math.pi / 2:
-    current_theta -= math.pi / 2
-  elif current_theta < -math.pi / 2:
-    current_theta += math.pi / 2
 
-  return int(default_speed - abs(current_theta) * 90)
+  return int(default_speed - abs(current_theta - math.pi) * 90)
 
 
 def main_loop():
