@@ -157,22 +157,23 @@ default_speed = 1700
 
 
 def compute_default_speed() -> int:
-  """Compute default speed based on current slope."""
-  global default_speed
-  if modules.settings.slope is None:
-    return default_speed
+  # """Compute default speed based on current slope."""
+  # global default_speed
+  # if modules.settings.slope is None:
+  #   return default_speed
 
-  current_theta = math.atan(modules.settings.slope)
-  # Normalize theta to [0, π]
-  if current_theta < 0:
-    current_theta += math.pi
-  # Normalize to [-π/2, π/2]
-  if current_theta > math.pi / 2:
-    current_theta -= math.pi / 2
-  elif current_theta < -math.pi / 2:
-    current_theta += math.pi / 2
+  # current_theta = math.atan(modules.settings.slope)
+  # # Normalize theta to [0, π]
+  # if current_theta < 0:
+  #   current_theta += math.pi
+  # # Normalize to [-π/2, π/2]
+  # if current_theta > math.pi / 2:
+  #   current_theta -= math.pi / 2
+  # elif current_theta < -math.pi / 2:
+  #   current_theta += math.pi / 2
 
-  return int(default_speed - abs(current_theta) * 60)
+  # return int(default_speed - abs(current_theta) * 60)
+  return default_speed
 
 
 def main_loop():
