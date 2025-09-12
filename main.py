@@ -163,7 +163,7 @@ def compute_default_speed() -> int:
     current_theta = 0  # Horizontal line, 0 degrees from y-axis
   else:
     current_theta = math.atan(1 / modules.settings.slope)  # Angle from y-axis
-  
+
   # Use absolute angle directly - larger angles = more turning = slower speed
   return int(default_speed - abs(current_theta) * 150)
 
@@ -189,25 +189,26 @@ def main_loop():
       if modules.settings.slope == 0:
         current_theta = 0  # Horizontal line
       else:
-        current_theta = math.atan(1 / modules.settings.slope)  # Angle from y-axis
+        current_theta = math.atan(1 /
+                                  modules.settings.slope)  # Angle from y-axis
 
       # Determine turning direction based on angle sign
       if current_theta > 0:  # Right turn
         send_speed(
             fix_to_range(
-                compute_default_speed() - compute_moving_value(abs(current_theta)),
-                1000, 2000),
+                compute_default_speed() -
+                compute_moving_value(abs(current_theta)), 1000, 2000),
             fix_to_range(
-                compute_default_speed() + compute_moving_value(abs(current_theta)),
-                1000, 2000))
+                compute_default_speed() +
+                compute_moving_value(abs(current_theta)), 1000, 2000))
       elif current_theta < 0:  # Left turn
         send_speed(
             fix_to_range(
-                compute_default_speed() + compute_moving_value(abs(current_theta)),
-                1000, 2000),
+                compute_default_speed() +
+                compute_moving_value(abs(current_theta)), 1000, 2000),
             fix_to_range(
-                compute_default_speed() - compute_moving_value(abs(current_theta)),
-                1000, 2000))
+                compute_default_speed() -
+                compute_moving_value(abs(current_theta)), 1000, 2000))
       else:  # Straight line
         send_speed(compute_default_speed() - 10, compute_default_speed() - 10)
 
