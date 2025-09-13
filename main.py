@@ -148,7 +148,7 @@ def compute_moving_value(current_theta: float) -> float:
   return modules.settings.COMPUTING_P * current_theta
 
 
-default_speed = 1750
+default_speed = 1800
 
 
 def compute_default_speed() -> int:
@@ -161,7 +161,7 @@ def compute_default_speed() -> int:
   if current_theta < 0:
     current_theta += math.pi
   # Use absolute angle directly - larger angles = more turning = slower speed
-  return int(default_speed - (abs(current_theta - math.pi / 2)**2) * 100)
+  return int(default_speed - (abs(current_theta - math.pi / 2)**2) * 110)
 
 
 def main_loop():
