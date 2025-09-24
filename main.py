@@ -204,6 +204,7 @@ if __name__ == "__main__":
     while True:
       uart_io.send_message(Message(message_id, "GET button"))
       message = uart_io.receive_message()
+      Linetrace_Camera.stop_cam()
       if message and message.getMessage() == "ON":
         main_loop()
       else:
