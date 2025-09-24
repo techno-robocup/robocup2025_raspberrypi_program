@@ -76,6 +76,7 @@ def get_ultrasonic_distance() -> Optional[float]:
         Optional[float]: Distance reading or None if failed
     """
   try:
+    print("Getting ultrasonic distance")
     global message_id
     message_id += 1
     uart_io.send_message(Message(message_id, "GET ultrasonic"))
