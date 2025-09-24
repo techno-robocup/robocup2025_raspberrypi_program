@@ -76,7 +76,7 @@ def get_ultrasonic_distance() -> Optional[float]:
         Optional[float]: Distance reading or None if failed
     """
   try:
-    print("Getting ultrasonic distance")
+    logger.debug("Getting ultrasonic distance")
     global message_id
     message_id += 1
     uart_io.send_message(Message(message_id, "GET ultrasonic"))
@@ -89,7 +89,7 @@ def get_ultrasonic_distance() -> Optional[float]:
           try:
             ret.append(float(distance))
           except ValueError:
-            print(f"ValueError: Could not convert {distance} to float")
+            logger.error(f"ValueError: Could not convert {distance} to float")
         return ret
       elif response.getId() > message_id:
         return None
