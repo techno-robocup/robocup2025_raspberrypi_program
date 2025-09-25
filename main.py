@@ -68,24 +68,31 @@ def send_speed(left_value: int, right_value: int) -> Message:
     return None
 
 
-def get_ultrasonic_distance() -> Optional[float]:
+def get_ultrasonic_distance() -> Optional[list[float]]:
   """
     Get ultrasonic sensor distance reading.
     
     Returns:
-        Optional[float]: Distance reading or None if failed
+        Optional[list[float]]: List of distance readings or None if failed
     """
   try:
+    logger.debug("Getting ultrasonic distance")
     global message_id
     message_id += 1
+    uart_io.send_message(Message(message_id, "GET ultrasonic"))
     while True:
-      uart_io.send_message(Message(message_id, "GET ultrasonic"))
       response = uart_io.receive_message()
       if response and response.getId() == message_id:
-        return float(response.getMessage())
-      elif not response:
-        break
-    return None
+        distances = response.getMessage().split()
+        ret = []
+        for distance in distances:
+          try:
+            ret.append(float(distance))
+          except ValueError:
+            logger.error(f"ValueError: Could not convert {distance} to float")
+        return ret
+      elif response.getId() > message_id:
+        return None
   except Exception as e:
     logger.error(f"Failed to get ultrasonic distance: {e}")
     return None
@@ -238,6 +245,7 @@ def main_loop():
           elif all_checks[1]:
             send_speed(1200, 1750)
             time.sleep(1.5)
+
 
   except KeyboardInterrupt:
     logger.info("STOPPING PROCESS BY KeyboardInterrupt")
