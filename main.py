@@ -73,7 +73,7 @@ def get_ultrasonic_distance() -> Optional[list[float]]:
     Get ultrasonic sensor distance reading.
     
     Returns:
-        Optional[float]: Distance reading or None if failed
+        Optional[list[float]]: List of distance readings or None if failed
     """
   try:
     logger.debug("Getting ultrasonic distance")
