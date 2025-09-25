@@ -68,7 +68,7 @@ def send_speed(left_value: int, right_value: int) -> Message:
     return None
 
 
-def get_ultrasonic_distance() -> Optional[float]:
+def get_ultrasonic_distance() -> Optional[list[float]]:
   """
     Get ultrasonic sensor distance reading.
     
