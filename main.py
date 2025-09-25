@@ -188,8 +188,64 @@ def main_loop():
         time.sleep(1)
         modules.settings.stop_requested = False
         return
-      ultrasonic_distance = get_ultrasonic_distance()
-      print(*ultrasonic_distance)
+            if modules.settings.slope is None:
+        send_speed(compute_default_speed() - 10, compute_default_speed() - 10)
+        return
+
+      current_theta = math.atan(modules.settings.slope)
+      if current_theta < 0:
+        current_theta += math.pi
+
+      if current_theta > math.pi / 2:  # ← / に修正
+        current_theta -= math.pi / 2
+        send_speed(
+            fix_to_range(
+                compute_default_speed() - compute_moving_value(current_theta),
+                1000, 2000),
+            fix_to_range(
+                compute_default_speed() + compute_moving_value(current_theta),
+                1000, 2000))
+      elif current_theta < math.pi / 2:
+        current_theta = math.pi / 2 - current_theta
+        send_speed(
+            fix_to_range(
+                compute_default_speed() + compute_moving_value(current_theta),
+                1000, 2000),
+            fix_to_range(
+                compute_default_speed() - compute_moving_value(current_theta),
+                1000, 2000))
+      else:
+        send_speed(compute_default_speed() - 10, compute_default_speed() - 10)
+
+      if modules.settings.green_black_detected:
+        all_checks = [False, False]  # [left, right]
+        should_detect = False
+        for i in modules.settings.green_black_detected:
+          if i[0] == 1:
+            continue
+          if i[1] == 0:
+            continue
+          if i[2] == 1:
+            all_checks[0] = True
+          if i[3] == 1:
+            all_checks[1] = True
+        for i in modules.settings.green_marks:
+          if i[1] > modules.settings.LINETRACE_CAMERA_LORES_HEIGHT // 2:
+            should_detect = True
+            break
+        if (all_checks[0] or all_checks[1]) and should_detect:
+          send_speed(compute_default_speed(), compute_default_speed())
+          time.sleep(0.5)
+          if all_checks[0] and all_checks[1]:
+            send_speed(1750, 1250)
+            # time.sleep(5)
+          elif all_checks[0]:
+            send_speed(1750, 1250)
+            time.sleep(1.5)
+          elif all_checks[1]:
+            send_speed(1200, 1750)
+            time.sleep(1.5)
+
 
   except KeyboardInterrupt:
     logger.info("STOPPING PROCESS BY KeyboardInterrupt")
