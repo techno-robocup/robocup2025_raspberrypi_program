@@ -188,7 +188,7 @@ def main_loop():
         time.sleep(1)
         modules.settings.stop_requested = False
         return
-            if modules.settings.slope is None:
+      if modules.settings.slope is None:
         send_speed(compute_default_speed() - 10, compute_default_speed() - 10)
         return
 
