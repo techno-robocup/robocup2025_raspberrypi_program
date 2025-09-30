@@ -75,6 +75,7 @@ def send_arm(angle: int, wire: int):
       Message(message_id, f"Rescue {angle:4d}{wire}")
     )
     logger.debug(f"Sent Rescue {angle:4d}{wire}")
+    logger.debug(f"Received message {uart_io.receive_message()}")
     return None
   except Exception as e:
     logger.error(f"Failed to send speed command: {e}")
