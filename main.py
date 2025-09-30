@@ -67,6 +67,18 @@ def send_speed(left_value: int, right_value: int) -> Message:
     logger.error(f"Failed to send speed command: {e}")
     return None
 
+def send_arm(angle: int, wire: int):
+  global message_id
+  message_id += 1
+  try:
+    uart_io.send_message(
+      Message(message_id, f"Rescue {angle:4d}{wire}")
+    )
+    return None
+  except Exception as e:
+    logger.error(f"Failed to send speed command: {e}")
+    return None
+
 
 def get_ultrasonic_distance() -> Optional[list[float]]:
   """
@@ -179,6 +191,11 @@ def main_loop():
   try:
     if modules.settings.is_rescue_area:
       modules.settings.is_rescue_area = False
+    elif True:
+      send_arm(1024, 0)
+      time.sleep(3)
+      send_arm(3072, 0)
+      time.sleep(3)
     else:
       if modules.settings.stop_requested:
         send_speed(1500, 1500)
