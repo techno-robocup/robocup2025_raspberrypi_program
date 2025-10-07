@@ -9,6 +9,7 @@ import modules.uart
 import modules.log
 import modules.camera
 import modules.settings
+import modules.rescue
 from modules.uart import Message
 import traceback
 import sys
@@ -192,12 +193,24 @@ def main_loop():
 
   try:
     if modules.settings.is_rescue_area:
-      modules.settings.is_rescue_area = False
-    elif True:
-      send_arm(1024, 0)
-      time.sleep(3)
-      send_arm(3072, 0)
-      time.sleep(3)
+      modules.rescue.rescue_loop_func()
+      time.sleep(1)
+      send_speed(modules.rescue.L_motor_value, modules.rescue.R_motor_value)
+      #send_arm(modules.rescue.Arm_pos, modules.rescue.Arm_pos)
+      if modules.rescue.Release_flag:
+        send_arm(3072, 0)
+        time.sleep(3)
+        send_arm(3072, 1)
+        time.sleep(1)
+        send_arm(3072, 0)
+        send_arm(1024,0)
+        time.sleep(3)
+        modules.rescue.Release_flag = False
+    #elif True:
+    # send_arm(1024, 0)
+    # time.sleep(3)
+    # send_arm(3072, 0)
+    # time.sleep(3)
     else:
       if modules.settings.stop_requested:
         send_speed(1500, 1500)
@@ -215,7 +228,7 @@ def main_loop():
       if current_theta < 0:
         current_theta += math.pi
 
-      if current_theta > math.pi / 2:  # ← / に修正
+      if current_theta > math.pi / 2: # ← / に修正
         current_theta -= math.pi / 2
         send_speed(
             fix_to_range(
@@ -237,7 +250,7 @@ def main_loop():
         send_speed(compute_default_speed() - 10, compute_default_speed() - 10)
 
       if modules.settings.green_black_detected:
-        all_checks = [False, False]  # [left, right]
+        all_checks = [False, False] # [left, right]
         should_detect = False
         for i in modules.settings.green_black_detected:
           if i[0] == 1:
