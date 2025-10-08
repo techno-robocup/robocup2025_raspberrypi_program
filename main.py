@@ -193,7 +193,12 @@ def main_loop():
 
   try:
     if modules.settings.is_rescue_area:
-      modules.rescue.rescue_loop_func()
+      distances = get_ultrasonic_distance()
+      if distances and len(distances) >= 3:
+        u_sonicL, u_sonicU, u_sonicR = distances[0], distances[1], distances[2]
+        modules.rescue.rescue_loop_func(u_sonicL, u_sonicU, u_sonicR)
+      else:
+        logger.debug("No ultrasonic data available")
       time.sleep(1)
       send_speed(modules.rescue.L_motor_value, modules.rescue.R_motor_value)
       #send_arm(modules.rescue.Arm_pos, modules.rescue.Arm_pos)
