@@ -43,7 +43,6 @@ uart_io = modules.uart.UART_CON()
 
 # Start the line tracing camera
 # Linetrace_Camera.start_cam()
-Rescue_Camera.start_cam()
 
 message_id = 0
 
@@ -200,6 +199,7 @@ def main_loop():
       #modules.rescue.rescue_loop_func()
       ##else:
         #logger.debug("No ultrasonic data available")
+      Rescue_Camera.start_cam()
       time.sleep(1)
       send_speed(modules.rescue.L_motor_value, modules.rescue.R_motor_value)
       send_arm(modules.rescue.Arm_pos, modules.rescue.Arm_pos)
