@@ -185,6 +185,8 @@ def compute_default_speed() -> int:
   # Use absolute angle directly - larger angles = more turning = slower speed
   return int(default_speed - (abs(current_theta - math.pi / 2)**2) * 100)
 
+# TODO: Removing some day
+Rescue_Camera.start_cam()
 
 def main_loop():
   """Main control loop for the robotics program."""
@@ -199,7 +201,6 @@ def main_loop():
       #modules.rescue.rescue_loop_func()
       ##else:
         #logger.debug("No ultrasonic data available")
-      Rescue_Camera.start_cam()
       time.sleep(1)
       send_speed(modules.rescue.L_motor_value, modules.rescue.R_motor_value)
       send_arm(modules.rescue.Arm_pos, modules.rescue.Arm_pos)
