@@ -195,24 +195,13 @@ def main_loop():
 
   try:
     if modules.settings.is_rescue_area:
-      ##distances = get_ultrasonic_distance()
-      ##if distances and len(distances) >= 3:
-      #  #u_sonicL, u_sonicU, u_sonicR = distances[0], distances[1], distances[2]
-      #modules.rescue.rescue_loop_func()
-      ##else:
-        #logger.debug("No ultrasonic data available")
-      time.sleep(1)
-      send_speed(modules.rescue.L_motor_value, modules.rescue.R_motor_value)
-      send_arm(modules.rescue.Arm_pos, modules.rescue.Arm_pos)
-      if modules.rescue.Release_flag:
-        send_arm(3072, 0)
-        time.sleep(3)
-        send_arm(3072, 1)
-        time.sleep(1)
-        send_arm(3072, 0)
-        send_arm(1024,0)
-        time.sleep(3)
-        modules.rescue.Release_flag = False
+      distances = get_ultrasonic_distance()
+      if distances and len(distances) >= 3:
+        modules.rescue.R_U_SONIC, modules.rescue.F_U_SONIC, modules.rescue.R_U_SONIC = distances[0], distances[1], distances[2]
+      else:
+        logger.debug("No ultrasonic data available")
+      send_speed(modules.rescue.L_Motor_Value, modules.rescue.R_Motor_Value)
+      send_arm(modules.rescue.Wire_Motor_Value,modules.rescue.Wire_Motor_Value)
     #elif True:
     # send_arm(1024, 0)
     # time.sleep(3)
@@ -221,11 +210,7 @@ def main_loop():
     else:
       if modules.settings.stop_requested:
         send_speed(1500, 1500)
-        time.sleep(5)
         logger.debug("Red stop")
-        send_speed(1600, 1600)
-        time.sleep(1)
-        modules.settings.stop_requested = False
         return
       if modules.settings.slope is None:
         send_speed(compute_default_speed() - 10, compute_default_speed() - 10)
