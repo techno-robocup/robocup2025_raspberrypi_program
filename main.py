@@ -222,11 +222,7 @@ def main_loop():
     else:
       if modules.settings.stop_requested:
         send_speed(1500, 1500)
-        time.sleep(5)
         logger.debug("Red stop")
-        send_speed(1600, 1600)
-        time.sleep(1)
-        modules.settings.stop_requested = False
         return
       if modules.settings.slope is None:
         send_speed(compute_default_speed() - 10, compute_default_speed() - 10)
