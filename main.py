@@ -68,13 +68,12 @@ def send_speed(left_value: int, right_value: int) -> Message:
     logger.error(f"Failed to send speed command: {e}")
     return None
 
+
 def send_arm(angle: int, wire: int):
   global message_id
   message_id += 1
   try:
-    uart_io.send_message(
-      Message(message_id, f"Rescue {angle:4d}{wire}")
-    )
+    uart_io.send_message(Message(message_id, f"Rescue {angle:4d}{wire}"))
     logger.debug(f"Sent Rescue {angle:4d}{wire}")
     logger.debug(f"Received message {uart_io.receive_message()}")
     return None
@@ -185,8 +184,10 @@ def compute_default_speed() -> int:
   # Use absolute angle directly - larger angles = more turning = slower speed
   return int(default_speed - (abs(current_theta - math.pi / 2)**2) * 100)
 
+
 # TODO: Removing some day
 Rescue_Camera.start_cam()
+
 
 def main_loop():
   """Main control loop for the robotics program."""
@@ -200,7 +201,7 @@ def main_loop():
       #  #u_sonicL, u_sonicU, u_sonicR = distances[0], distances[1], distances[2]
       #modules.rescue.rescue_loop_func()
       ##else:
-        #logger.debug("No ultrasonic data available")
+      #logger.debug("No ultrasonic data available")
       time.sleep(1)
       send_speed(modules.rescue.L_motor_value, modules.rescue.R_motor_value)
       send_arm(modules.rescue.Arm_pos, modules.rescue.Arm_pos)
@@ -210,7 +211,7 @@ def main_loop():
         send_arm(3072, 1)
         time.sleep(1)
         send_arm(3072, 0)
-        send_arm(1024,0)
+        send_arm(1024, 0)
         time.sleep(3)
         modules.rescue.Release_flag = False
     #elif True:
@@ -235,7 +236,7 @@ def main_loop():
       if current_theta < 0:
         current_theta += math.pi
 
-      if current_theta > math.pi / 2: # ← / に修正
+      if current_theta > math.pi / 2:  # ← / に修正
         current_theta -= math.pi / 2
         send_speed(
             fix_to_range(
@@ -257,7 +258,7 @@ def main_loop():
         send_speed(compute_default_speed() - 10, compute_default_speed() - 10)
 
       if modules.settings.green_black_detected:
-        all_checks = [False, False] # [left, right]
+        all_checks = [False, False]  # [left, right]
         should_detect = False
         for i in modules.settings.green_black_detected:
           if i[0] == 1:
@@ -284,7 +285,6 @@ def main_loop():
           elif all_checks[1]:
             send_speed(1200, 1750)
             time.sleep(1.5)
-
 
   except KeyboardInterrupt:
     logger.info("STOPPING PROCESS BY KeyboardInterrupt")
