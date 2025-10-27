@@ -215,6 +215,7 @@ def main_loop():
         time.sleep(1.5)
         send_speed(1750, 1750)
         time.sleep(1)
+        object_second_phase = True
       else:
         if distances[0] < 8:
           send_speed(1750, 1250)
