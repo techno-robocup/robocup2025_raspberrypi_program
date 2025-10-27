@@ -214,7 +214,7 @@ def main_loop():
       if not object_second_phase:
         send_speed(1750, 1250)
         time.sleep(1.5)
-        send_speed(1750, 1750)
+        send_speed(1700, 1700)
         time.sleep(1)
         object_second_phase = True
       else:
