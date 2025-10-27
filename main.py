@@ -223,10 +223,10 @@ def main_loop():
     # send_arm(3072, 0)
     # time.sleep(3)
     else:
-      if modules.settings.stop_requested:
-        send_speed(1500, 1500)
-        logger.debug("Red stop")
-        return
+      #if modules.settings.stop_requested:
+      #  send_speed(1500, 1500)
+      #  logger.debug("Red stop")
+      #  return
       if modules.settings.slope is None:
         send_speed(compute_default_speed() - 10, compute_default_speed() - 10)
         return
