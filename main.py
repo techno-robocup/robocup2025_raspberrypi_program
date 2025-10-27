@@ -170,7 +170,8 @@ def compute_moving_value(current_theta: float) -> float:
 
 
 default_speed = 1750
-
+is_object = False
+object_second_phase = False
 
 def compute_default_speed() -> int:
   """Compute default speed based on current slope."""
@@ -206,6 +207,16 @@ def main_loop():
       modules.rescue.rescue_loop_func()
       send_speed(modules.rescue.L_Motor_Value, modules.rescue.R_Motor_Value)
       send_arm(modules.rescue.Arm_Motor_Value, modules.rescue.Wire_Motor_Value)
+    elif is_object:
+      if not object_second_phase:
+        send_speed(1750, 1250)
+        time.sleep(1.5)
+      else:
+        dist = get_ultrasonic_distance()
+        if dist[1] < 8:
+          send_speed(1250, 1750)
+        else:
+          send_speed(1750, 1750)
     #elif True:
     # send_arm(1024, 0)
     # time.sleep(3)
@@ -294,6 +305,8 @@ if __name__ == "__main__":
         send_speed(1500, 1500)
         modules.settings.stop_requested = False
         modules.settings.is_rescue_area = False
+        is_object = False
+        object_second_phase = False
 
   except KeyboardInterrupt:
     logger.info("PROCESS INTERRUPTED BY USER")
