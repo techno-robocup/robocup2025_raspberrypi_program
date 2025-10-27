@@ -172,6 +172,7 @@ def compute_moving_value(current_theta: float) -> float:
 default_speed = 1750
 is_object = False
 object_second_phase = False
+distances = []
 
 
 def compute_default_speed() -> int:
@@ -216,8 +217,7 @@ def main_loop():
         send_speed(1750, 1750)
         time.sleep(1)
       else:
-        dist = get_ultrasonic_distance()
-        if dist[0] < 8:
+        if distances[0] < 8:
           send_speed(1750, 1250)
         else:
           send_speed(1250, 1750)
