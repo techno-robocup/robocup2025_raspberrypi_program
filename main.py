@@ -234,6 +234,9 @@ def main_loop():
       #  send_speed(1500, 1500)
       #  logger.debug("Red stop")
       #  return
+      if distances[1] < 8:
+        is_object = True
+        return
       if modules.settings.slope is None:
         send_speed(compute_default_speed() - 10, compute_default_speed() - 10)
         return
