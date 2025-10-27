@@ -194,7 +194,7 @@ Rescue_Camera.start_cam()
 
 def main_loop():
   """Main control loop for the robotics program."""
-  global message_id
+  global message_id, is_object, object_second_phase
   message_id += 1
 
   try:
