@@ -173,6 +173,7 @@ default_speed = 1750
 is_object = False
 object_second_phase = False
 
+
 def compute_default_speed() -> int:
   """Compute default speed based on current slope."""
   global default_speed
@@ -199,8 +200,8 @@ def main_loop():
     if modules.settings.is_rescue_area:
       distances = get_ultrasonic_distance()
       if distances and len(distances) >= 3:
-        modules.rescue.L_U_SONIC= distances[0]
-        modules.rescue.F_U_SONIC =  distances[1]
+        modules.rescue.L_U_SONIC = distances[0]
+        modules.rescue.F_U_SONIC = distances[1]
         modules.rescue.R_U_SONIC = distances[2]
       else:
         logger.debug("No ultrasonic data available")
