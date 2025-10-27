@@ -197,9 +197,9 @@ def main_loop():
   message_id += 1
 
   try:
+    distances = get_ultrasonic_distance()
     if modules.settings.is_rescue_area:
     #if True:
-      distances = get_ultrasonic_distance()
       if distances and len(distances) >= 3:
         modules.rescue.L_U_SONIC = distances[0]
         modules.rescue.F_U_SONIC = distances[1]
@@ -210,7 +210,6 @@ def main_loop():
       send_speed(modules.rescue.L_Motor_Value, modules.rescue.R_Motor_Value)
       send_arm(modules.rescue.Arm_Motor_Value, modules.rescue.Wire_Motor_Value)
     elif is_object:
-      distances = get_ultrasonic_distance()
       if not object_second_phase:
         send_speed(1750, 1250)
         time.sleep(1.5)
