@@ -220,7 +220,7 @@ def main_loop():
         if distances[0] < 8:
           send_speed(1700, 1700)
         else:
-          send_speed(1600, 1700)
+          send_speed(1550, 1700)
         if modules.settings.slope is None:
           is_object = False
           object_second_phase = False
