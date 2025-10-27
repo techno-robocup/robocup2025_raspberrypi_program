@@ -172,7 +172,6 @@ def compute_moving_value(current_theta: float) -> float:
 default_speed = 1750
 is_object = False
 object_second_phase = False
-distances = []
 
 
 def compute_default_speed() -> int:
@@ -194,7 +193,7 @@ Rescue_Camera.start_cam()
 
 def main_loop():
   """Main control loop for the robotics program."""
-  global message_id, is_object, object_second_phase, distances
+  global message_id, is_object, object_second_phase
   message_id += 1
 
   try:
@@ -211,6 +210,7 @@ def main_loop():
       send_speed(modules.rescue.L_Motor_Value, modules.rescue.R_Motor_Value)
       send_arm(modules.rescue.Arm_Motor_Value, modules.rescue.Wire_Motor_Value)
     elif is_object:
+      distances = get_ultrasonic_distance()
       if not object_second_phase:
         send_speed(1750, 1250)
         time.sleep(1.5)
