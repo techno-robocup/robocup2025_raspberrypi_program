@@ -172,7 +172,6 @@ def compute_moving_value(current_theta: float) -> float:
 default_speed = 1750
 is_object = False
 object_second_phase = False
-distances = []
 
 
 def compute_default_speed() -> int:
@@ -194,13 +193,13 @@ Rescue_Camera.start_cam()
 
 def main_loop():
   """Main control loop for the robotics program."""
-  global message_id
+  global message_id, is_object, object_second_phase
   message_id += 1
 
   try:
+    distances = get_ultrasonic_distance()
     if modules.settings.is_rescue_area:
     #if True:
-      distances = get_ultrasonic_distance()
       if distances and len(distances) >= 3:
         modules.rescue.L_U_SONIC = distances[0]
         modules.rescue.F_U_SONIC = distances[1]
@@ -215,6 +214,7 @@ def main_loop():
         time.sleep(1.5)
         send_speed(1750, 1750)
         time.sleep(1)
+        object_second_phase = True
       else:
         if distances[0] < 8:
           send_speed(1750, 1250)
