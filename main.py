@@ -266,7 +266,7 @@ def main_loop():
           time.sleep(0.5)
           if all_checks[0] and all_checks[1]:
             send_speed(1750, 1250)
-            # time.sleep(5)
+            time.sleep(3.5)
           elif all_checks[0]:
             send_speed(1750, 1250)
             time.sleep(1.5)
