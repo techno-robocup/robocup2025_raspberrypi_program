@@ -197,7 +197,8 @@ def main_loop():
   message_id += 1
 
   try:
-    if modules.settings.is_rescue_area:
+    #if modules.settings.is_rescue_area:
+    if True:
       distances = get_ultrasonic_distance()
       if distances and len(distances) >= 3:
         modules.rescue.L_U_SONIC = distances[0]
