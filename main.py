@@ -221,7 +221,7 @@ def main_loop():
           send_speed(1700, 1700)
         else:
           send_speed(1550, 1700)
-        if modules.settings.slope is None:
+        if modules.settings.slope is not None and abs(modules.settings.slope) < 0.5:
           is_object = False
           object_second_phase = False
     #elif True:
