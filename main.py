@@ -213,12 +213,17 @@ def main_loop():
       if not object_second_phase:
         send_speed(1750, 1250)
         time.sleep(1.5)
+        send_speed(1750, 1750)
+        time.sleep(1)
       else:
         dist = get_ultrasonic_distance()
-        if dist[1] < 8:
-          send_speed(1250, 1750)
+        if dist[0] < 8:
+          send_speed(1750, 1250)
         else:
-          send_speed(1750, 1750)
+          send_speed(1250, 1750)
+        if modules.settings.slope is None:
+          is_object = False
+          object_second_phase = False
     #elif True:
     # send_arm(1024, 0)
     # time.sleep(3)
