@@ -212,14 +212,14 @@ def main_loop():
       if not object_second_phase:
         send_speed(1750, 1250)
         time.sleep(1.5)
-        send_speed(1750, 1750)
+        send_speed(1700, 1700)
         time.sleep(1)
         object_second_phase = True
       else:
         if distances[0] < 8:
-          send_speed(1750, 1250)
+          send_speed(1700, 1700)
         else:
-          send_speed(1250, 1750)
+          send_speed(1600, 1700)
         if modules.settings.slope is None:
           is_object = False
           object_second_phase = False
