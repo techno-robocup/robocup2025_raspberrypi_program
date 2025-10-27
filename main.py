@@ -207,7 +207,6 @@ def main_loop():
         modules.rescue.R_U_SONIC = distances[2]
       else:
         logger.debug("No ultrasonic data available")
-      modules.rescue.rescue_loop_func()
       send_speed(modules.rescue.L_Motor_Value, modules.rescue.R_Motor_Value)
       send_arm(modules.rescue.Arm_Motor_Value, modules.rescue.Wire_Motor_Value)
     elif is_object:
