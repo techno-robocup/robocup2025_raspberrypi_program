@@ -194,7 +194,7 @@ Is_Rescue_Camera_Start = False
 
 def main_loop():
   """Main control loop for the robotics program."""
-  global message_id, is_object, object_second_phase
+  global message_id, is_object, object_second_phase, Is_Rescue_Camera_Start
   message_id += 1
 
   try:
