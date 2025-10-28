@@ -188,7 +188,8 @@ def compute_default_speed() -> int:
 
 
 # TODO: Removing some day
-Rescue_Camera.start_cam()
+Is_Rescue_Camera_Start = False
+#Rescue_Camera.start_cam()
 
 
 def main_loop():
@@ -197,6 +198,10 @@ def main_loop():
   message_id += 1
 
   try:
+    if not Is_Rescue_Camera_Start:
+      Rescue_Camera.start_cam()
+      time.sleep(1)
+      Is_Rescue_Camera_Start = True
     distances = get_ultrasonic_distance()
     if modules.settings.is_rescue_area:
     #if True:
