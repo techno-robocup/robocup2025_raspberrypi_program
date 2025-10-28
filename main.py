@@ -198,12 +198,13 @@ def main_loop():
   message_id += 1
 
   try:
-    if not Is_Rescue_Camera_Start:
-      Rescue_Camera.start_cam()
-      time.sleep(1)
-      Is_Rescue_Camera_Start = True
     distances = get_ultrasonic_distance()
     if modules.settings.is_rescue_area:
+      if not Is_Rescue_Camera_Start:
+        Rescue_Camera.start_cam()
+        Linetrace_Camera.stop_cam()
+        time.sleep(1)
+        Is_Rescue_Camera_Start = True
     #if True:
       if distances and len(distances) >= 3:
         modules.rescue.L_U_SONIC = distances[0]
@@ -235,6 +236,10 @@ def main_loop():
     # send_arm(3072, 0)
     # time.sleep(3)
     else:
+      if Is_Rescue_Camera_Start:
+        Rescue_Camera.stop_cam()
+        Linetrace_Camera.start_cam()
+        Is_Rescue_Camera_Start = False
       if modules.settings.stop_requested:
         send_speed(1500, 1500)
         logger.debug("Red stop")
