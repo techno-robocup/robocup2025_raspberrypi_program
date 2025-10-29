@@ -200,7 +200,7 @@ def main_loop():
   try:
     distances = get_ultrasonic_distance()
     # if modules.settings.is_rescue_area:
-    if True:
+    if False:
       if not Is_Rescue_Camera_Start:
         Rescue_Camera.start_cam()
         Linetrace_Camera.stop_cam()
