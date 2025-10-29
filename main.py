@@ -215,7 +215,28 @@ def main_loop():
         logger.debug("No ultrasonic data available")
       modules.rescue.rescue_loop_func()
       send_speed(modules.rescue.L_Motor_Value, modules.rescue.R_Motor_Value)
-      send_arm(modules.rescue.Arm_Motor_Value, modules.rescue.Wire_Motor_Value)
+      if modules.rescue.Arm_Move_Flag == 1:# TODO: Call Arm
+        logger.debug("Ball catch")
+        send_speed(1500,1500)
+        send_arm(1024,0)
+        time.sleep(1)
+        send_arm(1024,1)
+        send_arm(3072,1)
+        send_speed(1450,1450)
+        time.sleep(1)
+        send_speed(1500,1500)
+        modules.rescue.Arm_Move_Flag = 0
+      if modules.rescue.Arm_Move_Flag == 2:# TODO: Call Arm
+        logger.debug("Ball release")
+        send_speed(1550,1550)
+        send_arm(1024,1)
+        time.sleep(1)
+        send_arm(1024,0)
+        send_arm(3072,0)
+        send_speed(1450,1450)
+        time.sleep(1)
+        send_speed(1500,1500)
+        modules.rescue.Arm_Move_Flag = 0
     elif is_object:
       if not object_second_phase:
         send_speed(1750, 1250)
