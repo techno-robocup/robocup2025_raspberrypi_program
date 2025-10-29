@@ -358,6 +358,7 @@ from typing import Optional
 import time
 
 message_id = 0
+uart_io = modules.uart.UART_CON()
 def send_arm(angle: int, wire: int):
   global message_id
   message_id += 1
