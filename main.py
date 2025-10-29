@@ -345,6 +345,18 @@
 #       send_speed(1500, 1500)
 #     except Exception as e:
 #       logger.error(f"Error during cleanup: {e}")
+import modules.uart
+import modules.log
+import modules.camera
+import modules.settings
+import modules.rescue
+from modules.uart import Message
+import traceback
+import sys
+import math
+from typing import Optional
+import time
+
 message_id = 0
 def send_arm(angle: int, wire: int):
   global message_id
