@@ -345,7 +345,7 @@
 #       send_speed(1500, 1500)
 #     except Exception as e:
 #       logger.error(f"Error during cleanup: {e}")
-
+message_id = 0
 def send_arm(angle: int, wire: int):
   global message_id
   message_id += 1
