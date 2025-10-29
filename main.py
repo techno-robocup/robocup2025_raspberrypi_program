@@ -42,7 +42,7 @@ Linetrace_Camera = modules.camera.Camera(
 uart_io = modules.uart.UART_CON()
 
 # Start the line tracing camera
-# Linetrace_Camera.start_cam()
+Linetrace_Camera.start_cam()
 
 message_id = 0
 
