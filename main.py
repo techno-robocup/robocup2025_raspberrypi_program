@@ -304,6 +304,9 @@ def main_loop():
               ObjectClasses.GREEN_CAGE.value
           ] if rescue_silver_ball_cnt < 2 else [ObjectClasses.RED_CAGE.value]
 
+        # Update modules.rescue.Valid_Classes for compatibility
+        modules.rescue.Valid_Classes = rescue_valid_classes
+
         # EXPANDED FIND_BEST_TARGET LOGIC
         boxes = results[0].boxes
         if not boxes:
@@ -377,6 +380,7 @@ def main_loop():
                 rescue_silver_ball_cnt += 1
               else:
                 rescue_black_ball_cnt += 1
+              rescue_is_ball_caching = False  # Reset ball caching state
               rescue_Arm_Move_Flag = 2
               modules.rescue.Arm_Move_Flag = 2  # For compatibility
             else:
@@ -408,6 +412,13 @@ def main_loop():
       # Update modules.rescue values for compatibility
       modules.rescue.L_Motor_Value = rescue_L_Motor_Value
       modules.rescue.R_Motor_Value = rescue_R_Motor_Value
+      modules.rescue.robot.silver_ball_cnt = rescue_silver_ball_cnt
+      modules.rescue.robot.black_ball_cnt = rescue_black_ball_cnt
+      modules.rescue.robot.is_ball_caching = rescue_is_ball_caching
+      modules.rescue.robot.target_position = rescue_target_position
+      modules.rescue.robot.target_size = rescue_target_size
+      modules.rescue.robot.cnt_turning_degrees = rescue_cnt_turning_degrees
+      modules.rescue.robot.cnt_turning_side = rescue_cnt_turning_side
 
       # Send motor speeds
       send_speed(rescue_L_Motor_Value, rescue_R_Motor_Value)
