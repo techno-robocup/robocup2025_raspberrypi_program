@@ -346,7 +346,7 @@
 #     except Exception as e:
 #       logger.error(f"Error during cleanup: {e}")
 
-  def send_arm(angle: int, wire: int):
+def send_arm(angle: int, wire: int):
   global message_id
   message_id += 1
   try:
