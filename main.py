@@ -351,10 +351,6 @@ import modules.camera
 import modules.settings
 import modules.rescue
 from modules.uart import Message
-import traceback
-import sys
-import math
-from typing import Optional
 import time
 
 message_id = 0
