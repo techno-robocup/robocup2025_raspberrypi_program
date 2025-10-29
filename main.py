@@ -24,6 +24,7 @@ logger.info("PROCESS STARTED")
 
 # Rescue constants from modules.rescue
 P = 0.2
+WP = 1 # Cage P
 AP = 1.5
 CP = 1
 BALL_CATCH_SIZE = 130000
@@ -361,7 +362,7 @@ def main_loop():
             logger.debug(f"L: {rescue_L_Motor_Value} R: {rescue_R_Motor_Value}")
           else:
             rescue_cnt_turning_degrees = 0
-            if not rescue_is_ball_caching and rescue_target_size >= BALL_CATCH_SIZE:
+            if not rescue_is_ball_caching and rescue_target_size >= BALL_CATCH_SIZE and abs(rescue_target_position) <= 100:
               logger.debug(
                   f"Target is close (size: {rescue_target_size:.1f}). Initiating catch_ball()"
               )
@@ -371,7 +372,7 @@ def main_loop():
               logger.debug("catch_ball done")
               rescue_Arm_Move_Flag = 1
               modules.rescue.Arm_Move_Flag = 1  # For compatibility
-            elif rescue_is_ball_caching and rescue_F_U_SONIC is not None and rescue_F_U_SONIC < 1.0:
+            elif rescue_is_ball_caching and rescue_F_U_SONIC is not None and rescue_F_U_SONIC < 2.0:
               logger.debug(
                   f"Close to wall (dist: {rescue_F_U_SONIC:.1f}). Initiating release_ball()")
               # EXPANDED RELEASE_BALL LOGIC
@@ -393,16 +394,18 @@ def main_loop():
                 rescue_R_Motor_Value = 1500
                 logger.debug("No target data for set_motor_speeds(), stopping motors.")
               else:
-                diff_angle = rescue_target_position * P
-                if rescue_is_ball_caching:
-                  dist_term = 100
-                else:
+                if not rescue_is_ball_caching:
+                  diff_angle = rescue_target_position * P
                   if BALL_CATCH_SIZE > rescue_target_size:
                     dist_term = (math.sqrt(BALL_CATCH_SIZE) - math.sqrt(rescue_target_size)) * AP + 80
                   else:
                     dist_term = 0
-                base_L = 1500 + diff_angle + dist_term
-                base_R = 1500 - diff_angle + dist_term
+                  base_L = 1500 + diff_angle + dist_term
+                  base_R = 1500 - diff_angle + dist_term
+                else:
+                  diff_angle = rescue_target_position * WP
+                  base_L = 1500 + diff_angle + 100
+                  base_R = 1500 - diff_angle + 100
                 rescue_L_Motor_Value = int(min(max(base_L, 1000), 2000))
                 rescue_R_Motor_Value = int(min(max(base_R, 1000), 2000))
                 logger.debug(f"Motor speed L:{rescue_L_Motor_Value}, R:{rescue_R_Motor_Value}")
