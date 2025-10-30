@@ -395,7 +395,7 @@ def main_loop():
                 if not rescue_is_ball_caching:
                   diff_angle = rescue_target_position * P
                   if BALL_CATCH_SIZE > rescue_target_size:
-                    dist_term = (math.sqrt(BALL_CATCH_SIZE) - math.sqrt(rescue_target_size)) * A
+                    dist_term = (math.sqrt(BALL_CATCH_SIZE) - math.sqrt(rescue_target_size)) * AP
                   else:
                     dist_term = 0
                     diff_angle * 2
