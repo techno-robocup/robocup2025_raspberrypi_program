@@ -458,7 +458,7 @@ def main_loop():
         send_arm(3072,0)
         send_speed(1450,1450)
         time.sleep(1)
-        send_speed(1400,4500)
+        send_speed(1400,1400)
         time.sleep(3)
         send_speed(1750,1250)
         time.sleep(TURN_180_TIME)
