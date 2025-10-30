@@ -23,14 +23,14 @@ logger = modules.log.get_logger()
 logger.info("PROCESS STARTED")
 
 # Rescue constants from modules.rescue
-P = 0.2
-WP = 1 # Cage P
-AP = 1.5
+P = 0.5
+WP = 0.5 # Cage P
+AP = 1
 CP = 1
 BALL_CATCH_SIZE = 130000
-CAGE_RELEASE_SIZE = 1000000
-TURN_45_TIME = 3
-TURN_180_TIME = 12
+CAGE_RELEASE_SIZE = 10000
+TURN_45_TIME = 1
+TURN_180_TIME = 4
 FORWARD_STEP_TIME = 0.3
 WALL_DIST_THRESHOLD = 5.03072
 FRONT_CLEAR_THRESHOLD = 3.0
@@ -282,12 +282,9 @@ def main_loop():
       if modules.settings.yolo_results is None:
         logger.debug("No YOLO results available, stopping motors.")
         # EXPANDED CHANGE_POSITION LOGIC
-        logger.debug(f"SonicF :{rescue_F_U_SONIC} SonicL:{rescue_L_U_SONIC} cnt_turning:{rescue_cnt_turning_degrees}")
-        rescue_L_Motor_Value = 1750
-        rescue_R_Motor_Value = 1250
+        send_speed(1750,1250)
         time.sleep(TURN_45_TIME)
-        rescue_L_Motor_Value = 1500
-        rescue_R_Motor_Value = 1500
+        send_speed(1500,1500)
         rescue_cnt_turning_degrees += 45
         logger.debug(f"L: {rescue_L_Motor_Value} R: {rescue_R_Motor_Value}")
       else:
@@ -398,9 +395,10 @@ def main_loop():
                 if not rescue_is_ball_caching:
                   diff_angle = rescue_target_position * P
                   if BALL_CATCH_SIZE > rescue_target_size:
-                    dist_term = (math.sqrt(BALL_CATCH_SIZE) - math.sqrt(rescue_target_size)) * AP + 80
+                    dist_term = (math.sqrt(BALL_CATCH_SIZE) - math.sqrt(rescue_target_size)) * A
                   else:
                     dist_term = 0
+                    diff_angle * 2
                   base_L = 1500 + diff_angle + dist_term
                   base_R = 1500 - diff_angle + dist_term
                 else:
@@ -417,7 +415,6 @@ def main_loop():
                     rescue_Arm_Move_Flag = 2
                 rescue_L_Motor_Value = int(min(max(base_L, 1000), 2000))
                 rescue_R_Motor_Value = int(min(max(base_R, 1000), 2000))
-                logger.debug(f"Motor speed L:{rescue_L_Motor_Value}, R:{rescue_R_Motor_Value}")
         logger.debug(f"Motor Values after run: L={rescue_L_Motor_Value}, R={rescue_R_Motor_Value}, Sonic:{rescue_F_U_SONIC}")
 
       # Update modules.rescue values for compatibility
