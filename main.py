@@ -373,7 +373,7 @@ def main_loop():
               logger.debug("catch_ball done")
               rescue_Arm_Move_Flag = 1
               modules.rescue.Arm_Move_Flag = 1  # For compatibility
-            elif rescue_is_ball_caching and rescue_F_U_SONIC is not None and rescue_F_U_SONIC < 2.0:
+            elif rescue_is_ball_caching and rescue_F_U_SONIC is not None and rescue_F_U_SONIC < 10.0:
               logger.debug(
                   f"Close to wall (dist: {rescue_F_U_SONIC:.1f}). Initiating release_ball()")
               # EXPANDED RELEASE_BALL LOGIC
