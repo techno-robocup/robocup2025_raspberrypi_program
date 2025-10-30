@@ -379,7 +379,6 @@ def main_loop():
                 rescue_silver_ball_cnt += 1
               else:
                 rescue_black_ball_cnt += 1
-              rescue_is_ball_caching = False  # Reset ball caching state
               rescue_Arm_Move_Flag = 2
               modules.rescue.Arm_Move_Flag = 2  # For compatibility
             else:
@@ -409,10 +408,6 @@ def main_loop():
                   elif abs(rescue_target_position) <= 1000:
                     base_L = 1500 + diff_angle
                     base_R = 1500 - diff_angle
-                  else:
-                    base_L = 1500
-                    base_R = 1500
-                    rescue_Arm_Move_Flag = 2
                 rescue_L_Motor_Value = int(min(max(base_L, 1000), 2000))
                 rescue_R_Motor_Value = int(min(max(base_R, 1000), 2000))
         logger.debug(f"Motor Values after run: L={rescue_L_Motor_Value}, R={rescue_R_Motor_Value}, Sonic:{rescue_F_U_SONIC}")
@@ -434,6 +429,7 @@ def main_loop():
       # Handle arm movements
       if rescue_Arm_Move_Flag == 1:  # Ball catch
         logger.debug("Ball catch")
+        rescue_is_ball_caching = False
         send_speed(1500,1500)
         send_arm(1024,0)
         time.sleep(1)
@@ -444,7 +440,8 @@ def main_loop():
         send_speed(1500,1500)
         rescue_Arm_Move_Flag = 0
         modules.rescue.Arm_Move_Flag = 0
-      if rescue_Arm_Move_Flag == 2:  # Ball release
+      if rescue_Arm_Move_Flag == 2:
+        rescue_is_ball_caching = False  # Ball release
         logger.debug("Ball release")
         send_speed(1600,1600)
         time.sleep(3)
