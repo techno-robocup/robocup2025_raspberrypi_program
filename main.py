@@ -28,6 +28,7 @@ WP = 1 # Cage P
 AP = 1.5
 CP = 1
 BALL_CATCH_SIZE = 130000
+CAGE_RELEASE_SIZE = 1000000
 TURN_45_TIME = 3
 TURN_180_TIME = 12
 FORWARD_STEP_TIME = 0.3
@@ -403,13 +404,20 @@ def main_loop():
                   base_L = 1500 + diff_angle + dist_term
                   base_R = 1500 - diff_angle + dist_term
                 else:
-                  diff_angle = rescue_target_position * WP
-                  base_L = 1500 + diff_angle + 100
-                  base_R = 1500 - diff_angle + 100
+                  diff_angle =rescue_target_position * WP
+                  if CAGE_RELEASE_SIZE > rescue_target_size:
+                    base_L = 1500 + diff_angle + 100
+                    base_R = 1500 - diff_angle + 100
+                  elif abs(rescue_target_position) <= 1000:
+                    base_L = 1500 + diff_angle
+                    base_R = 1500 - diff_angle
+                  else:
+                    base_L = 1500
+                    base_R = 1500
+                    rescue_Arm_Move_Flag = 2
                 rescue_L_Motor_Value = int(min(max(base_L, 1000), 2000))
                 rescue_R_Motor_Value = int(min(max(base_R, 1000), 2000))
                 logger.debug(f"Motor speed L:{rescue_L_Motor_Value}, R:{rescue_R_Motor_Value}")
-
         logger.debug(f"Motor Values after run: L={rescue_L_Motor_Value}, R={rescue_R_Motor_Value}, Sonic:{rescue_F_U_SONIC}")
 
       # Update modules.rescue values for compatibility
@@ -441,13 +449,19 @@ def main_loop():
         modules.rescue.Arm_Move_Flag = 0
       if rescue_Arm_Move_Flag == 2:  # Ball release
         logger.debug("Ball release")
-        send_speed(1550,1550)
+        send_speed(1600,1600)
+        time.sleep(3)
+        send_speed(1500,1500)
         send_arm(1024,1)
         time.sleep(1)
         send_arm(1024,0)
         send_arm(3072,0)
         send_speed(1450,1450)
         time.sleep(1)
+        send_speed(1400,4500)
+        time.sleep(3)
+        send_speed(1750,1250)
+        time.sleep(TURN_180_TIME)
         send_speed(1500,1500)
         rescue_Arm_Move_Flag = 0
         modules.rescue.Arm_Move_Flag = 0
