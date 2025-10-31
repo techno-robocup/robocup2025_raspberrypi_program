@@ -365,9 +365,9 @@ def main_loop():
             time.sleep(1)
             send_speed(1500,1500)
             if rescue_valid_classes == [ObjectClasses.SILVER_BALL.value]:
-              rescue_valid_classes = [ObjectClasses.GREEN_CAGE]
+              rescue_valid_classes = [ObjectClasses.GREEN_CAGE.value]
             else:
-              rescue_valid_classes = [ObjectClasses.RED_CAGE]
+              rescue_valid_classes = [ObjectClasses.RED_CAGE.value]
             rescue_is_ball_caching = True
           elif rescue_is_ball_caching and rescue_F_U_SONIC is not None and rescue_F_U_SONIC < 10.0 and abs(rescue_target_position) <= 100 :#NOTE: CAGE BALL RELEASE
             logger.debug(
@@ -381,7 +381,7 @@ def main_loop():
               ]if rescue_silver_ball_cnt < 2 else [ObjectClasses.BLACK_BALL.value]
             else:
               rescue_black_ball_cnt += 1
-              rescue_valid_classes == [ObjectClasses.EXIT.value]
+              rescue_valid_classes = [ObjectClasses.EXIT.value]
             logger.debug("---Ball release")
             send_speed(1600,1600)
             time.sleep(3)
