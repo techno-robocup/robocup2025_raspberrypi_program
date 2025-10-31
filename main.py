@@ -24,13 +24,13 @@ logger.info("PROCESS STARTED")
 
 # Rescue constants from modules.rescue
 P = 0.5
-WP = 0.5 # Cage P
+WP = 0.3 # Cage P
 AP = 1
 CP = 1
 BALL_CATCH_SIZE = 130000
-CAGE_RELEASE_SIZE = 10000
-TURN_45_TIME = 1
-TURN_180_TIME = 4
+CAGE_RELEASE_SIZE = 1000000
+TURN_45_TIME = 1.7
+TURN_180_TIME = 3.4
 FORWARD_STEP_TIME = 0.3
 WALL_DIST_THRESHOLD = 5.03072
 FRONT_CLEAR_THRESHOLD = 3.0
@@ -82,7 +82,7 @@ Linetrace_Camera = modules.camera.Camera(
 uart_io = modules.uart.UART_CON()
 
 # Start the line tracing camera
-Linetrace_Camera.start_cam()
+# Linetrace_Camera.start_cam()
 
 message_id = 0
 
@@ -252,7 +252,7 @@ def main_loop():
 
     distances = get_ultrasonic_distance()
     # if modules.settings.is_rescue_area:
-    if False:
+    if True:
       if not Is_Rescue_Camera_Start:
         Rescue_Camera.start_cam()
         Linetrace_Camera.stop_cam()
@@ -346,119 +346,102 @@ def main_loop():
           send_speed(1500, 1500)
           return
 
-        if rescue_Arm_Move_Flag == 0:
-          if rescue_target_position is None:
-            logger.debug("No target found -> executing change_position()")
-            # EXPANDED CHANGE_POSITION LOGIC
-            logger.debug(f"SonicF :{rescue_F_U_SONIC} SonicL:{rescue_L_U_SONIC} cnt_turning:{rescue_cnt_turning_degrees}")
-            rescue_L_Motor_Value = 1750
-            rescue_R_Motor_Value = 1250
-            time.sleep(TURN_45_TIME)
-            rescue_L_Motor_Value = 1500
-            rescue_R_Motor_Value = 1500
-            rescue_cnt_turning_degrees += 45
-            logger.debug(f"L: {rescue_L_Motor_Value} R: {rescue_R_Motor_Value}")
-          else:
-            rescue_cnt_turning_degrees = 0
-            if not rescue_is_ball_caching and rescue_target_size >= BALL_CATCH_SIZE and abs(rescue_target_position) <= 100:
-              logger.debug(
-                  f"Target is close (size: {rescue_target_size:.1f}). Initiating catch_ball()"
-              )
-              # EXPANDED CATCH_BALL LOGIC
-              logger.debug("Executing catch_ball()")
-              rescue_is_ball_caching = True
-              logger.debug("catch_ball done")
-              rescue_Arm_Move_Flag = 1
-              modules.rescue.Arm_Move_Flag = 1  # For compatibility
-            elif rescue_is_ball_caching and rescue_F_U_SONIC is not None and rescue_F_U_SONIC < 10.0:
-              logger.debug(
-                  f"Close to wall (dist: {rescue_F_U_SONIC:.1f}). Initiating release_ball()")
-              # EXPANDED RELEASE_BALL LOGIC
-              logger.debug("Executing release_ball()")
-              if rescue_valid_classes == [ObjectClasses.GREEN_CAGE.value]:
-                rescue_silver_ball_cnt += 1
-              else:
-                rescue_black_ball_cnt += 1
-              rescue_Arm_Move_Flag = 2
-              modules.rescue.Arm_Move_Flag = 2  # For compatibility
+        if rescue_target_position is None:
+          logger.debug("No target found -> executing change_position()")
+          # EXPANDED CHANGE_POSITION LOGIC
+          logger.debug(f"SonicF :{rescue_F_U_SONIC} SonicL:{rescue_L_U_SONIC} cnt_turning:{rescue_cnt_turning_degrees}")
+          rescue_L_Motor_Value = 1750
+          rescue_R_Motor_Value = 1250
+          time.sleep(TURN_45_TIME)
+          rescue_L_Motor_Value = 1500
+          rescue_R_Motor_Value = 1500
+          rescue_cnt_turning_degrees += 45
+        else:
+          rescue_cnt_turning_degrees = 0
+          if not rescue_is_ball_caching and rescue_target_size >= BALL_CATCH_SIZE and abs(rescue_target_position) <= 100:
+            logger.debug(
+                f"Target is close (size: {rescue_target_size:.1f}). Initiating catch_ball()"
+            )
+            # EXPANDED CATCH_BALL LOGIC
+            logger.debug("Executing catch_ball()")
+            logger.debug("---Ball catch")
+            send_speed(1500,1500)
+            send_arm(1024,0)
+            time.sleep(1)
+            send_arm(1024,1)
+            send_arm(3072,1)
+            send_speed(1450,1450)
+            time.sleep(1)
+            send_speed(1500,1500)
+            rescue_is_ball_caching = True
+          elif rescue_is_ball_caching and rescue_F_U_SONIC is not None and rescue_F_U_SONIC < 10.0 and abs(rescue_target_position) <= 1000 :#NOTE: CAGE BALL RELEASE
+            logger.debug(
+                f"Close to wall (dist: {rescue_F_U_SONIC:.1f}). Initiating release_ball()")
+            # EXPANDED RELEASE_BALL LOGIC
+            logger.debug("Executing release_ball()")
+            if rescue_valid_classes == [ObjectClasses.GREEN_CAGE.value]:
+              rescue_silver_ball_cnt += 1
             else:
-              logger.debug(
-                  f"Targeting {rescue_valid_classes}, offset={rescue_target_position:.1f}. Navigating..."
-              )
-              # EXPANDED SET_MOTOR_SPEEDS LOGIC
-              if rescue_target_position is None or rescue_target_size is None:
-                rescue_L_Motor_Value = 1500
-                rescue_R_Motor_Value = 1500
-                logger.debug("No target data for set_motor_speeds(), stopping motors.")
-              else:
-                if not rescue_is_ball_caching:
-                  diff_angle = rescue_target_position * P
-                  if BALL_CATCH_SIZE > rescue_target_size:
-                    dist_term = (math.sqrt(BALL_CATCH_SIZE) - math.sqrt(rescue_target_size)) * AP
-                  else:
-                    dist_term = 0
-                    diff_angle * 2
-                  base_L = 1500 + diff_angle + dist_term
-                  base_R = 1500 - diff_angle + dist_term
+              rescue_black_ball_cnt += 1
+            logger.debug("---Ball release")
+            send_speed(1600,1600)
+            time.sleep(3)
+            send_speed(1500,1500)
+            send_arm(1024,1)
+            time.sleep(1)
+            send_arm(1024,0)
+            send_arm(3072,0)
+            send_speed(1450,1450)
+            time.sleep(1)
+            send_speed(1400,1400)
+            time.sleep(3)
+            send_speed(1750,1250)
+            time.sleep(TURN_180_TIME)
+            send_speed(1500,1500)
+            rescue_is_ball_caching = False
+          else:
+            logger.debug(
+                f"Targeting {rescue_valid_classes}, offset={rescue_target_position:.1f}. Navigating..."
+            )
+            # EXPANDED SET_MOTOR_SPEEDS LOGIC
+            if rescue_target_position is None or rescue_target_size is None:
+              rescue_L_Motor_Value = 1500
+              rescue_R_Motor_Value = 1500
+              logger.debug("No target data for set_motor_speeds(), stopping motors.")
+            else:
+              if not rescue_is_ball_caching:
+                diff_angle = rescue_target_position * P
+                if BALL_CATCH_SIZE > rescue_target_size:
+                  dist_term = (math.sqrt(BALL_CATCH_SIZE) - math.sqrt(rescue_target_size)) * AP
                 else:
-                  diff_angle =rescue_target_position * WP
-                  if CAGE_RELEASE_SIZE > rescue_target_size:
-                    base_L = 1500 + diff_angle + 100
-                    base_R = 1500 - diff_angle + 100
-                  elif abs(rescue_target_position) <= 1000:
-                    base_L = 1500 + diff_angle
-                    base_R = 1500 - diff_angle
-                rescue_L_Motor_Value = int(min(max(base_L, 1000), 2000))
-                rescue_R_Motor_Value = int(min(max(base_R, 1000), 2000))
+                  dist_term = 0
+                  diff_angle *= 1.5
+                base_L = 1500 + diff_angle + dist_term
+                base_R = 1500 - diff_angle + dist_term
+              else:
+                diff_angle =rescue_target_position * WP
+                if CAGE_RELEASE_SIZE > rescue_target_size:
+                  base_L = 1500 + diff_angle + 100
+                  base_R = 1500 - diff_angle + 100
+              rescue_L_Motor_Value = int(min(max(base_L, 1000), 2000))
+              rescue_R_Motor_Value = int(min(max(base_R, 1000), 2000))
+              send_speed(rescue_L_Motor_Value,rescue_R_Motor_Value)
         logger.debug(f"Motor Values after run: L={rescue_L_Motor_Value}, R={rescue_R_Motor_Value}, Sonic:{rescue_F_U_SONIC}")
+        logger.debug(f"Target offset:{rescue_target_position} size:{rescue_target_size}")
 
       # Update modules.rescue values for compatibility
-      modules.rescue.L_Motor_Value = rescue_L_Motor_Value
-      modules.rescue.R_Motor_Value = rescue_R_Motor_Value
-      modules.rescue.robot.silver_ball_cnt = rescue_silver_ball_cnt
-      modules.rescue.robot.black_ball_cnt = rescue_black_ball_cnt
-      modules.rescue.robot.is_ball_caching = rescue_is_ball_caching
-      modules.rescue.robot.target_position = rescue_target_position
-      modules.rescue.robot.target_size = rescue_target_size
-      modules.rescue.robot.cnt_turning_degrees = rescue_cnt_turning_degrees
-      modules.rescue.robot.cnt_turning_side = rescue_cnt_turning_side
+      #modules.rescue.L_Motor_Value = rescue_L_Motor_Value
+      #modules.rescue.R_Motor_Value = rescue_R_Motor_Value
+      #modules.rescue.robot.silver_ball_cnt = rescue_silver_ball_cnt
+      #modules.rescue.robot.black_ball_cnt = rescue_black_ball_cnt
+      #modules.rescue.robot.is_ball_caching = rescue_is_ball_caching
+      #modules.rescue.robot.target_position = rescue_target_position
+      #modules.rescue.robot.target_size = rescue_target_size
+      #modules.rescue.robot.cnt_turning_degrees = rescue_cnt_turning_degrees
+      #modules.rescue.robot.cnt_turning_side = rescue_cnt_turning_side
 
-      # Send motor speeds
-      send_speed(rescue_L_Motor_Value, rescue_R_Motor_Value)
 
       # Handle arm movements
-      if rescue_Arm_Move_Flag == 1:  # Ball catch
-        logger.debug("Ball catch")
-        rescue_is_ball_caching = False
-        send_speed(1500,1500)
-        send_arm(1024,0)
-        time.sleep(1)
-        send_arm(1024,1)
-        send_arm(3072,1)
-        send_speed(1450,1450)
-        time.sleep(1)
-        send_speed(1500,1500)
-        rescue_Arm_Move_Flag = 0
-        modules.rescue.Arm_Move_Flag = 0
-      if rescue_Arm_Move_Flag == 2:
-        rescue_is_ball_caching = False  # Ball release
-        logger.debug("Ball release")
-        send_speed(1600,1600)
-        time.sleep(3)
-        send_speed(1500,1500)
-        send_arm(1024,1)
-        time.sleep(1)
-        send_arm(1024,0)
-        send_arm(3072,0)
-        send_speed(1450,1450)
-        time.sleep(1)
-        send_speed(1400,1400)
-        time.sleep(3)
-        send_speed(1750,1250)
-        time.sleep(TURN_180_TIME)
-        send_speed(1500,1500)
-        rescue_Arm_Move_Flag = 0
-        modules.rescue.Arm_Move_Flag = 0
     elif is_object:
       if not object_second_phase:
         send_speed(1750, 1250)
@@ -470,7 +453,7 @@ def main_loop():
         if distances[0] < 8:
           send_speed(1700, 1700)
         else:
-          send_speed(1560, 1740)
+          send_speed(1600, 1700)
         if modules.settings.slope is not None and abs(modules.settings.slope) < 0.5:
           is_object = False
           object_second_phase = False
