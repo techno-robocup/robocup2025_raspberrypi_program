@@ -29,7 +29,7 @@ AP = 1
 CP = 1
 BALL_CATCH_SIZE = 130000
 CAGE_RELEASE_SIZE = 1000000
-TURN_45_TIME = 1.7
+TURN_45_TIME = 0.5
 TURN_180_TIME = 3.4
 FORWARD_STEP_TIME = 0.3
 WALL_DIST_THRESHOLD = 5.03072
@@ -46,7 +46,7 @@ class ObjectClasses(Enum):
   SILVER_BALL = 4
 
 # Rescue state variables
-rescue_valid_classes = []
+rescue_valid_classes = [ObjectClasses.SILVER_BALL.value]
 rescue_silver_ball_cnt = 0
 rescue_black_ball_cnt = 0
 rescue_is_ball_caching = False
@@ -359,9 +359,9 @@ def main_loop():
             time.sleep(1)
             send_speed(1500,1500)
             if rescue_valid_classes == [ObjectClasses.SILVER_BALL.value]:
-              rescue_valid_classes == [ObjectClasses.GREEN_CAGE]
+              rescue_valid_classes = [ObjectClasses.GREEN_CAGE]
             else:
-              rescue_valid_classes == [ObjectClasses.RED_CAGE]
+              rescue_valid_classes = [ObjectClasses.RED_CAGE]
             rescue_is_ball_caching = True
           elif rescue_is_ball_caching and rescue_F_U_SONIC is not None and rescue_F_U_SONIC < 10.0 and abs(rescue_target_position) <= 100 :#NOTE: CAGE BALL RELEASE
             logger.debug(
