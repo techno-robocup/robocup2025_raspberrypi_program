@@ -27,7 +27,7 @@ P = 0.5
 WP = 0.3 # Cage P
 AP = 1
 CP = 1
-BALL_CATCH_SIZE = 130000
+BALL_CATCH_SIZE = 140000
 CAGE_RELEASE_SIZE = 1000000
 TURN_45_TIME = 0.5
 TURN_180_TIME = 3.4
@@ -297,6 +297,7 @@ def main_loop():
         if not boxes:
           rescue_target_position = None
           rescue_target_size = None
+          detected_classes = []
         else:
           best_target_pos = None
           best_target_area = None
@@ -305,6 +306,7 @@ def main_loop():
           for box in boxes:
             try:
               cls = int(box.cls[0])
+              detected_classes.append(cls)
             except Exception:
               continue
             if cls in rescue_valid_classes:
@@ -324,6 +326,10 @@ def main_loop():
             )
           else:
             logger.debug("No valid target found")
+            if detected_classes:
+                logger.debug(f"No valid target found. Detected classes: {detected_classes}")
+            else:
+              logger.debug("NO detected target")
 
         # Check stop button before motor control
         uart_io.send_message(Message(message_id, "GET button"))
