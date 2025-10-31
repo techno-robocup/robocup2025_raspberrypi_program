@@ -294,10 +294,10 @@ def main_loop():
         image_width = results[0].orig_shape[1]
         # EXPANDED FIND_BEST_TARGET LOGIC
         boxes = results[0].boxes
+        detected_classes = []
         if not boxes:
           rescue_target_position = None
           rescue_target_size = None
-          detected_classes = []
         else:
           best_target_pos = None
           best_target_area = None
