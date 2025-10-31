@@ -290,6 +290,10 @@ def main_loop():
         rescue_cnt_turning_degrees += 45
         logger.debug(f"L: {rescue_L_Motor_Value} R: {rescue_R_Motor_Value}")
       else:
+        if not rescue_is_ball_caching:
+          rescue_valid_classes = [ObjectClasses.SILVER_BALL.value] if rescue_silver_ball_cnt < 2 else[ObjectClasses.BLACK_BALL.value]
+        else:
+          rescue_valid_classes = [ObjectClasses.GREEN_CAGE.value] if rescue_silver_ball_cnt < 2 else[ObjectClasses.RED_CAGE.value]
         results = modules.settings.yolo_results
         image_width = results[0].orig_shape[1]
         # EXPANDED FIND_BEST_TARGET LOGIC
