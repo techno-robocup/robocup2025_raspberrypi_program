@@ -346,15 +346,13 @@ def main_loop():
           send_speed(1500, 1500)
           return
 
-        if rescue_target_position is None:
+        if rescue_target_position is None or rescue_target_size is None:
           logger.debug("No target found -> executing change_position()")
           # EXPANDED CHANGE_POSITION LOGIC
           logger.debug(f"SonicF :{rescue_F_U_SONIC} SonicL:{rescue_L_U_SONIC} cnt_turning:{rescue_cnt_turning_degrees}")
-          rescue_L_Motor_Value = 1750
-          rescue_R_Motor_Value = 1250
+          send_speed(1750,1250)
           time.sleep(TURN_45_TIME)
-          rescue_L_Motor_Value = 1500
-          rescue_R_Motor_Value = 1500
+          send_speed(1500,1500)
           rescue_cnt_turning_degrees += 45
         else:
           rescue_cnt_turning_degrees = 0
@@ -400,32 +398,24 @@ def main_loop():
             send_speed(1500,1500)
             rescue_is_ball_caching = False
           else:
-            logger.debug(
-                f"Targeting {rescue_valid_classes}, offset={rescue_target_position:.1f}. Navigating..."
-            )
+            logger.debug(f"Targeting {rescue_valid_classes}, offset={rescue_target_position:.1f}. Navigating...")
             # EXPANDED SET_MOTOR_SPEEDS LOGIC
-            if rescue_target_position is None or rescue_target_size is None:
-              rescue_L_Motor_Value = 1500
-              rescue_R_Motor_Value = 1500
-              logger.debug("No target data for set_motor_speeds(), stopping motors.")
-            else:
-              if not rescue_is_ball_caching:
-                diff_angle = rescue_target_position * P
-                if BALL_CATCH_SIZE > rescue_target_size:
-                  dist_term = (math.sqrt(BALL_CATCH_SIZE) - math.sqrt(rescue_target_size)) * AP
-                else:
-                  dist_term = 0
-                  diff_angle *= 1.5
-                base_L = 1500 + diff_angle + dist_term
-                base_R = 1500 - diff_angle + dist_term
+            if not rescue_is_ball_caching:
+              diff_angle = rescue_target_position * P
+              if BALL_CATCH_SIZE > rescue_target_size:
+                dist_term = (math.sqrt(BALL_CATCH_SIZE) - math.sqrt(rescue_target_size)) * AP
               else:
-                diff_angle =rescue_target_position * WP
-                if CAGE_RELEASE_SIZE > rescue_target_size:
-                  base_L = 1500 + diff_angle + 100
-                  base_R = 1500 - diff_angle + 100
-              rescue_L_Motor_Value = int(min(max(base_L, 1000), 2000))
-              rescue_R_Motor_Value = int(min(max(base_R, 1000), 2000))
-              send_speed(rescue_L_Motor_Value,rescue_R_Motor_Value)
+                dist_term = 0
+                diff_angle *= 1.5
+              base_L = 1500 + diff_angle + dist_term
+              base_R = 1500 - diff_angle + dist_term
+            else:
+              diff_angle =rescue_target_position * WP
+              base_L = 1500 + diff_angle + 100
+              base_R = 1500 - diff_angle + 100
+            rescue_L_Motor_Value = int(min(max(base_L, 1000), 2000))
+            rescue_R_Motor_Value = int(min(max(base_R, 1000), 2000))
+            send_speed(rescue_L_Motor_Value,rescue_R_Motor_Value)
         logger.debug(f"Motor Values after run: L={rescue_L_Motor_Value}, R={rescue_R_Motor_Value}, Sonic:{rescue_F_U_SONIC}")
         logger.debug(f"Target offset:{rescue_target_position} size:{rescue_target_size}")
 
