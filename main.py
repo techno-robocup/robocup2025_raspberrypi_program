@@ -60,6 +60,7 @@ rescue_Arm_Move_Flag = 0
 rescue_L_U_SONIC = None
 rescue_F_U_SONIC = None
 rescue_R_U_SONIC = None
+rescue_Moving_Flag = False
 
 # Initialize camera objects
 Rescue_Camera = modules.camera.Camera(
@@ -240,6 +241,7 @@ def main_loop():
   global rescue_cnt_turning_degrees, rescue_cnt_turning_side
   global rescue_L_Motor_Value, rescue_R_Motor_Value, rescue_Arm_Move_Flag
   global rescue_L_U_SONIC, rescue_F_U_SONIC, rescue_R_U_SONIC
+  global rescue_Moving_Flag
   message_id += 1
 
   try:
@@ -290,22 +292,6 @@ def main_loop():
       else:
         results = modules.settings.yolo_results
         image_width = results[0].orig_shape[1]
-
-        # Determine valid classes based on robot state
-        if rescue_silver_ball_cnt == 2 and rescue_black_ball_cnt == 1:
-          rescue_valid_classes = [ObjectClasses.EXIT.value]
-        elif not rescue_is_ball_caching:
-          rescue_valid_classes = [
-              ObjectClasses.SILVER_BALL.value
-          ] if rescue_silver_ball_cnt < 2 else [ObjectClasses.BLACK_BALL.value]
-        else:
-          rescue_valid_classes = [
-              ObjectClasses.GREEN_CAGE.value
-          ] if rescue_silver_ball_cnt < 2 else [ObjectClasses.RED_CAGE.value]
-
-        # Update modules.rescue.Valid_Classes for compatibility
-        modules.rescue.Valid_Classes = rescue_valid_classes
-
         # EXPANDED FIND_BEST_TARGET LOGIC
         boxes = results[0].boxes
         if not boxes:
@@ -346,7 +332,7 @@ def main_loop():
           send_speed(1500, 1500)
           return
 
-        if rescue_target_position is None or rescue_target_size is None:
+        elif rescue_target_position is None or rescue_target_size is None:
           logger.debug("No target found -> executing change_position()")
           # EXPANDED CHANGE_POSITION LOGIC
           logger.debug(f"SonicF :{rescue_F_U_SONIC} SonicL:{rescue_L_U_SONIC} cnt_turning:{rescue_cnt_turning_degrees}")
@@ -365,22 +351,31 @@ def main_loop():
             logger.debug("---Ball catch")
             send_speed(1500,1500)
             send_arm(1024,0)
-            time.sleep(1)
+            time.sleep(0.5)
             send_arm(1024,1)
             send_arm(3072,1)
+            time.sleep(0.5)
             send_speed(1450,1450)
             time.sleep(1)
             send_speed(1500,1500)
+            if rescue_valid_classes == [ObjectClasses.SILVER_BALL.value]:
+              rescue_valid_classes == [ObjectClasses.GREEN_CAGE]
+            else:
+              rescue_valid_classes == [ObjectClasses.RED_CAGE]
             rescue_is_ball_caching = True
-          elif rescue_is_ball_caching and rescue_F_U_SONIC is not None and rescue_F_U_SONIC < 10.0 and abs(rescue_target_position) <= 1000 :#NOTE: CAGE BALL RELEASE
+          elif rescue_is_ball_caching and rescue_F_U_SONIC is not None and rescue_F_U_SONIC < 10.0 and abs(rescue_target_position) <= 100 :#NOTE: CAGE BALL RELEASE
             logger.debug(
                 f"Close to wall (dist: {rescue_F_U_SONIC:.1f}). Initiating release_ball()")
             # EXPANDED RELEASE_BALL LOGIC
             logger.debug("Executing release_ball()")
             if rescue_valid_classes == [ObjectClasses.GREEN_CAGE.value]:
               rescue_silver_ball_cnt += 1
+              rescue_valid_classes = [
+                ObjectClasses.SILVER_BALL.value
+              ]if rescue_silver_ball_cnt < 2 else [ObjectClasses.BLACK_BALL.value]
             else:
               rescue_black_ball_cnt += 1
+              rescue_valid_classes == [ObjectClasses.EXIT.value]
             logger.debug("---Ball release")
             send_speed(1600,1600)
             time.sleep(3)
@@ -389,10 +384,9 @@ def main_loop():
             time.sleep(1)
             send_arm(1024,0)
             send_arm(3072,0)
-            send_speed(1450,1450)
-            time.sleep(1)
+            time.sleep(0.5)
             send_speed(1400,1400)
-            time.sleep(3)
+            time.sleep(1)
             send_speed(1750,1250)
             time.sleep(TURN_180_TIME)
             send_speed(1500,1500)
