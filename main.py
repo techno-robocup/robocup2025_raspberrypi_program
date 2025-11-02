@@ -329,6 +329,16 @@ def main_loop():
                 best_target_area = area
               logger.debug(
                   f"Detected cls={cls}, area={area:.1f}, offset={dist:.1f}")
+            elif not rescue_is_ball_caching and cls in ObjectClasses.SILVER_BALL.value:
+              x_center, y_center, w, h = map(float, box.xywh[0])
+              dist = x_center - cx
+              area = w * h
+              if abs(dist) < min_dist:
+                min_dist = abs(dist)
+                best_target_pos = dist
+                best_target_area = area
+              logger.debug(
+                  f"Detected cls={cls}, area={area:.1f}, offset={dist:.1f}")
           rescue_target_position = best_target_pos
           rescue_target_size = best_target_area
           if best_target_pos is not None:
