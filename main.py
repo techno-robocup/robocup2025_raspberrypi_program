@@ -30,7 +30,7 @@ CP = 1
 BALL_CATCH_SIZE = 140000
 CAGE_RELEASE_SIZE = 1000000
 TURN_45_TIME = 0.5
-TURN_180_TIME = 3.4
+TURN_180_TIME = 2.4
 FORWARD_STEP_TIME = 0.3
 WALL_DIST_THRESHOLD = 5.03072
 FRONT_CLEAR_THRESHOLD = 3.0
@@ -363,7 +363,7 @@ def main_loop():
           rescue_cnt_turning_degrees += 45
         else:
           rescue_cnt_turning_degrees = 0
-          if not rescue_is_ball_caching and rescue_target_size >= BALL_CATCH_SIZE and abs(
+          if not rescue_is_ball_caching and rescue_F_U_SONIC is not None and rescue_F_U_SONIC < 3.0 and abs(
               rescue_target_position) <= 100:
             logger.debug(
                 f"Target is close (size: {rescue_target_size:.1f}). Initiating catch_ball()"
@@ -385,8 +385,7 @@ def main_loop():
             else:
               rescue_valid_classes = [ObjectClasses.RED_CAGE.value]
             rescue_is_ball_caching = True
-          elif rescue_is_ball_caching and rescue_F_U_SONIC is not None and rescue_F_U_SONIC < 10.0 and abs(
-              rescue_target_position) <= 100:  #NOTE: CAGE BALL RELEASE
+          elif rescue_is_ball_caching and rescue_F_U_SONIC is not None and rescue_F_U_SONIC < 8.0:  #NOTE: CAGE BALL RELEASE
             logger.debug(
                 f"Close to wall (dist: {rescue_F_U_SONIC:.1f}). Initiating release_ball()"
             )
@@ -426,6 +425,7 @@ def main_loop():
               if BALL_CATCH_SIZE > rescue_target_size:
                 dist_term = (math.sqrt(BALL_CATCH_SIZE) -
                              math.sqrt(rescue_target_size)) * AP
+                dist_term = int(max(30,dist_term))
               else:
                 dist_term = 0
                 diff_angle *= 1.5
