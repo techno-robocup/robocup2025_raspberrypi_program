@@ -329,7 +329,7 @@ def main_loop():
                 best_target_area = area
               logger.debug(
                   f"Detected cls={cls}, area={area:.1f}, offset={dist:.1f}")
-            elif not rescue_is_ball_caching and cls in ObjectClasses.SILVER_BALL.value:
+            elif not rescue_is_ball_caching and cls == ObjectClasses.SILVER_BALL.value:
               x_center, y_center, w, h = map(float, box.xywh[0])
               dist = x_center - cx
               area = w * h
@@ -390,10 +390,10 @@ def main_loop():
             send_speed(1450, 1450)
             time.sleep(1)
             send_speed(1500, 1500)
-            if rescue_valid_classes == [ObjectClasses.SILVER_BALL.value]:
-              rescue_valid_classes = [ObjectClasses.GREEN_CAGE.value]
-            else:
-              rescue_valid_classes = [ObjectClasses.RED_CAGE.value]
+            #if rescue_valid_classes == [ObjectClasses.SILVER_BALL.value]:
+            #  rescue_valid_classes = [ObjectClasses.GREEN_CAGE.value]
+            #else:
+            #  rescue_valid_classes = [ObjectClasses.RED_CAGE.value]
             rescue_is_ball_caching = True
           elif rescue_is_ball_caching and rescue_F_U_SONIC is not None and rescue_F_U_SONIC < 8.0:  #NOTE: CAGE BALL RELEASE
             logger.debug(
@@ -401,15 +401,15 @@ def main_loop():
             )
             # EXPANDED RELEASE_BALL LOGIC
             logger.debug("Executing release_ball()")
-            if rescue_valid_classes == [ObjectClasses.GREEN_CAGE.value]:
-              rescue_silver_ball_cnt += 1
-              rescue_valid_classes = [ObjectClasses.SILVER_BALL.value
-                                      ] if rescue_silver_ball_cnt < 2 else [
-                                          ObjectClasses.BLACK_BALL.value
-                                      ]
-            else:
-              rescue_black_ball_cnt += 1
-              rescue_valid_classes = [ObjectClasses.EXIT.value]
+            #if rescue_valid_classes == [ObjectClasses.GREEN_CAGE.value]:
+            #  rescue_silver_ball_cnt += 1
+            #  rescue_valid_classes = [ObjectClasses.SILVER_BALL.value
+            #                          ] if rescue_silver_ball_cnt < 2 else [
+            #                              ObjectClasses.BLACK_BALL.value
+            #                          ]
+            #else:
+            #  rescue_black_ball_cnt += 1
+            #  rescue_valid_classes = [ObjectClasses.EXIT.value]
             logger.debug("---Ball release")
             send_speed(1600, 1600)
             time.sleep(3)
