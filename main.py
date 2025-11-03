@@ -30,7 +30,7 @@ CP = 1
 BALL_CATCH_SIZE = 140000
 CAGE_RELEASE_SIZE = 1000000
 TURN_45_TIME = 0.5
-TURN_180_TIME = 3.4
+TURN_180_TIME = 2.4
 FORWARD_STEP_TIME = 0.3
 WALL_DIST_THRESHOLD = 5.03072
 FRONT_CLEAR_THRESHOLD = 3.0
@@ -329,6 +329,16 @@ def main_loop():
                 best_target_area = area
               logger.debug(
                   f"Detected cls={cls}, area={area:.1f}, offset={dist:.1f}")
+            elif not rescue_is_ball_caching and cls == ObjectClasses.SILVER_BALL.value:
+              x_center, y_center, w, h = map(float, box.xywh[0])
+              dist = x_center - cx
+              area = w * h
+              if abs(dist) < min_dist:
+                min_dist = abs(dist)
+                best_target_pos = dist
+                best_target_area = area
+              logger.debug(
+                  f"Detected cls={cls}, area={area:.1f}, offset={dist:.1f}")
           rescue_target_position = best_target_pos
           rescue_target_size = best_target_area
           if best_target_pos is not None:
@@ -363,7 +373,7 @@ def main_loop():
           rescue_cnt_turning_degrees += 45
         else:
           rescue_cnt_turning_degrees = 0
-          if not rescue_is_ball_caching and rescue_target_size >= BALL_CATCH_SIZE and abs(
+          if not rescue_is_ball_caching and rescue_F_U_SONIC is not None and rescue_F_U_SONIC < 3.0 and abs(
               rescue_target_position) <= 100:
             logger.debug(
                 f"Target is close (size: {rescue_target_size:.1f}). Initiating catch_ball()"
@@ -380,27 +390,26 @@ def main_loop():
             send_speed(1450, 1450)
             time.sleep(1)
             send_speed(1500, 1500)
-            if rescue_valid_classes == [ObjectClasses.SILVER_BALL.value]:
-              rescue_valid_classes = [ObjectClasses.GREEN_CAGE.value]
-            else:
-              rescue_valid_classes = [ObjectClasses.RED_CAGE.value]
+            #if rescue_valid_classes == [ObjectClasses.SILVER_BALL.value]:
+            #  rescue_valid_classes = [ObjectClasses.GREEN_CAGE.value]
+            #else:
+            #  rescue_valid_classes = [ObjectClasses.RED_CAGE.value]
             rescue_is_ball_caching = True
-          elif rescue_is_ball_caching and rescue_F_U_SONIC is not None and rescue_F_U_SONIC < 10.0 and abs(
-              rescue_target_position) <= 100:  #NOTE: CAGE BALL RELEASE
+          elif rescue_is_ball_caching and rescue_F_U_SONIC is not None and rescue_F_U_SONIC < 8.0:  #NOTE: CAGE BALL RELEASE
             logger.debug(
                 f"Close to wall (dist: {rescue_F_U_SONIC:.1f}). Initiating release_ball()"
             )
             # EXPANDED RELEASE_BALL LOGIC
             logger.debug("Executing release_ball()")
-            if rescue_valid_classes == [ObjectClasses.GREEN_CAGE.value]:
-              rescue_silver_ball_cnt += 1
-              rescue_valid_classes = [ObjectClasses.SILVER_BALL.value
-                                      ] if rescue_silver_ball_cnt < 2 else [
-                                          ObjectClasses.BLACK_BALL.value
-                                      ]
-            else:
-              rescue_black_ball_cnt += 1
-              rescue_valid_classes = [ObjectClasses.EXIT.value]
+            #if rescue_valid_classes == [ObjectClasses.GREEN_CAGE.value]:
+            #  rescue_silver_ball_cnt += 1
+            #  rescue_valid_classes = [ObjectClasses.SILVER_BALL.value
+            #                          ] if rescue_silver_ball_cnt < 2 else [
+            #                              ObjectClasses.BLACK_BALL.value
+            #                          ]
+            #else:
+            #  rescue_black_ball_cnt += 1
+            #  rescue_valid_classes = [ObjectClasses.EXIT.value]
             logger.debug("---Ball release")
             send_speed(1600, 1600)
             time.sleep(3)
@@ -426,6 +435,7 @@ def main_loop():
               if BALL_CATCH_SIZE > rescue_target_size:
                 dist_term = (math.sqrt(BALL_CATCH_SIZE) -
                              math.sqrt(rescue_target_size)) * AP
+                dist_term = int(max(30,dist_term))
               else:
                 dist_term = 0
                 diff_angle *= 1.5
