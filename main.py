@@ -374,7 +374,7 @@ def main_loop():
           send_speed(1500, 1500)
           rescue_cnt_turning_degrees += 45
         else:
-          rescue_cnt_turning_degrees = 0
+          rescue_cnt_turning_degrees = [0] if  rescue_valid_classes!= [ObjectClasses.BLACK_BALL.value]  else [360]
           #if not rescue_is_ball_caching and rescue_F_U_SONIC is not None and rescue_F_U_SONIC < 3.0 and abs(
           #    rescue_target_position) <= 100:
           #  logger.debug(
@@ -479,7 +479,7 @@ def main_loop():
                 )
                 logger.debug("Executing release_ball()")
                 logger.debug("---Ball release")
-                send_speed(1600, 1600)
+                send_speed(1650, 1650)
                 time.sleep(3)
                 send_speed(1500, 1500)
                 send_arm(1024, 1)
