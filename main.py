@@ -471,9 +471,34 @@ def main_loop():
               diff_angle = rescue_target_position * WP
               base_L = 1500 + diff_angle + 100
               base_R = 1500 - diff_angle + 100
-              rescue_L_Motor_Value = int(min(max(base_L, 1000), 2000))
-              rescue_R_Motor_Value = int(min(max(base_R, 1000), 2000))
-              send_speed(rescue_L_Motor_Value, rescue_R_Motor_Value)
+
+              # Check if cage is large enough to release ball (4x ball catch size)
+              if rescue_target_size >= BALL_CATCH_SIZE * 4:
+                logger.debug(
+                    f"Cage large enough (size={rescue_target_size:.1f}, threshold={BALL_CATCH_SIZE * 4}). Initiating release_ball()"
+                )
+                logger.debug("Executing release_ball()")
+                logger.debug("---Ball release")
+                send_speed(1600, 1600)
+                time.sleep(3)
+                send_speed(1500, 1500)
+                send_arm(1024, 1)
+                time.sleep(1)
+                send_arm(1024, 0)
+                send_arm(3072, 0)
+                time.sleep(0.5)
+                send_speed(1400, 1400)
+                time.sleep(1)
+                send_speed(1750, 1250)
+                time.sleep(TURN_180_TIME)
+                send_speed(1500, 1500)
+                rescue_is_ball_caching = False
+                rescue_L_Motor_Value = MOTOR_NEUTRAL
+                rescue_R_Motor_Value = MOTOR_NEUTRAL
+              else:
+                rescue_L_Motor_Value = int(min(max(base_L, 1000), 2000))
+                rescue_R_Motor_Value = int(min(max(base_R, 1000), 2000))
+                send_speed(rescue_L_Motor_Value, rescue_R_Motor_Value)
         logger.debug(
             f"Motor Values after run: L={rescue_L_Motor_Value}, R={rescue_R_Motor_Value}, Sonic:{rescue_F_U_SONIC}"
         )
