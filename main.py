@@ -293,9 +293,11 @@ def main_loop():
         logger.debug(f"L: {rescue_L_Motor_Value} R: {rescue_R_Motor_Value}")
       else:
         if not rescue_is_ball_caching:
-          rescue_valid_classes = [
-              ObjectClasses.SILVER_BALL.value
-          ] if rescue_silver_ball_cnt < 2 else [ObjectClasses.BLACK_BALL.value]
+          # Prioritize silver balls, but switch to black if turned 360+ degrees without finding silver
+          if rescue_silver_ball_cnt < 2 and rescue_cnt_turning_degrees < 360:
+            rescue_valid_classes = [ObjectClasses.SILVER_BALL.value]
+          else:
+            rescue_valid_classes = [ObjectClasses.BLACK_BALL.value]
         else:
           rescue_valid_classes = [
               ObjectClasses.GREEN_CAGE.value
