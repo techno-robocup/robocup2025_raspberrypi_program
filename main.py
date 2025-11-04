@@ -443,13 +443,37 @@ def main_loop():
                 diff_angle *= 1.5
               base_L = 1500 + diff_angle + dist_term
               base_R = 1500 - diff_angle + dist_term
+
+              # Check if robot is close enough to pick up ball (speed-based)
+              if base_L < 1520 or base_R < 1520:
+                logger.debug(
+                    f"Robot close to ball (base_L={base_L:.1f}, base_R={base_R:.1f}). Initiating catch_ball()"
+                )
+                logger.debug("Executing catch_ball()")
+                logger.debug("---Ball catch")
+                send_speed(1500, 1500)
+                send_arm(1024, 0)
+                time.sleep(0.5)
+                send_arm(1024, 1)
+                send_arm(3072, 1)
+                time.sleep(0.5)
+                send_speed(1450, 1450)
+                time.sleep(1)
+                send_speed(1500, 1500)
+                rescue_is_ball_caching = True
+                rescue_L_Motor_Value = MOTOR_NEUTRAL
+                rescue_R_Motor_Value = MOTOR_NEUTRAL
+              else:
+                rescue_L_Motor_Value = int(min(max(base_L, 1000), 2000))
+                rescue_R_Motor_Value = int(min(max(base_R, 1000), 2000))
+                send_speed(rescue_L_Motor_Value, rescue_R_Motor_Value)
             else:
               diff_angle = rescue_target_position * WP
               base_L = 1500 + diff_angle + 100
               base_R = 1500 - diff_angle + 100
-            rescue_L_Motor_Value = int(min(max(base_L, 1000), 2000))
-            rescue_R_Motor_Value = int(min(max(base_R, 1000), 2000))
-            send_speed(rescue_L_Motor_Value, rescue_R_Motor_Value)
+              rescue_L_Motor_Value = int(min(max(base_L, 1000), 2000))
+              rescue_R_Motor_Value = int(min(max(base_R, 1000), 2000))
+              send_speed(rescue_L_Motor_Value, rescue_R_Motor_Value)
         logger.debug(
             f"Motor Values after run: L={rescue_L_Motor_Value}, R={rescue_R_Motor_Value}, Sonic:{rescue_F_U_SONIC}"
         )
