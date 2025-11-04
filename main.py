@@ -375,59 +375,59 @@ def main_loop():
           rescue_cnt_turning_degrees += 45
         else:
           rescue_cnt_turning_degrees = 0
-          if not rescue_is_ball_caching and rescue_F_U_SONIC is not None and rescue_F_U_SONIC < 3.0 and abs(
-              rescue_target_position) <= 100:
-            logger.debug(
-                f"Target is close (size: {rescue_target_size:.1f}). Initiating catch_ball()"
-            )
-            # EXPANDED CATCH_BALL LOGIC
-            logger.debug("Executing catch_ball()")
-            logger.debug("---Ball catch")
-            send_speed(1500, 1500)
-            send_arm(1024, 0)
-            time.sleep(0.5)
-            send_arm(1024, 1)
-            send_arm(3072, 1)
-            time.sleep(0.5)
-            send_speed(1450, 1450)
-            time.sleep(1)
-            send_speed(1500, 1500)
+          #if not rescue_is_ball_caching and rescue_F_U_SONIC is not None and rescue_F_U_SONIC < 3.0 and abs(
+          #    rescue_target_position) <= 100:
+          #  logger.debug(
+          #      f"Target is close (size: {rescue_target_size:.1f}). Initiating catch_ball()"
+          #  )
+          #  # EXPANDED CATCH_BALL LOGIC
+          #  logger.debug("Executing catch_ball()")
+          #  logger.debug("---Ball catch")
+          #  send_speed(1500, 1500)
+          #  send_arm(1024, 0)
+          #  time.sleep(0.5)
+          #  send_arm(1024, 1)
+          #  send_arm(3072, 1)
+          #  time.sleep(0.5)
+          #  send_speed(1450, 1450)
+          #  time.sleep(1)
+          #  send_speed(1500, 1500)
             #if rescue_valid_classes == [ObjectClasses.SILVER_BALL.value]:
             #  rescue_valid_classes = [ObjectClasses.GREEN_CAGE.value]
             #else:
             #  rescue_valid_classes = [ObjectClasses.RED_CAGE.value]
-            rescue_is_ball_caching = True
-          elif rescue_is_ball_caching and rescue_F_U_SONIC is not None and rescue_F_U_SONIC < 8.0:  #NOTE: CAGE BALL RELEASE
-            logger.debug(
-                f"Close to wall (dist: {rescue_F_U_SONIC:.1f}). Initiating release_ball()"
-            )
-            # EXPANDED RELEASE_BALL LOGIC
-            logger.debug("Executing release_ball()")
-            #if rescue_valid_classes == [ObjectClasses.GREEN_CAGE.value]:
-            #  rescue_silver_ball_cnt += 1
-            #  rescue_valid_classes = [ObjectClasses.SILVER_BALL.value
-            #                          ] if rescue_silver_ball_cnt < 2 else [
-            #                              ObjectClasses.BLACK_BALL.value
-            #                          ]
-            #else:
-            #  rescue_black_ball_cnt += 1
-            #  rescue_valid_classes = [ObjectClasses.EXIT.value]
-            logger.debug("---Ball release")
-            send_speed(1600, 1600)
-            time.sleep(3)
-            send_speed(1500, 1500)
-            send_arm(1024, 1)
-            time.sleep(1)
-            send_arm(1024, 0)
-            send_arm(3072, 0)
-            time.sleep(0.5)
-            send_speed(1400, 1400)
-            time.sleep(1)
-            send_speed(1750, 1250)
-            time.sleep(TURN_180_TIME)
-            send_speed(1500, 1500)
-            rescue_is_ball_caching = False
-          else:
+            #rescue_is_ball_caching = True
+          #elif rescue_is_ball_caching and rescue_F_U_SONIC is not None and rescue_F_U_SONIC < 8.0:  #NOTE: CAGE BALL RELEASE
+          #  logger.debug(
+          #      f"Close to wall (dist: {rescue_F_U_SONIC:.1f}). Initiating release_ball()"
+          #  )
+          #  # EXPANDED RELEASE_BALL LOGIC
+          #  logger.debug("Executing release_ball()")
+          #  #if rescue_valid_classes == [ObjectClasses.GREEN_CAGE.value]:
+          #  #  rescue_silver_ball_cnt += 1
+          #  #  rescue_valid_classes = [ObjectClasses.SILVER_BALL.value
+          #  #                          ] if rescue_silver_ball_cnt < 2 else [
+          #  #                              ObjectClasses.BLACK_BALL.value
+          #  #                          ]
+          #  #else:
+          #  #  rescue_black_ball_cnt += 1
+          #  #  rescue_valid_classes = [ObjectClasses.EXIT.value]
+          #  logger.debug("---Ball release")
+          #  send_speed(1600, 1600)
+          #  time.sleep(3)
+          #  send_speed(1500, 1500)
+          #  send_arm(1024, 1)
+          #  time.sleep(1)
+          #  send_arm(1024, 0)
+          #  send_arm(3072, 0)
+          #  time.sleep(0.5)
+          #  send_speed(1400, 1400)
+          #  time.sleep(1)
+          #  send_speed(1750, 1250)
+          #  time.sleep(TURN_180_TIME)
+          #  send_speed(1500, 1500)
+          #  rescue_is_ball_caching = False
+          if True:
             logger.debug(
                 f"Targeting {rescue_valid_classes}, offset={rescue_target_position:.1f}. Navigating..."
             )
@@ -469,8 +469,8 @@ def main_loop():
                 send_speed(rescue_L_Motor_Value, rescue_R_Motor_Value)
             else:
               diff_angle = rescue_target_position * WP
-              base_L = 1500 + diff_angle + 100
-              base_R = 1500 - diff_angle + 100
+              base_L = 1500 + diff_angle + 200
+              base_R = 1500 - diff_angle + 200
 
               # Check if cage is large enough to release ball (4x ball catch size)
               if rescue_target_size >= BALL_CATCH_SIZE * 4:
