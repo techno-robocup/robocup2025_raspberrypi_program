@@ -298,6 +298,7 @@ def main_loop():
             rescue_valid_classes = [ObjectClasses.SILVER_BALL.value]
           else:
             rescue_valid_classes = [ObjectClasses.BLACK_BALL.value]
+            rescue_silver_ball_cnt = 2
         else:
           rescue_valid_classes = [
               ObjectClasses.GREEN_CAGE.value
@@ -480,7 +481,7 @@ def main_loop():
                 logger.debug("Executing release_ball()")
                 logger.debug("---Ball release")
                 send_speed(1650, 1650)
-                time.sleep(3)
+                time.sleep(1)
                 send_speed(1500, 1500)
                 send_arm(1024, 1)
                 time.sleep(1)
