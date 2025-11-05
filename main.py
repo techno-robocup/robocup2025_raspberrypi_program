@@ -24,7 +24,7 @@ logger.info("PROCESS STARTED")
 
 # Rescue constants from modules.rescue
 P = 0.5
-WP = 0.3  # Cage P
+WP = 0.15  # Cage P
 AP = 1
 CP = 1
 BALL_CATCH_SIZE = 140000
@@ -392,6 +392,7 @@ def main_loop():
                 f"Targeting {rescue_valid_classes}, offset={rescue_target_position:.1f}. Navigating..."
             )
             # EXPANDED SET_MOTOR_SPEEDS LOGIC
+
             if not rescue_is_ball_caching:
               diff_angle = rescue_target_position * P
               if BALL_CATCH_SIZE > rescue_target_size:
@@ -405,7 +406,7 @@ def main_loop():
               base_R = 1500 - diff_angle + dist_term
 
               # Check if robot is close enough to pick up ball (speed-based)
-              if abs(diff_angle + dist_term) < 30:
+              if abs(diff_angle + dist_term) < 30 and abs(rescue_target_position) <= 150 :
                 logger.debug(
                     f"Robot close to ball (base_L={base_L:.1f}, base_R={base_R:.1f}). Initiating catch_ball()"
                 )
@@ -425,10 +426,11 @@ def main_loop():
                 rescue_is_ball_caching = True
                 rescue_L_Motor_Value = MOTOR_NEUTRAL
                 rescue_R_Motor_Value = MOTOR_NEUTRAL
-              else:
+              else: # TODO: ADD EXIT
                 rescue_L_Motor_Value = int(min(max(base_L, 1000), 2000))
                 rescue_R_Motor_Value = int(min(max(base_R, 1000), 2000))
                 send_speed(rescue_L_Motor_Value, rescue_R_Motor_Value)
+
             else:
               diff_angle = rescue_target_position * WP
               base_L = 1500 + diff_angle + 200
