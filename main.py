@@ -402,7 +402,7 @@ def main_loop():
               base_R = 1500 - diff_angle + dist_term
 
               # Check if robot is close enough to pick up ball (speed-based)
-              if abs(diff_angle + dist_term) < 20:
+              if abs(diff_angle + dist_term) < 30:
                 logger.debug(
                     f"Robot close to ball (base_L={base_L:.1f}, base_R={base_R:.1f}). Initiating catch_ball()"
                 )
@@ -412,10 +412,10 @@ def main_loop():
                 time.sleep(1.3)
                 send_speed(1500, 1500)
                 send_arm(1024, 0)
-                time.sleep(3)
+                time.sleep(2)
                 send_arm(1024, 1)
                 send_arm(3072, 1)
-                time.sleep(0.5)
+                time.sleep(1)
                 send_speed(1450, 1450)
                 time.sleep(1)
                 send_speed(1500, 1500)
@@ -432,7 +432,7 @@ def main_loop():
               base_R = 1500 - diff_angle + 200
 
               # Check if cage is large enough to release ball (3.8x ball catch size)
-              if rescue_target_size >= BALL_CATCH_SIZE * 3.8:
+              if rescue_target_size >= BALL_CATCH_SIZE * 3.7:
                 logger.debug(
                     f"Cage large enough (size={rescue_target_size:.1f}, threshold={BALL_CATCH_SIZE * 4}). Initiating release_ball()"
                 )
