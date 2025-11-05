@@ -409,7 +409,7 @@ def main_loop():
                 logger.debug("Executing catch_ball()")
                 logger.debug("---Ball catch")
                 send_speed(1600,1600)
-                time.sleep(1)
+                time.sleep(1.3)
                 send_speed(1500, 1500)
                 send_arm(1024, 0)
                 time.sleep(3)
@@ -431,15 +431,15 @@ def main_loop():
               base_L = 1500 + diff_angle + 200
               base_R = 1500 - diff_angle + 200
 
-              # Check if cage is large enough to release ball (4x ball catch size)
-              if rescue_target_size >= BALL_CATCH_SIZE * 4:
+              # Check if cage is large enough to release ball (3.8x ball catch size)
+              if rescue_target_size >= BALL_CATCH_SIZE * 3.8:
                 logger.debug(
                     f"Cage large enough (size={rescue_target_size:.1f}, threshold={BALL_CATCH_SIZE * 4}). Initiating release_ball()"
                 )
                 logger.debug("Executing release_ball()")
                 logger.debug("---Ball release")
-                send_speed(1800, 1800)
-                time.sleep(0.8)
+                send_speed(1650, 1650)
+                time.sleep(1)
                 send_speed(1500, 1500)
                 send_speed(1400,1400)
                 time.sleep(0.5)
