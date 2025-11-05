@@ -296,9 +296,12 @@ def main_loop():
           # Prioritize silver balls, but switch to black if turned 360+ degrees without finding silver
           if rescue_silver_ball_cnt < 2 and rescue_cnt_turning_degrees < 360:
             rescue_valid_classes = [ObjectClasses.SILVER_BALL.value]
-          else:
+          elif rescue_cnt_turning_degrees < 720:
             rescue_valid_classes = [ObjectClasses.BLACK_BALL.value]
             rescue_silver_ball_cnt = 2
+          else:
+            rescue_valid_classes = [ObjectClasses.EXIT.value]
+            rescue_black_ball_cnt = 1
         else:
           rescue_valid_classes = [
               ObjectClasses.GREEN_CAGE.value
@@ -375,7 +378,12 @@ def main_loop():
           send_speed(1500, 1500)
           rescue_cnt_turning_degrees += 45
         else:
-          rescue_cnt_turning_degrees = 0 if  rescue_valid_classes!= [ObjectClasses.BLACK_BALL.value]  else 360
+          if rescue_silver_ball_cnt <2:
+            rescue_cnt_turning_degrees = 0
+          elif rescue_black_ball_cnt < 1:
+            rescue_cnt_turning_degrees = 360
+          else:
+            rescue_cnt_turning_degrees = 720
           #if not rescue_is_ball_caching and rescue_F_U_SONIC is not None and rescue_F_U_SONIC < 3.0 and abs(
           #    rescue_target_position) <= 100:
           #  logger.debug(
@@ -452,6 +460,8 @@ def main_loop():
                 )
                 logger.debug("Executing catch_ball()")
                 logger.debug("---Ball catch")
+                send_speed(1600,1600)
+                time.sleep(0.5)
                 send_speed(1500, 1500)
                 send_arm(1024, 0)
                 time.sleep(0.5)
