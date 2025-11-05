@@ -495,8 +495,10 @@ def main_loop():
           send_speed(1700, 1700)
         else:
           send_speed(1600, 1700)
-        if modules.settings.slope is not None and abs(
-            modules.settings.slope) < 0.5:
+        MIN_LINE_AREA = 500  # Minimum line area to exit object avoidance
+        if (modules.settings.slope is not None and abs(modules.settings.slope) < 0.5
+            and modules.settings.line_area is not None
+            and modules.settings.line_area >= MIN_LINE_AREA):
           is_object = False
           object_second_phase = False
     #elif True:
