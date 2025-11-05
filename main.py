@@ -85,7 +85,10 @@ Linetrace_Camera = modules.camera.Camera(
 uart_io = modules.uart.UART_CON()
 
 # Start the line tracing camera
-# Linetrace_Camera.start_cam()
+Linetrace_Camera.start_cam()
+
+# Start the rescue camera
+Rescue_Camera.start_cam()
 
 message_id = 0
 
@@ -256,7 +259,7 @@ def main_loop():
 
     distances = get_ultrasonic_distance()
     # if modules.settings.is_rescue_area:
-    if True:
+    if False:
       if not Is_Rescue_Camera_Start:
         Rescue_Camera.start_cam()
         Linetrace_Camera.stop_cam()
