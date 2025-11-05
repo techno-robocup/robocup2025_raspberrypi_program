@@ -509,6 +509,7 @@ def main_loop():
         Rescue_Camera.stop_cam()
         Linetrace_Camera.start_cam()
         Is_Rescue_Camera_Start = False
+        send_arm(3072,0)
       if modules.settings.stop_requested:
         send_speed(1500, 1500)
         logger.debug("Red stop")
