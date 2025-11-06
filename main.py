@@ -257,7 +257,7 @@ def main_loop():
       send_speed(1500, 1500)
       return
 
-    distances = []
+    distances = [1000, 1000, 1000]
     # if modules.settings.is_rescue_area:
     if False:
       if not Is_Rescue_Camera_Start:
