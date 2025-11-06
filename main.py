@@ -519,6 +519,9 @@ def main_loop():
       if modules.settings.slope is None:
         send_speed(compute_default_speed() - 10, compute_default_speed() - 10)
         return
+      if time.time() - modules.settings.last_linetrace_precallback_time > 0.5:
+        send_speed(1500, 1500)
+        logger.debug("Linetrace precallback not called, stopping...")
 
       current_theta = math.atan(modules.settings.slope)
       if current_theta < 0:
