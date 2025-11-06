@@ -88,7 +88,7 @@ uart_io = modules.uart.UART_CON()
 Linetrace_Camera.start_cam()
 
 # Start the rescue camera
-Rescue_Camera.start_cam()
+#Rescue_Camera.start_cam()
 
 message_id = 0
 
@@ -245,7 +245,7 @@ def main_loop():
   global rescue_is_ball_caching, rescue_target_position, rescue_target_size
   global rescue_cnt_turning_degrees, rescue_cnt_turning_side
   global rescue_L_Motor_Value, rescue_R_Motor_Value, rescue_Arm_Move_Flag
-  global rescue_L_U_SONIC, rescue_F_U_SONIC, rescue_R_U_SONIC
+  #global rescue_L_U_SONIC, rescue_F_U_SONIC, rescue_R_U_SONIC
   global rescue_Moving_Flag
   message_id += 1
 
@@ -267,16 +267,16 @@ def main_loop():
         Is_Rescue_Camera_Start = True
 
       # Update ultrasonic values
-      if distances and len(distances) >= 3:
-        rescue_L_U_SONIC = distances[0]
-        rescue_F_U_SONIC = distances[1]
-        rescue_R_U_SONIC = distances[2]
-        # Also update modules.rescue values for compatibility
-        modules.rescue.L_U_SONIC = distances[0]
-        modules.rescue.F_U_SONIC = distances[1]
-        modules.rescue.R_U_SONIC = distances[2]
-      else:
-        logger.debug("No ultrasonic data available")
+      #if distances and len(distances) >= 3:
+      #  rescue_L_U_SONIC = distances[0]
+      #  rescue_F_U_SONIC = distances[1]
+      #  rescue_R_U_SONIC = distances[2]
+      #  # Also update modules.rescue values for compatibility
+      #  modules.rescue.L_U_SONIC = distances[0]
+      #  modules.rescue.F_U_SONIC = distances[1]
+      #  modules.rescue.R_U_SONIC = distances[2]
+      #else:
+      #  logger.debug("No ultrasonic data available")
 
       # Check stop button before rescue logic
       uart_io.send_message(Message(message_id, "GET button"))
@@ -373,9 +373,6 @@ def main_loop():
         elif rescue_target_position is None or rescue_target_size is None:
           logger.debug("No target found -> executing change_position()")
           # EXPANDED CHANGE_POSITION LOGIC
-          logger.debug(
-              f"SonicF :{rescue_F_U_SONIC} SonicL:{rescue_L_U_SONIC} cnt_turning:{rescue_cnt_turning_degrees}"
-          )
           send_speed(1750, 1250)
           time.sleep(TURN_45_TIME)
           send_speed(1500, 1500)
@@ -466,7 +463,7 @@ def main_loop():
                 rescue_R_Motor_Value = int(min(max(base_R, 1000), 2000))
                 send_speed(rescue_L_Motor_Value, rescue_R_Motor_Value)
         logger.debug(
-            f"Motor Values after run: L={rescue_L_Motor_Value}, R={rescue_R_Motor_Value}, Sonic:{rescue_F_U_SONIC}"
+            f"Motor Values after run: L={rescue_L_Motor_Value}, R={rescue_R_Motor_Value}"
         )
         logger.debug(
             f"Target offset:{rescue_target_position} size:{rescue_target_size}")
