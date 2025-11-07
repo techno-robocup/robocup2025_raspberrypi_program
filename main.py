@@ -520,13 +520,14 @@ def main_loop():
         is_object = True
         return
       if modules.settings.slope is None:
-        if is_slop_none:
+        if not is_slop_none:
           if time.time() - none_slop_time > RESCUE_FLAG_TIME:
             logger.debug("Rescue start ------------")
             modules.settings.stop_requested
             modules.settings.is_rescue_area = True
         else:
           none_slop_time = time.time()
+          is_slop_none = True
         send_speed(compute_default_speed() - 10, compute_default_speed() - 10)
         return
       if time.time() - modules.settings.last_linetrace_precallback_time > 0.5:
