@@ -36,7 +36,7 @@ FRONT_CLEAR_THRESHOLD = 3.0
 MOTOR_MIN = 1000
 MOTOR_MAX = 2000
 MOTOR_NEUTRAL = 1500
-RESCUE_FLAG_TIME = 14.0
+RESCUE_FLAG_TIME = 7.0
 
 
 class ObjectClasses(Enum):
@@ -532,6 +532,7 @@ def main_loop():
         return
       else:
         is_slop_none = False
+        none_slop_time = time.time()
       if time.time() - modules.settings.last_linetrace_precallback_time > 0.5:
         send_speed(1500, 1500)
         logger.debug("Linetrace precallback not called, stopping...")
