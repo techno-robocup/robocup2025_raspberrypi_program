@@ -249,7 +249,7 @@ def main_loop():
   global rescue_L_Motor_Value, rescue_R_Motor_Value, rescue_Arm_Move_Flag
   #global rescue_L_U_SONIC, rescue_F_U_SONIC, rescue_R_U_SONIC
   global rescue_Moving_Flag
-  global none_slop_time
+  global none_slop_time,is_slop_none
   message_id += 1
 
   try:
