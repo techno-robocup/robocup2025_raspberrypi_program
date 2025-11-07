@@ -611,7 +611,7 @@ if __name__ == "__main__":
         is_object = False
         object_second_phase = False
         is_slop_none = False
-        none_slop_time = 0
+        none_slop_time = time.time()
         # Reset rescue state variables
         rescue_silver_ball_cnt = 0
         rescue_black_ball_cnt = 0
