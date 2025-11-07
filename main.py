@@ -261,8 +261,8 @@ def main_loop():
       return
 
     distances = [1000, 1000, 1000]
-    # if modules.settings.is_rescue_area:
-    if False:
+    if modules.settings.is_rescue_area:
+    #if False:
       if not Is_Rescue_Camera_Start:
         Rescue_Camera.start_cam()
         Linetrace_Camera.stop_cam()
