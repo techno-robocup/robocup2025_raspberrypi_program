@@ -9,7 +9,6 @@ import modules.uart
 import modules.log
 import modules.camera
 import modules.settings
-import modules.rescue
 from modules.uart import Message
 from enum import Enum
 import traceback
@@ -37,6 +36,7 @@ FRONT_CLEAR_THRESHOLD = 3.0
 MOTOR_MIN = 1000
 MOTOR_MAX = 2000
 MOTOR_NEUTRAL = 1500
+RESCUE_FLAG_TIME = 7.0
 
 
 class ObjectClasses(Enum):
@@ -46,6 +46,8 @@ class ObjectClasses(Enum):
   RED_CAGE = 3
   SILVER_BALL = 4
 
+is_slop_none = False
+none_slop_time = 0
 
 # Rescue state variables
 rescue_valid_classes = [ObjectClasses.SILVER_BALL.value]
@@ -247,6 +249,7 @@ def main_loop():
   global rescue_L_Motor_Value, rescue_R_Motor_Value, rescue_Arm_Move_Flag
   #global rescue_L_U_SONIC, rescue_F_U_SONIC, rescue_R_U_SONIC
   global rescue_Moving_Flag
+  global none_slop_time
   message_id += 1
 
   try:
@@ -517,6 +520,11 @@ def main_loop():
         is_object = True
         return
       if modules.settings.slope is None:
+        if is_slop_none:
+          if time.time() - none_slop_time > RESCUE_FLAG_TIME:
+            modules.settings.is_rescue_area = True
+        else:
+          none_slop_time = time.time()
         send_speed(compute_default_speed() - 10, compute_default_speed() - 10)
         return
       if time.time() - modules.settings.last_linetrace_precallback_time > 0.5:
