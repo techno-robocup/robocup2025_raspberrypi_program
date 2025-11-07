@@ -46,7 +46,7 @@ class ObjectClasses(Enum):
   RED_CAGE = 3
   SILVER_BALL = 4
 
-is_slop_none = False
+is_slop_none = False#TODO: Exit -> False
 none_slop_time = 0
 
 # Rescue state variables
@@ -530,6 +530,8 @@ def main_loop():
           is_slop_none = True
         send_speed(compute_default_speed() - 10, compute_default_speed() - 10)
         return
+      else:
+        is_slop_none = False
       if time.time() - modules.settings.last_linetrace_precallback_time > 0.5:
         send_speed(1500, 1500)
         logger.debug("Linetrace precallback not called, stopping...")
