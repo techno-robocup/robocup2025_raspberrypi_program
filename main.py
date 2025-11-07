@@ -522,6 +522,8 @@ def main_loop():
       if modules.settings.slope is None:
         if is_slop_none:
           if time.time() - none_slop_time > RESCUE_FLAG_TIME:
+            logger.debug("Rescue start ------------")
+            modules.settings.stop_requested
             modules.settings.is_rescue_area = True
         else:
           none_slop_time = time.time()
