@@ -604,6 +604,7 @@ def main_loop():
 
 if __name__ == "__main__":
   try:
+    send_arm(3072,0)
     while True:
       uart_io.send_message(Message(message_id, "GET button"))
       message = uart_io.receive_message()
