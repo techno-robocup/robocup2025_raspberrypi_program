@@ -266,7 +266,7 @@ def main_loop():
       send_speed(1500, 1500)
       return
 
-    distances = [1000, 1000, 1000]
+    distances = get_ultrasonic_distance()
     if modules.settings.is_rescue_area:
     #if False:
       if not Is_Rescue_Camera_Start:
