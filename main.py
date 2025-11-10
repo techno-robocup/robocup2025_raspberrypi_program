@@ -22,7 +22,7 @@ logger = modules.log.get_logger()
 logger.info("PROCESS STARTED")
 
 # Rescue constants from modules.rescue
-P = 0.5
+P = 0.6
 WP = 0.15  # Cage P
 AP = 1
 CP = 1
@@ -65,6 +65,7 @@ rescue_L_U_SONIC = None
 rescue_F_U_SONIC = None
 rescue_R_U_SONIC = None
 rescue_Moving_Flag = False
+rescue_reposition_cnt = 0
 
 # Initialize camera objects
 Rescue_Camera = modules.camera.Camera(
@@ -269,18 +270,6 @@ def main_loop():
         time.sleep(1)
         Is_Rescue_Camera_Start = True
 
-      # Update ultrasonic values
-      #if distances and len(distances) >= 3:
-      #  rescue_L_U_SONIC = distances[0]
-      #  rescue_F_U_SONIC = distances[1]
-      #  rescue_R_U_SONIC = distances[2]
-      #  # Also update modules.rescue values for compatibility
-      #  modules.rescue.L_U_SONIC = distances[0]
-      #  modules.rescue.F_U_SONIC = distances[1]
-      #  modules.rescue.R_U_SONIC = distances[2]
-      #else:
-      #  logger.debug("No ultrasonic data available")
-
       # Check stop button before rescue logic
       uart_io.send_message(Message(message_id, "GET button"))
       button_msg = uart_io.receive_message()
@@ -295,7 +284,7 @@ def main_loop():
         send_speed(1750, 1250)
         time.sleep(TURN_45_TIME)
         send_speed(1500, 1500)
-        rescue_cnt_turning_degrees += 45
+        rescue_cnt_turning_degrees += 35
         logger.debug(f"L: {rescue_L_Motor_Value} R: {rescue_R_Motor_Value}")
       else:
         if not rescue_is_ball_caching:
@@ -402,11 +391,24 @@ def main_loop():
               else:
                 dist_term = 0
                 diff_angle *= 1.5
+              if BALL_CATCH_SIZE > rescue_target_position and abs(rescue_target_position) > 90:
+                rescue_reposition_cnt +=1
+                if rescue_reposition_cnt == 5:
+                  send_speed(1450,1450)
+                  time.sleep(2)
+                else:
+                  if rescue_target_position > 0:
+                    send_speed(1550,1450)
+                  else:
+                    send_speed(1450,1550)
+                  time.sleep(0.1)
+
+
               base_L = 1500 + diff_angle + dist_term
               base_R = 1500 - diff_angle + dist_term
 
               # Check if robot is close enough to pick up ball (speed-based)
-              if abs(diff_angle + dist_term) < 30 and abs(rescue_target_position) <= 150 :
+              if abs(diff_angle + dist_term) < 30 and abs(rescue_target_position) <= 90 :
                 logger.debug(
                     f"Robot close to ball (base_L={base_L:.1f}, base_R={base_R:.1f}). Initiating catch_ball()"
                 )
@@ -419,7 +421,7 @@ def main_loop():
                 time.sleep(2)
                 send_arm(1024, 1)
                 send_arm(3072, 1)
-                time.sleep(1)
+                time.sleep(0.5)
                 send_speed(1450, 1450)
                 time.sleep(1)
                 send_speed(1500, 1500)
@@ -437,14 +439,14 @@ def main_loop():
               base_R = 1500 - diff_angle + 200
 
               # Check if cage is large enough to release ball (3.8x ball catch size)
-              if rescue_target_size >= BALL_CATCH_SIZE * 3.7:
+              if rescue_target_size >= BALL_CATCH_SIZE * 3.8:
                 logger.debug(
                     f"Cage large enough (size={rescue_target_size:.1f}, threshold={BALL_CATCH_SIZE * 4}). Initiating release_ball()"
                 )
                 logger.debug("Executing release_ball()")
                 logger.debug("---Ball release")
                 send_speed(1650, 1650)
-                time.sleep(1)
+                time.sleep(3)
                 send_speed(1500, 1500)
                 send_speed(1400,1400)
                 time.sleep(0.5)
