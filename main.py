@@ -133,32 +133,37 @@ def send_arm(angle: int, wire: int):
 
 def get_ultrasonic_distance() -> Optional[list[float]]:
   """
-    Get ultrasonic sensor distance reading.
-    
+    Get ultrasonic sensor distance reading with 100ms timeout.
+
     Returns:
-        Optional[list[float]]: List of distance readings or None if failed
+        Optional[list[float]]: List of distance readings or None if timeout/failed
     """
   try:
     logger.debug("Getting ultrasonic distance")
     global message_id
     message_id += 1
     uart_io.send_message(Message(message_id, "GET ultrasonic"))
-    while True:
-      response = uart_io.receive_message()
-      if response and response.getId() == message_id:
-        distances = response.getMessage().split()
-        ret = []
-        for distance in distances:
-          try:
-            ret.append(float(distance))
-          except ValueError:
-            logger.error(f"ValueError: Could not convert {distance} to float")
-        return ret
-      elif response.getId() > message_id:
-        return None
+    start_time = time.time()
+    timeout = 0.1  # 100ms timeout
+    # Only wait for one response - if it doesn't match or times out, return None
+    response = uart_io.receive_message()
+    elapsed = time.time() - start_time
+    if elapsed >= timeout:
+      logger.warning(f"Ultrasonic read timeout ({elapsed*1000:.1f}ms)")
+      return [1000, 1000, 1000]
+    if response and response.getId() == message_id:
+      distances = response.getMessage().split()
+      ret = []
+      for distance in distances:
+        try:
+          ret.append(float(distance))
+        except ValueError:
+          logger.error(f"ValueError: Could not convert {distance} to float")
+      return ret
+    return [1000, 1000, 1000]
   except Exception as e:
     logger.error(f"Failed to get ultrasonic distance: {e}")
-    return None
+    return [1000, 1000, 1000]
 
 
 def send_wire_command(wire_number: int) -> Message:
