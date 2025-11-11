@@ -292,12 +292,6 @@ def main_loop():
         time.sleep(TURN_45_TIME)
         send_speed(1500, 1500)
         rescue_cnt_turning_degrees += 35
-        if rescue_silver_ball_cnt < 2 and rescue_cnt_turning_degrees == 350:
-          rescue_cnt_turning_degrees = 0
-        elif rescue_silver_ball_cnt == 2 and rescue_black_ball_cnt < 1 and rescue_cnt_turning_degrees == 710:
-          rescue_cnt_turning_degrees = 360
-        else:
-          rescue_cnt_turning_degrees = 720
         logger.debug(f"L: {rescue_L_Motor_Value} R: {rescue_R_Motor_Value}")
       else:
         if not rescue_is_ball_caching:
