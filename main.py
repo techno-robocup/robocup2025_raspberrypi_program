@@ -146,21 +146,23 @@ def get_ultrasonic_distance() -> Optional[list[float]]:
     start_time = time.time()
     timeout = 0.1  # 100ms timeout
     # Only wait for one response - if it doesn't match or times out, return None
-    response = uart_io.receive_message()
-    elapsed = time.time() - start_time
-    if elapsed >= timeout:
-      logger.warning(f"Ultrasonic read timeout ({elapsed*1000:.1f}ms)")
+    response = None
+    while time.time() - start_time < timeout:
+      response = uart_io.receive_message()
+      if response and response.getId() == message_id:
+        break
+      time.sleep(0.01)
+    if not response or response.getId() != message_id:
+      logger.warning("Ultrasonic timeout or ID mismatch")
       return [1000, 1000, 1000]
-    if response and response.getId() == message_id:
-      distances = response.getMessage().split()
-      ret = []
-      for distance in distances:
-        try:
-          ret.append(float(distance))
-        except ValueError:
-          logger.error(f"ValueError: Could not convert {distance} to float")
-      return ret
-    return [1000, 1000, 1000]
+    distances = response.getMessage().split()
+    ret = []
+    for distance in distances:
+      try:
+        ret.append(float(distance))
+      except ValueError:
+        logger.error(f"ValueError: Could not convert {distance} to float")
+    return ret
   except Exception as e:
     logger.error(f"Failed to get ultrasonic distance: {e}")
     return [1000, 1000, 1000]
