@@ -396,47 +396,47 @@ def main_loop():
               else:
                 dist_term = 0
                 diff_angle *= 1.5
-              if BALL_CATCH_SIZE > rescue_target_position and abs(rescue_target_position) > 90:
+              if BALL_CATCH_SIZE > rescue_target_size and abs(rescue_target_position) > 90:
                 rescue_reposition_cnt +=1
                 if rescue_reposition_cnt == 5:
                   send_speed(1450,1450)
                   time.sleep(2)
                 else:
                   if rescue_target_position > 0:
-                    send_speed(1550,1450)
+                    send_speed(1530,1470)
                   else:
-                    send_speed(1450,1550)
+                    send_speed(1470,1530)
                   time.sleep(0.1)
+              else:
+                base_L = 1500 + diff_angle + dist_term
+                base_R = 1500 - diff_angle + dist_term
 
-
-              base_L = 1500 + diff_angle + dist_term
-              base_R = 1500 - diff_angle + dist_term
-
-              # Check if robot is close enough to pick up ball (speed-based)
-              if abs(diff_angle + dist_term) < 30 and abs(rescue_target_position) <= 90 :
-                logger.debug(
-                    f"Robot close to ball (base_L={base_L:.1f}, base_R={base_R:.1f}). Initiating catch_ball()"
-                )
-                logger.debug("Executing catch_ball()")
-                logger.debug("---Ball catch")
-                send_speed(1600,1600)
-                time.sleep(1.3)
-                send_speed(1500, 1500)
-                send_arm(1024, 0)
-                time.sleep(2)
-                send_arm(1024, 1)
-                send_arm(3072, 1)
-                time.sleep(0.5)
-                send_speed(1450, 1450)
-                time.sleep(1)
-                send_speed(1500, 1500)
-                rescue_is_ball_caching = True
-                rescue_L_Motor_Value = MOTOR_NEUTRAL
-                rescue_R_Motor_Value = MOTOR_NEUTRAL
-              else: # TODO: ADD EXIT
-                rescue_L_Motor_Value = int(min(max(base_L, 1000), 2000))
-                rescue_R_Motor_Value = int(min(max(base_R, 1000), 2000))
-                send_speed(rescue_L_Motor_Value, rescue_R_Motor_Value)
+                # Check if robot is close enough to pick up ball (speed-based)
+                if abs(diff_angle + dist_term) < 30 and abs(rescue_target_position) <= 90 :
+                  logger.debug(
+                      f"Robot close to ball (base_L={base_L:.1f}, base_R={base_R:.1f}). Initiating catch_ball()"
+                  )
+                  logger.debug("Executing catch_ball()")
+                  logger.debug("---Ball catch")
+                  send_speed(1600,1600)
+                  time.sleep(1.3)
+                  send_speed(1500, 1500)
+                  send_arm(1024, 0)
+                  time.sleep(2)
+                  send_arm(1024, 1)
+                  time.sleep(0.5)
+                  send_arm(3072, 1)
+                  time.sleep(0.5)
+                  send_speed(1450, 1450)
+                  time.sleep(1)
+                  send_speed(1500, 1500)
+                  rescue_is_ball_caching = True
+                  rescue_L_Motor_Value = MOTOR_NEUTRAL
+                  rescue_R_Motor_Value = MOTOR_NEUTRAL
+                else: # TODO: ADD EXIT
+                  rescue_L_Motor_Value = int(min(max(base_L, 1000), 2000))
+                  rescue_R_Motor_Value = int(min(max(base_R, 1000), 2000))
+                  send_speed(rescue_L_Motor_Value, rescue_R_Motor_Value)
 
             else:
               diff_angle = rescue_target_position * WP
@@ -451,7 +451,7 @@ def main_loop():
                 logger.debug("Executing release_ball()")
                 logger.debug("---Ball release")
                 send_speed(1650, 1650)
-                time.sleep(3)
+                time.sleep(2.5)
                 send_speed(1500, 1500)
                 send_speed(1400,1400)
                 time.sleep(0.5)
