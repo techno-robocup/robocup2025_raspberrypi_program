@@ -292,9 +292,9 @@ def main_loop():
         time.sleep(TURN_45_TIME)
         send_speed(1500, 1500)
         rescue_cnt_turning_degrees += 35
-        if rescue_valid_classes == ObjectClasses.SILVER_BALL.value and rescue_cnt_turning_degrees == 350:
+        if rescue_silver_ball_cnt < 2 and rescue_cnt_turning_degrees == 350:
           rescue_cnt_turning_degrees = 0
-        elif rescue_valid_classes == ObjectClasses.BLACK_BALL.value and rescue_cnt_turning_degrees == 710:
+        elif rescue_silver_ball_cnt == 2 and rescue_black_ball_cnt < 1 and rescue_cnt_turning_degrees == 710:
           rescue_cnt_turning_degrees = 360
         else:
           rescue_cnt_turning_degrees = 720
@@ -302,9 +302,9 @@ def main_loop():
       else:
         if not rescue_is_ball_caching:
           # Prioritize silver balls, but switch to black if turned 360+ degrees without finding silver
-          if rescue_silver_ball_cnt < 2 and rescue_cnt_turning_degrees < 360:
+          if rescue_silver_ball_cnt < 2 or rescue_cnt_turning_degrees < 360:
             rescue_valid_classes = [ObjectClasses.SILVER_BALL.value]
-          elif rescue_cnt_turning_degrees < 720:
+          elif rescue_silver_ball_cnt < 1 or rescue_cnt_turning_degrees < 720:
             rescue_valid_classes = [ObjectClasses.BLACK_BALL.value]
             rescue_silver_ball_cnt = 2
           else:
@@ -484,6 +484,10 @@ def main_loop():
                 rescue_is_ball_caching = False
                 rescue_L_Motor_Value = MOTOR_NEUTRAL
                 rescue_R_Motor_Value = MOTOR_NEUTRAL
+                if rescue_valid_classes == ObjectClasses.GREEN_CAGE.value:
+                  rescue_silver_ball_cnt +=1
+                else:
+                  rescue_black_ball_cnt +=1
               else:
                 rescue_L_Motor_Value = int(min(max(base_L, 1000), 2000))
                 rescue_R_Motor_Value = int(min(max(base_R, 1000), 2000))
