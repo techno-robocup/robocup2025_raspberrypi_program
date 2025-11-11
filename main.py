@@ -397,7 +397,7 @@ def main_loop():
                 dist_term = 0
                 diff_angle *= 1.5
               # reposition counter logic
-              if BALL_CATCH_SIZE > rescue_target_size and abs(rescue_target_position) > 90:
+              if BALL_CATCH_SIZE < rescue_target_size and abs(rescue_target_position) > 90:
                   rescue_reposition_cnt += 1
                   logger.debug(f"Repositioning... count={rescue_reposition_cnt}")
                   if rescue_target_position > 0:
