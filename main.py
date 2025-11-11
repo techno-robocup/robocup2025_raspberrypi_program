@@ -292,6 +292,12 @@ def main_loop():
         time.sleep(TURN_45_TIME)
         send_speed(1500, 1500)
         rescue_cnt_turning_degrees += 35
+        if rescue_valid_classes == ObjectClasses.SILVER_BALL.value and rescue_cnt_turning_degrees == 350:
+          rescue_cnt_turning_degrees = 0
+        elif rescue_valid_classes == ObjectClasses.BLACK_BALL.value and rescue_cnt_turning_degrees == 710:
+          rescue_cnt_turning_degrees = 360
+        else:
+          rescue_cnt_turning_degrees = 720
         logger.debug(f"L: {rescue_L_Motor_Value} R: {rescue_R_Motor_Value}")
       else:
         if not rescue_is_ball_caching:
@@ -511,7 +517,7 @@ def main_loop():
         if distances[0] < 8:
           send_speed(1700, 1700)
         else:
-          send_speed(1550, 1700)
+          send_speed(1550, 1650)
         MIN_LINE_AREA = 500  # Minimum line area to exit object avoidance
         if (modules.settings.slope is not None and abs(modules.settings.slope) < 0.5
             and modules.settings.line_area is not None
