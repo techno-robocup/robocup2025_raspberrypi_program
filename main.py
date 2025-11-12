@@ -554,7 +554,7 @@ def main_loop():
       else:
         is_slop_none = False
         none_slop_time = time.time()
-      if time.time() - modules.settings.last_linetrace_precallback_time > 0.5:
+      if time.time() - modules.settings.last_linetrace_precallback_time > 0.2:
         send_speed(1500, 1500)
         logger.debug("Linetrace precallback not called, stopping...")
 
