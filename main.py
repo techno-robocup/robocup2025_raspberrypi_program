@@ -144,14 +144,13 @@ def get_ultrasonic_distance() -> Optional[list[float]]:
     message_id += 1
     uart_io.send_message(Message(message_id, "GET ultrasonic"))
     start_time = time.time()
-    timeout = 0.1  # 100ms timeout
+    timeout = 0.2  # 200ms timeout
     # Only wait for one response - if it doesn't match or times out, return None
     response = None
     while time.time() - start_time < timeout:
       response = uart_io.receive_message()
       if response and response.getId() == message_id:
         break
-      time.sleep(0.01)
     if not response or response.getId() != message_id:
       logger.warning("Ultrasonic timeout or ID mismatch")
       return [1000, 1000, 1000]
