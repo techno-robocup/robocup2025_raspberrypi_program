@@ -425,7 +425,7 @@ def main_loop():
                 rescue_reposition_cnt = 0
 
                 # Check if YOLO results are stale (> 0.2s old)
-                if time.time() - rescue_last_yolo_time > 0.2:
+                if time.time() - rescue_last_yolo_time > 0.1:
                   logger.debug("YOLO results stale (>0.2s), sending neutral 1500")
                   send_speed(1500, 1500)
                   return
