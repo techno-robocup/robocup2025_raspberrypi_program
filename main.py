@@ -66,6 +66,7 @@ rescue_F_U_SONIC = None
 rescue_R_U_SONIC = None
 rescue_Moving_Flag = False
 rescue_reposition_cnt = 0
+rescue_last_yolo_time = time.time()
 
 # Initialize camera objects
 Rescue_Camera = modules.camera.Camera(
@@ -258,7 +259,7 @@ def main_loop():
   #global rescue_L_U_SONIC, rescue_F_U_SONIC, rescue_R_U_SONIC
   global rescue_Moving_Flag
   global none_slop_time,is_slop_none,rescue_reposition_cnt
-  global ultrasonic_increment, distances
+  global ultrasonic_increment, distances, rescue_last_yolo_time
   message_id += 1
 
   try:
@@ -297,6 +298,7 @@ def main_loop():
         rescue_cnt_turning_degrees += 35
         logger.debug(f"L: {rescue_L_Motor_Value} R: {rescue_R_Motor_Value}")
       else:
+        rescue_last_yolo_time = time.time()
         if not rescue_is_ball_caching:
           # Prioritize silver balls, but switch to black if turned 360+ degrees without finding silver
           if rescue_silver_ball_cnt < 2 or rescue_cnt_turning_degrees < 360:
@@ -421,6 +423,13 @@ def main_loop():
                       rescue_reposition_cnt = 0
               else:
                 rescue_reposition_cnt = 0
+
+                # Check if YOLO results are stale (> 0.2s old)
+                if time.time() - rescue_last_yolo_time > 0.2:
+                  logger.debug("YOLO results stale (>0.2s), sending neutral 1500")
+                  send_speed(1500, 1500)
+                  return
+
                 base_L = 1500 + diff_angle + dist_term
                 base_R = 1500 - diff_angle + dist_term
 
@@ -651,6 +660,7 @@ if __name__ == "__main__":
         rescue_L_Motor_Value = MOTOR_NEUTRAL
         rescue_R_Motor_Value = MOTOR_NEUTRAL
         rescue_Arm_Move_Flag = 0
+        rescue_last_yolo_time = time.time()
 
   except KeyboardInterrupt:
     logger.info("PROCESS INTERRUPTED BY USER")
