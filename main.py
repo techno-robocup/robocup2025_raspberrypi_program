@@ -36,7 +36,7 @@ FRONT_CLEAR_THRESHOLD = 3.0
 MOTOR_MIN = 1000
 MOTOR_MAX = 2000
 MOTOR_NEUTRAL = 1500
-RESCUE_FLAG_TIME = 7.0
+RESCUE_FLAG_TIME = 6.0
 
 
 class ObjectClasses(Enum):
@@ -297,7 +297,7 @@ def main_loop():
           # Prioritize silver balls, but switch to black if turned 360+ degrees without finding silver
           if rescue_silver_ball_cnt < 2 or rescue_cnt_turning_degrees < 360:
             rescue_valid_classes = [ObjectClasses.SILVER_BALL.value]
-          elif rescue_silver_ball_cnt < 1 or rescue_cnt_turning_degrees < 720:
+          elif rescue_black_ball_cnt < 1 or rescue_cnt_turning_degrees < 720:
             rescue_valid_classes = [ObjectClasses.BLACK_BALL.value]
             rescue_silver_ball_cnt = 2
           else:
