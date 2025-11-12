@@ -258,7 +258,7 @@ def main_loop():
   #global rescue_L_U_SONIC, rescue_F_U_SONIC, rescue_R_U_SONIC
   global rescue_Moving_Flag
   global none_slop_time,is_slop_none,rescue_reposition_cnt
-  global ultrasonic_increment
+  global ultrasonic_increment, distances
   message_id += 1
 
   try:
