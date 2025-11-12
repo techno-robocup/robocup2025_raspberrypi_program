@@ -246,7 +246,8 @@ def compute_default_speed() -> int:
 Is_Rescue_Camera_Start = False
 Rescue_Camera.start_cam()
 
-
+distances = []
+ultrasonic_increment = 0
 def main_loop():
   """Main control loop for the robotics program."""
   global message_id, is_object, object_second_phase, Is_Rescue_Camera_Start
@@ -267,7 +268,9 @@ def main_loop():
       send_speed(1500, 1500)
       return
 
-    distances = get_ultrasonic_distance()
+    ultrasonic_increment += 1
+    if ultrasonic_increment % 2 == 0:
+      distances = get_ultrasonic_distance()
     if modules.settings.is_rescue_area:
     #if False:
       if not Is_Rescue_Camera_Start:
