@@ -321,7 +321,7 @@ def main_loop():
         rescue_last_yolo_time = time.time()
         if not rescue_is_ball_caching:
           # Prioritize silver balls, but switch to black if turned 360+ degrees without finding silver
-          if rescue_cnt_turning_degrees < 360:
+          if rescue_silver_ball_cnt < 2 or rescue_cnt_turning_degrees < 360:
             rescue_valid_classes = [ObjectClasses.SILVER_BALL.value]
           else:
             rescue_valid_classes = [ObjectClasses.BLACK_BALL.value]
