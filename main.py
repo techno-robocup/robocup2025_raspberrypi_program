@@ -24,7 +24,7 @@ logger.info("PROCESS STARTED")
 # Rescue constants from modules.rescue
 P = 0.7
 WP = 0.15  # Cage P
-AP = 0.9
+AP = 1
 CP = 1
 BALL_CATCH_SIZE = 140000
 CAGE_RELEASE_SIZE = 1000000
