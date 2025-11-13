@@ -366,6 +366,7 @@ def main_loop():
               logger.debug(
                   f"Detected cls={cls}, area={area:.1f}, offset={dist:.1f}")
             elif not rescue_is_ball_caching and cls == ObjectClasses.SILVER_BALL.value:
+              rescue_cnt_turning_degrees = 0
               x_center, y_center, w, h = map(float, box.xywh[0])
               dist = x_center - cx
               area = w * h
