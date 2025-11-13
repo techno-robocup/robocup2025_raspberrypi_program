@@ -22,7 +22,7 @@ logger = modules.log.get_logger()
 logger.info("PROCESS STARTED")
 
 # Rescue constants from modules.rescue
-P = 0.7
+P = 0.6
 WP = 0.15  # Cage P
 AP = 1
 CP = 1
@@ -404,8 +404,8 @@ def main_loop():
                              math.sqrt(rescue_target_size)) * AP
                 dist_term = int(max(30,dist_term))
               else:
-                dist_term = -20
-                dist_angle *= 1.5
+                dist_term = 0
+                dist_angle *= 1.1
               # reposition counter logic
               #if BALL_CATCH_SIZE < rescue_target_size and abs(rescue_target_position) > 90:
               #    rescue_reposition_cnt += 1
@@ -438,13 +438,13 @@ def main_loop():
                 )
                 logger.debug("Executing catch_ball()")
                 logger.debug("---Ball catch")
-                #send_speed(1600,1600)
-                #time.sleep()
-                #send_speed(1500, 1500)
+                send_speed(1600,1600)
+                time.sleep(1.3)
+                send_speed(1500, 1500)
                 send_arm(1024, 0)
-                time.sleep(1.7)
+                time.sleep(2)
                 send_arm(1024, 1)
-                time.sleep(1)
+                time.sleep(0.5)
                 send_arm(3072, 1)
                 time.sleep(0.5)
                 send_speed(1450, 1450)
