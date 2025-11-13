@@ -425,7 +425,7 @@ def main_loop():
                 dist_term = int(max(30,dist_term))
               else:
                 dist_term = 0
-                dist_angle *= 1.1
+                diff_angle *= 1.1
               # reposition counter logic
               #if BALL_CATCH_SIZE < rescue_target_size and abs(rescue_target_position) > 90:
               #    rescue_reposition_cnt += 1
