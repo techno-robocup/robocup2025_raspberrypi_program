@@ -323,16 +323,16 @@ def main_loop():
           # Prioritize silver balls, but switch to black if turned 360+ degrees without finding silver
           if rescue_silver_ball_cnt < 2 or rescue_cnt_turning_degrees < 360:
             rescue_valid_classes = [ObjectClasses.SILVER_BALL.value]
-            logger.debug(f"Valid Class:Black Ball")
+            logger.debug("Valid Class:Black Ball")
           else:
             rescue_valid_classes = [ObjectClasses.BLACK_BALL.value]
-            logger.debug(f"Valid Class:Silver Ball")
+            logger.debug("Valid Class:Silver Ball")
             rescue_silver_ball_cnt = 2
         else:
           if rescue_silver_ball_cnt < 2:
-            logger.debug(f"Valid Class:Green Cage")
+            logger.debug("Valid Class:Green Cage")
           else:
-            logger.debug(f"Valid Class:Red Cage")
+            logger.debug("Valid Class:Red Cage")
           rescue_valid_classes = [
               ObjectClasses.GREEN_CAGE.value
           ] if rescue_silver_ball_cnt < 2 else [ObjectClasses.RED_CAGE.value]
@@ -378,15 +378,15 @@ def main_loop():
           rescue_target_position = best_target_pos
           rescue_target_size = best_target_area
           if rescue_valid_classes == ObjectClasses.BLACK_BALL:
-            logger.debug(f"Valid Class:Black Ball")
+            logger.debug("Valid Class:Black Ball")
           if rescue_valid_classes == ObjectClasses.SILVER_BALL:
-            logger.debug(f"Valid Class:Silver Ball")
+            logger.debug("Valid Class:Silver Ball")
           if rescue_valid_classes == ObjectClasses.GREEN_CAGE:
-            logger.debug(f"Valid Class:Green Cage")
+            logger.debug("Valid Class:Green Cage")
           if rescue_valid_classes == ObjectClasses.RED_CAGE:
-            logger.debug(f"Valid Class:Red Cage")
+            logger.debug("Valid Class:Red Cage")
           if rescue_valid_classes == ObjectClasses.EXIT:
-            logger.debug(f"Valid Class:EXIT")
+            logger.debug("Valid Class:EXIT")
           if best_target_pos is not None:
             logger.debug(
                 f"Target found offset={best_target_pos:.1f}, area={best_target_area:.1f}"
