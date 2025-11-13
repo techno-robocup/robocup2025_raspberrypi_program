@@ -16,6 +16,7 @@ import sys
 import math
 from typing import Optional
 import time
+import threading
 
 logger = modules.log.get_logger()
 
@@ -132,29 +133,22 @@ def send_arm(angle: int, wire: int):
     return None
 
 
-def get_ultrasonic_distance() -> Optional[list[float]]:
-  """
-    Get ultrasonic sensor distance reading with 100ms timeout.
-
-    Returns:
-        Optional[list[float]]: List of distance readings or None if timeout/failed
-    """
+def _get_ultrasonic_distance_internal(result_container: list, msg_id: int) -> None:
+  """Internal function to get ultrasonic distance (runs in thread)."""
   try:
     logger.debug("Getting ultrasonic distance")
-    global message_id
-    message_id += 1
-    uart_io.send_message(Message(message_id, "GET ultrasonic"))
+    uart_io.send_message(Message(msg_id, "GET ultrasonic"))
     start_time = time.time()
-    timeout = 0.2  # 200ms timeout
-    # Only wait for one response - if it doesn't match or times out, return None
+    timeout = 0.1  # 100ms timeout
     response = None
     while time.time() - start_time < timeout:
       response = uart_io.receive_message()
-      if response and response.getId() == message_id:
+      if response and response.getId() == msg_id:
         break
-    if not response or response.getId() != message_id:
+    if not response or response.getId() != msg_id:
       logger.warning("Ultrasonic timeout or ID mismatch")
-      return [1000, 1000, 1000]
+      result_container.append([1000, 1000, 1000])
+      return
     distances = response.getMessage().split()
     ret = []
     for distance in distances:
@@ -162,10 +156,36 @@ def get_ultrasonic_distance() -> Optional[list[float]]:
         ret.append(float(distance))
       except ValueError:
         logger.error(f"ValueError: Could not convert {distance} to float")
-    return ret
+    result_container.append(ret)
   except Exception as e:
     logger.error(f"Failed to get ultrasonic distance: {e}")
+    result_container.append([1000, 1000, 1000])
+
+
+def get_ultrasonic_distance() -> Optional[list[float]]:
+  """
+    Get ultrasonic sensor distance reading with 100ms timeout.
+    Force-quits after 100ms even if stuck in UART operations.
+
+    Returns:
+        Optional[list[float]]: List of distance readings or [1000,1000,1000] if timeout
+    """
+  global message_id
+  message_id += 1
+  msg_id = message_id
+
+  result_container = []
+  thread = threading.Thread(target=_get_ultrasonic_distance_internal,
+                           args=(result_container, msg_id))
+  thread.daemon = True
+  thread.start()
+  thread.join(timeout=0.1)
+
+  if thread.is_alive():
+    logger.warning("Ultrasonic thread timeout - abandoning thread")
     return [1000, 1000, 1000]
+
+  return result_container[0] if result_container else [1000, 1000, 1000]
 
 
 def send_wire_command(wire_number: int) -> Message:
