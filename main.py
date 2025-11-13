@@ -371,6 +371,16 @@ def main_loop():
                   f"Detected cls={cls}, area={area:.1f}, offset={dist:.1f}")
           rescue_target_position = best_target_pos
           rescue_target_size = best_target_area
+          if rescue_valid_classes == ObjectClasses.BLACK_BALL:
+            logger.debug("Valid Class:Black Ball")
+          if rescue_valid_classes == ObjectClasses.SILVER_BALL:
+            logger.debug("Valid Class:Silver Ball")
+          if rescue_valid_classes == ObjectClasses.GREEN_CAGE:
+            logger.debug("Valid Class:Green Cage")
+          if rescue_valid_classes == ObjectClasses.RED_CAGE:
+            logger.debug("Valid Class:Red Cage")
+          if rescue_valid_classes == ObjectClasses.EXIT:
+            logger.debug("Valid Class:EXIT")
           if best_target_pos is not None:
             logger.debug(
                 f"Target found offset={best_target_pos:.1f}, area={best_target_area:.1f}"
