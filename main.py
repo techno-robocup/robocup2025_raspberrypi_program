@@ -24,7 +24,7 @@ logger.info("PROCESS STARTED")
 
 # Rescue constants from modules.rescue
 P = 0.6
-WP = 0.15  # Cage P
+WP = 0.3  # Cage P
 AP = 1
 CP = 1
 BALL_CATCH_SIZE = 140000
@@ -480,8 +480,8 @@ def main_loop():
 
             else:
               diff_angle = rescue_target_position * WP
-              base_L = 1500 + diff_angle + 200
-              base_R = 1500 - diff_angle + 200
+              base_L = 1500 + diff_angle + 150
+              base_R = 1500 - diff_angle + 150
 
               # Check if cage is large enough to release ball (3.8x ball catch size)
               if rescue_target_size >= BALL_CATCH_SIZE * 3.8:
