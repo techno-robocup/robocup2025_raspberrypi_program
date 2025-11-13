@@ -323,10 +323,10 @@ def main_loop():
           # Prioritize silver balls, but switch to black if turned 360+ degrees without finding silver
           if rescue_silver_ball_cnt < 2 or rescue_cnt_turning_degrees < 360:
             rescue_valid_classes = [ObjectClasses.SILVER_BALL.value]
-            logger.debug("Valid Class:Black Ball")
+            logger.debug("Valid Class:Silver Ball")
           else:
             rescue_valid_classes = [ObjectClasses.BLACK_BALL.value]
-            logger.debug("Valid Class:Silver Ball")
+            logger.debug("Valid Class:Black Ball")
             rescue_silver_ball_cnt = 2
         else:
           if rescue_silver_ball_cnt < 2:
@@ -437,7 +437,7 @@ def main_loop():
                              math.sqrt(rescue_target_size)) * AP
                 dist_term = int(max(30,dist_term))
               else:
-                dist_term = 0
+                dist_term = -30
                 diff_angle *= 1.1
               # reposition counter logic
               #if BALL_CATCH_SIZE < rescue_target_size and abs(rescue_target_position) > 90:
