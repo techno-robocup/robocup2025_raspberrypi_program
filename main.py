@@ -303,23 +303,16 @@ def main_loop():
           # Prioritize silver balls, but switch to black if turned 360+ degrees without finding silver
           if rescue_silver_ball_cnt < 2 or rescue_cnt_turning_degrees < 360:
             rescue_valid_classes = [ObjectClasses.SILVER_BALL.value]
-            logger.debug("valid class: SILVER")
-          else:
+          elif rescue_black_ball_cnt < 1 or rescue_cnt_turning_degrees < 720:
             rescue_valid_classes = [ObjectClasses.BLACK_BALL.value]
             rescue_silver_ball_cnt = 2
-            logger.debug("valid class: BLACK")
-          #else:
-          #  rescue_valid_classes = [ObjectClasses.EXIT.value]
-          #  rescue_black_ball_cnt = 1
-          #  logger.debug("valid class: SILVER")
+          else:
+            rescue_valid_classes = [ObjectClasses.EXIT.value]
+            rescue_black_ball_cnt = 1
         else:
           rescue_valid_classes = [
               ObjectClasses.GREEN_CAGE.value
           ] if rescue_silver_ball_cnt < 2 else [ObjectClasses.RED_CAGE.value]
-          if rescue_silver_ball_cnt < 2:
-            logger.debug("valid class: GREEN")
-          else:
-            logger.debug("valid class: RED")
         results = modules.settings.yolo_results
         image_width = results[0].orig_shape[1]
         # EXPANDED FIND_BEST_TARGET LOGIC
@@ -366,6 +359,7 @@ def main_loop():
                 f"Target found offset={best_target_pos:.1f}, area={best_target_area:.1f}"
             )
           else:
+            logger.debug("No valid target found")
             if detected_classes:
               logger.debug(
                   f"No valid target found. Detected classes: {detected_classes}"
@@ -398,6 +392,9 @@ def main_loop():
           else:
             rescue_cnt_turning_degrees = 720
           if True:
+            logger.debug(
+                f"Targeting {rescue_valid_classes}, offset={rescue_target_position:.1f}. Navigating..."
+            )
             # EXPANDED SET_MOTOR_SPEEDS LOGIC
 
             if not rescue_is_ball_caching:
@@ -427,6 +424,7 @@ def main_loop():
               #        time.sleep(1.5)
               #        send_speed(1500, 1500)
               #        rescue_reposition_cnt = 0
+            
               rescue_reposition_cnt = 0
 
 
@@ -435,6 +433,9 @@ def main_loop():
 
                 # Check if robot is close enough to pick up ball (speed-based)
               if abs(diff_angle + dist_term) < 30 and abs(rescue_target_position) <= 90 :
+                logger.debug(
+                    f"Robot close to ball (base_L={base_L:.1f}, base_R={base_R:.1f}). Initiating catch_ball()"
+                )
                 logger.debug("Executing catch_ball()")
                 logger.debug("---Ball catch")
                 #send_speed(1600,1600)
@@ -464,6 +465,9 @@ def main_loop():
 
               # Check if cage is large enough to release ball (3.8x ball catch size)
               if rescue_target_size >= BALL_CATCH_SIZE * 3.8:
+                logger.debug(
+                    f"Cage large enough (size={rescue_target_size:.1f}, threshold={BALL_CATCH_SIZE * 4}). Initiating release_ball()"
+                )
                 logger.debug("Executing release_ball()")
                 logger.debug("---Ball release")
                 send_speed(1600, 1600)
@@ -497,6 +501,17 @@ def main_loop():
         )
         logger.debug(
             f"Target offset:{rescue_target_position} size:{rescue_target_size}")
+
+      # Update modules.rescue values for compatibility
+      #modules.rescue.L_Motor_Value = rescue_L_Motor_Value
+      #modules.rescue.R_Motor_Value = rescue_R_Motor_Value
+      #modules.rescue.robot.silver_ball_cnt = rescue_silver_ball_cnt
+      #modules.rescue.robot.black_ball_cnt = rescue_black_ball_cnt
+      #modules.rescue.robot.is_ball_caching = rescue_is_ball_caching
+      #modules.rescue.robot.target_position = rescue_target_position
+      #modules.rescue.robot.target_size = rescue_target_size
+      #modules.rescue.robot.cnt_turning_degrees = rescue_cnt_turning_degrees
+      #modules.rescue.robot.cnt_turning_side = rescue_cnt_turning_side
 
       # Handle arm movements
     elif is_object:
