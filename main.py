@@ -313,8 +313,9 @@ def main_loop():
       if modules.settings.yolo_results is None:
         logger.debug("No YOLO results available, stopping motors.")
         # EXPANDED CHANGE_POSITION LOGIC
-        send_speed(1750, 1250)
-        time.sleep(TURN_45_TIME)
+        previous_time_rotarymars = time.time()
+        while time.time() - previous_time_rotarymars < TURN_45_TIME:
+          send_speed(1750, 1250)
         send_speed(1500, 1500)
         rescue_cnt_turning_degrees += 35
         logger.debug(f"cnt degrees{rescue_cnt_turning_degrees}")
@@ -419,8 +420,9 @@ def main_loop():
         elif rescue_target_position is None or rescue_target_size is None:
           logger.debug("No target found -> executing change_position()")
           # EXPANDED CHANGE_POSITION LOGIC
-          send_speed(1750, 1250)
-          time.sleep(TURN_45_TIME)
+          prev_time_rotarymars = time.time()
+          if time.time() - prev_time_rotarymars < TURN_45_TIME
+            send_speed(1750, 1250)
           send_speed(1500, 1500)
           rescue_cnt_turning_degrees += 45
         else:
@@ -441,8 +443,9 @@ def main_loop():
                              math.sqrt(rescue_target_size)) * AP
                 dist_term = int(max(30,dist_term))
               else:
-                send_speed(1470,1470)
-                time.sleep(1)
+                prev_time_rotarymars = time.time()
+                if time.time() - prev_time_rotarymars < 1:
+                  send_speed(1450,1450)
                 send_speed(1500,1500)
                 dist_term = 0
                 diff_angle = 0
@@ -480,8 +483,9 @@ def main_loop():
                 # Store which ball type we're catching
                 rescue_current_ball_type = rescue_valid_classes[0]
                 logger.debug(f"Caught ball type: {rescue_current_ball_type}")
-                send_speed(1600,1600)
-                time.sleep(1.1)
+                prev_time_rotarymars = time.time()
+                if time.time() - prev_time_rotarymars < 1.1:
+                  send_speed(1600,1600)
                 send_speed(1500, 1500)
                 send_arm(1024, 0)
                 time.sleep(2)
@@ -489,8 +493,9 @@ def main_loop():
                 time.sleep(0.5)
                 send_arm(3072, 1)
                 time.sleep(0.5)
-                send_speed(1450, 1450)
-                time.sleep(1)
+                prev_time_rotarymars = time.time()
+                while time.time() - prev_time_rotarymars < 1:
+                  send_speed(1450, 1450)
                 send_speed(1500, 1500)
                 rescue_is_ball_caching = True
                 rescue_L_Motor_Value = MOTOR_NEUTRAL
@@ -512,20 +517,24 @@ def main_loop():
                 )
                 logger.debug("Executing release_ball()")
                 logger.debug("---Ball release")
-                send_speed(1600, 1600)
-                time.sleep(2)
+                prev_time_rotarymars = time.time()
+                if time.time() - prev_time_rotarymars < 2:
+                  send_speed(1600, 1600)
                 send_speed(1500, 1500)
-                send_speed(1400,1400)
-                time.sleep(0.5)
+                prev_time_rotarymars = time.time()
+                while time.time() - prev_time_rotarymars < 0.5:
+                  send_speed(1400,1400)
                 send_speed(1500,1500)
                 send_arm(1536, 0)
                 time.sleep(1.5)
                 send_arm(3072, 0)
                 time.sleep(0.5)
-                send_speed(1400, 1400)
-                time.sleep(1)
-                send_speed(1750, 1250)
-                time.sleep(TURN_180_TIME)
+                prev_time_rotarymars = time.time()
+                while time.time() - prev_time_rotarymars < 1:
+                  send_speed(1400, 1400)
+                prev_time_rotarymars = time.time()
+                if time.time() - prev_time_rotarymars < TURN_180_TIME:
+                  send_speed(1750, 1250)
                 send_speed(1500, 1500)
                 rescue_is_ball_caching = False
                 rescue_L_Motor_Value = MOTOR_NEUTRAL
@@ -552,10 +561,12 @@ def main_loop():
       # Handle arm movements
     elif is_object:
       if not object_second_phase:
-        send_speed(1750, 1250)
-        time.sleep(1.5)
-        send_speed(1700, 1700)
-        time.sleep(1)
+        prev_time_rotarymars = time.time()
+        if time.time() - prev_time_rotarymars < 1.5:
+          send_speed(1750, 1250)
+        prev_time_rotarymars = time.time()
+        if time.time() - prev_time_rotarymars < 1:
+          send_speed(1700, 1700)
         object_second_phase = True
       else:
         if distances[0] < 8:
@@ -646,17 +657,21 @@ def main_loop():
             should_detect = True
             break
         if (all_checks[0] or all_checks[1]) and should_detect:
-          send_speed(compute_default_speed(), compute_default_speed())
-          time.sleep(0.5)
+          prev_time_rotarymars = time.time()
+          while time.time() - prev_time_rotarymars < 0.5:
+            send_speed(compute_default_speed(), compute_default_speed())
           if all_checks[0] and all_checks[1]:
-            send_speed(1750, 1250)
-            time.sleep(3.5)
+            prev_time_rotarymars = time.time()
+            while time.time() - prev_time_rotarymars < 3.5:
+              send_speed(1750, 1250)
           elif all_checks[0]:
-            send_speed(1750, 1250)
-            time.sleep(1.5)
+            prev_time_rotarymars = time.time()
+            while time.time() - prev_time_rotarymars < 1.5:
+              send_speed(1750, 1250)
           elif all_checks[1]:
-            send_speed(1200, 1750)
-            time.sleep(1.5)
+            prev_time_rotarymars = time.time()
+            while time.time() - prev_time_rotarymars < 1.5:
+              send_speed(1200, 1750)
 
   except KeyboardInterrupt:
     logger.info("STOPPING PROCESS BY KeyboardInterrupt")
