@@ -421,7 +421,7 @@ def main_loop():
           logger.debug("No target found -> executing change_position()")
           # EXPANDED CHANGE_POSITION LOGIC
           prev_time_rotarymars = time.time()
-          if time.time() - prev_time_rotarymars < TURN_45_TIME
+          while time.time() - prev_time_rotarymars < TURN_45_TIME:
             send_speed(1750, 1250)
           send_speed(1500, 1500)
           rescue_cnt_turning_degrees += 45
