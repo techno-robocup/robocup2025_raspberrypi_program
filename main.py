@@ -37,7 +37,7 @@ FRONT_CLEAR_THRESHOLD = 3.0
 MOTOR_MIN = 1000
 MOTOR_MAX = 2000
 MOTOR_NEUTRAL = 1500
-RESCUE_FLAG_TIME = 4.0
+RESCUE_FLAG_TIME = 3.0
 
 
 class ObjectClasses(Enum):
@@ -316,6 +316,7 @@ def main_loop():
         time.sleep(TURN_45_TIME)
         send_speed(1500, 1500)
         rescue_cnt_turning_degrees += 35
+        logger.debug(f"cnt degrees{rescue_cnt_turning_degrees}")
         logger.debug(f"L: {rescue_L_Motor_Value} R: {rescue_R_Motor_Value}")
       else:
         rescue_last_yolo_time = time.time()
@@ -367,6 +368,7 @@ def main_loop():
                   f"Detected cls={cls}, area={area:.1f}, offset={dist:.1f}")
             elif not rescue_is_ball_caching and cls == ObjectClasses.SILVER_BALL.value:
               rescue_cnt_turning_degrees = 0
+              rescue_valid_classes = [ObjectClasses.SILVER_BALL.value]
               x_center, y_center, w, h = map(float, box.xywh[0])
               dist = x_center - cx
               area = w * h
@@ -419,12 +421,7 @@ def main_loop():
           send_speed(1500, 1500)
           rescue_cnt_turning_degrees += 45
         else:
-          if rescue_silver_ball_cnt <2:
-            rescue_cnt_turning_degrees = 0
-          elif rescue_black_ball_cnt < 1:
-            rescue_cnt_turning_degrees = 360
-          else:
-            rescue_cnt_turning_degrees = 720
+          rescue_cnt_turning_degrees = 0 if rescue_valid_classes == [ObjectClasses.SILVER_BALL.value] else 360
           if True:
             logger.debug(
                 f"Targeting {rescue_valid_classes}, offset={rescue_target_position:.1f}. Navigating..."
@@ -438,8 +435,8 @@ def main_loop():
                              math.sqrt(rescue_target_size)) * AP
                 dist_term = int(max(30,dist_term))
               else:
-                dist_term = -30
-                diff_angle *= 1.1
+                dist_term = -35
+                diff_angle *= 0
               # reposition counter logic
               #if BALL_CATCH_SIZE < rescue_target_size and abs(rescue_target_position) > 90:
               #    rescue_reposition_cnt += 1
