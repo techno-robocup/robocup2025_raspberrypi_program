@@ -536,6 +536,7 @@ def main_loop():
                   rescue_black_ball_cnt += 1
                   logger.debug(f"Released black ball, count: {rescue_black_ball_cnt}")
                 rescue_current_ball_type = None
+                rescue_cnt_turning_degrees = 0  # Reset to search for silver balls again
               else:
                 rescue_L_Motor_Value = int(min(max(base_L, 1000), 2000))
                 rescue_R_Motor_Value = int(min(max(base_R, 1000), 2000))
