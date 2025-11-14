@@ -432,14 +432,17 @@ def main_loop():
             # EXPANDED SET_MOTOR_SPEEDS LOGIC
 
             if not rescue_is_ball_caching:
-              diff_angle = rescue_target_position * P
+              if abs(rescue_target_position) > 60:
+                diff_angle = rescue_target_position * P
+              else:
+                diff_angle = 0
               if BALL_CATCH_SIZE > rescue_target_size:
                 dist_term = (math.sqrt(BALL_CATCH_SIZE) -
                              math.sqrt(rescue_target_size)) * AP
                 dist_term = int(max(30,dist_term))
               else:
-                send_speed(1450,1450)
-                time.sleep(0.5)
+                send_speed(1470,1470)
+                time.sleep(1)
                 send_speed(1500,1500)
                 dist_term = 0
                 diff_angle = 0
@@ -461,8 +464,7 @@ def main_loop():
               #        time.sleep(1.5)
               #        send_speed(1500, 1500)
               #        rescue_reposition_cnt = 0
-            
-              rescue_reposition_cnt = 0
+              #rescue_reposition_cnt = 0
 
 
               base_L = 1500 + diff_angle + dist_term
@@ -479,7 +481,7 @@ def main_loop():
                 rescue_current_ball_type = rescue_valid_classes[0]
                 logger.debug(f"Caught ball type: {rescue_current_ball_type}")
                 send_speed(1600,1600)
-                time.sleep(1.3)
+                time.sleep(1.1)
                 send_speed(1500, 1500)
                 send_arm(1024, 0)
                 time.sleep(2)
@@ -546,17 +548,6 @@ def main_loop():
         )
         logger.debug(
             f"Target offset:{rescue_target_position} size:{rescue_target_size}")
-
-      # Update modules.rescue values for compatibility
-      #modules.rescue.L_Motor_Value = rescue_L_Motor_Value
-      #modules.rescue.R_Motor_Value = rescue_R_Motor_Value
-      #modules.rescue.robot.silver_ball_cnt = rescue_silver_ball_cnt
-      #modules.rescue.robot.black_ball_cnt = rescue_black_ball_cnt
-      #modules.rescue.robot.is_ball_caching = rescue_is_ball_caching
-      #modules.rescue.robot.target_position = rescue_target_position
-      #modules.rescue.robot.target_size = rescue_target_size
-      #modules.rescue.robot.cnt_turning_degrees = rescue_cnt_turning_degrees
-      #modules.rescue.robot.cnt_turning_side = rescue_cnt_turning_side
 
       # Handle arm movements
     elif is_object:
@@ -686,6 +677,7 @@ if __name__ == "__main__":
         main_loop()
       else:
         send_speed(1500, 1500)
+        send_arm(3072,0)
         modules.settings.stop_requested = False
         modules.settings.is_rescue_area = False
         is_object = False
