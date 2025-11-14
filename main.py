@@ -55,6 +55,7 @@ rescue_valid_classes = [ObjectClasses.SILVER_BALL.value]
 rescue_silver_ball_cnt = 0
 rescue_black_ball_cnt = 0
 rescue_is_ball_caching = False
+rescue_current_ball_type = None
 rescue_target_position = None
 rescue_target_size = None
 rescue_cnt_turning_degrees = 0
@@ -279,7 +280,7 @@ def main_loop():
   #global rescue_L_U_SONIC, rescue_F_U_SONIC, rescue_R_U_SONIC
   global rescue_Moving_Flag
   global none_slop_time,is_slop_none,rescue_reposition_cnt
-  global ultrasonic_increment, distances, rescue_last_yolo_time
+  global ultrasonic_increment, distances, rescue_last_yolo_time, rescue_current_ball_type
   message_id += 1
 
   try:
@@ -330,13 +331,15 @@ def main_loop():
             logger.debug("Valid Class:Black Ball")
             rescue_silver_ball_cnt = 2
         else:
-          if rescue_silver_ball_cnt < 2:
-            logger.debug("Valid Class:Green Cage")
+          if rescue_current_ball_type == ObjectClasses.SILVER_BALL.value:
+            rescue_valid_classes = [ObjectClasses.GREEN_CAGE.value]
+            logger.debug("Valid Class:Green Cage (holding silver ball)")
+          elif rescue_current_ball_type == ObjectClasses.BLACK_BALL.value:
+            rescue_valid_classes = [ObjectClasses.RED_CAGE.value]
+            logger.debug("Valid Class:Red Cage (holding black ball)")
           else:
-            logger.debug("Valid Class:Red Cage")
-          rescue_valid_classes = [
-              ObjectClasses.GREEN_CAGE.value
-          ] if rescue_silver_ball_cnt < 2 else [ObjectClasses.RED_CAGE.value]
+            rescue_valid_classes = [ObjectClasses.GREEN_CAGE.value]
+            logger.debug("Valid Class:Green Cage (default)")
         results = modules.settings.yolo_results
         image_width = results[0].orig_shape[1]
         # EXPANDED FIND_BEST_TARGET LOGIC
@@ -469,6 +472,9 @@ def main_loop():
                 )
                 logger.debug("Executing catch_ball()")
                 logger.debug("---Ball catch")
+                # Store which ball type we're catching
+                rescue_current_ball_type = rescue_valid_classes[0]
+                logger.debug(f"Caught ball type: {rescue_current_ball_type}")
                 send_speed(1600,1600)
                 time.sleep(1.3)
                 send_speed(1500, 1500)
@@ -519,10 +525,14 @@ def main_loop():
                 rescue_is_ball_caching = False
                 rescue_L_Motor_Value = MOTOR_NEUTRAL
                 rescue_R_Motor_Value = MOTOR_NEUTRAL
-                if rescue_valid_classes == ObjectClasses.GREEN_CAGE.value:
-                  rescue_silver_ball_cnt +=1
-                else:
-                  rescue_black_ball_cnt +=1
+                # Update ball counts based on which ball was released
+                if rescue_current_ball_type == ObjectClasses.SILVER_BALL.value:
+                  rescue_silver_ball_cnt += 1
+                  logger.debug(f"Released silver ball, count: {rescue_silver_ball_cnt}")
+                elif rescue_current_ball_type == ObjectClasses.BLACK_BALL.value:
+                  rescue_black_ball_cnt += 1
+                  logger.debug(f"Released black ball, count: {rescue_black_ball_cnt}")
+                rescue_current_ball_type = None
               else:
                 rescue_L_Motor_Value = int(min(max(base_L, 1000), 2000))
                 rescue_R_Motor_Value = int(min(max(base_R, 1000), 2000))
@@ -682,6 +692,7 @@ if __name__ == "__main__":
         rescue_silver_ball_cnt = 0
         rescue_black_ball_cnt = 0
         rescue_is_ball_caching = False
+        rescue_current_ball_type = None
         rescue_target_position = None
         rescue_target_size = None
         rescue_cnt_turning_degrees = 0
