@@ -437,18 +437,13 @@ def main_loop():
 
             if not rescue_is_ball_caching:
               if abs(rescue_target_position) > 60:
-                  diff_angle = rescue_target_position * P
+                diff_angle = rescue_target_position * P
               else:
-                  diff_angle = 0
-              filtered_angle = 0.7 * previous_angle + 0.3 * diff_angle
-              previous_angle = filtered_angle
-
+                diff_angle = 0
               if BALL_CATCH_SIZE > rescue_target_size:
-                  dist_term = (math.sqrt(BALL_CATCH_SIZE) -
-                              math.sqrt(rescue_target_size)) * AP
-                  dist_term = int(max(30, dist_term))
-                  near_factor = max(0.25, min(1.0, 1.0 - (rescue_target_size / 300.0)))
-
+                dist_term = (math.sqrt(BALL_CATCH_SIZE) -
+                             math.sqrt(rescue_target_size)) * AP
+                dist_term = int(max(30,dist_term))
               else:
                   prev_time_rotarymars = time.time()
                   if time.time() - prev_time_rotarymars < 1:
@@ -511,7 +506,7 @@ def main_loop():
                 logger.debug("Executing release_ball()")
                 logger.debug("---Ball release")
                 prev_time_rotarymars = time.time()
-                if time.time() - prev_time_rotarymars < 3:
+                if time.time() - prev_time_rotarymars < 2:
                   send_speed(1600, 1600)
                 send_speed(1500, 1500)
                 prev_time_rotarymars = time.time()
