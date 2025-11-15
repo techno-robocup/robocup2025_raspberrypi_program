@@ -463,7 +463,7 @@ def main_loop():
                 dist_term = int(max(60,dist_term))
               else:
                 prev_time_rotarymars = time.time()
-                if time.time() - prev_time_rotarymars < 1:
+                while time.time() - prev_time_rotarymars < 3:
                   send_speed(1450,1450)
                 send_speed(1500,1500)
                 dist_term = 0
@@ -549,8 +549,8 @@ def main_loop():
                 logger.debug("Executing release_ball()")
                 logger.debug("---Ball release")
                 prev_time_rotarymars = time.time()
-                if time.time() - prev_time_rotarymars < 8:
-                  send_speed(1650, 1650)
+                while time.time() - prev_time_rotarymars < 4:
+                  send_speed(1700, 1700)
                 send_speed(1500, 1500)
                 prev_time_rotarymars = time.time()
                 while time.time() - prev_time_rotarymars < 0.5:
@@ -564,7 +564,7 @@ def main_loop():
                 while time.time() - prev_time_rotarymars < 1:
                   send_speed(1400, 1400)
                 prev_time_rotarymars = time.time()
-                if time.time() - prev_time_rotarymars < TURN_180_TIME:
+                while time.time() - prev_time_rotarymars < TURN_180_TIME:
                   send_speed(1750, 1250)
                 send_speed(1500, 1500)
                 rescue_is_ball_caching = False
