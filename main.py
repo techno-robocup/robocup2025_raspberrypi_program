@@ -550,7 +550,7 @@ def main_loop():
                 logger.debug("Executing release_ball()")
                 logger.debug("---Ball release")
                 prev_time_rotarymars = time.time()
-                while time.time() - prev_time_rotarymars < 8:
+                while time.time() - prev_time_rotarymars < 4:
                   send_speed(1700, 1700)
                 send_speed(1500, 1500)
                 prev_time_rotarymars = time.time()
