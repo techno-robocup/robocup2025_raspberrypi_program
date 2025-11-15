@@ -69,6 +69,7 @@ rescue_R_U_SONIC = None
 rescue_Moving_Flag = False
 rescue_reposition_cnt = 0
 rescue_last_yolo_time = time.time()
+previous_angle = 100
 
 # Initialize camera objects
 Rescue_Camera = modules.camera.Camera(
@@ -281,6 +282,7 @@ def main_loop():
   global rescue_Moving_Flag
   global none_slop_time,is_slop_none,rescue_reposition_cnt
   global ultrasonic_increment, distances, rescue_last_yolo_time, rescue_current_ball_type
+  global previous_angle
   message_id += 1
 
   try:
