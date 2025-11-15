@@ -58,6 +58,9 @@ rescue_is_ball_caching = False
 rescue_current_ball_type = None
 rescue_target_position = None
 rescue_target_size = None
+rescue_target_y = None
+rescue_target_w = None
+rescue_target_h = None
 rescue_cnt_turning_degrees = 0
 rescue_cnt_turning_side = 0
 rescue_L_Motor_Value = MOTOR_NEUTRAL
@@ -276,6 +279,7 @@ def main_loop():
   global message_id, is_object, object_second_phase, Is_Rescue_Camera_Start
   global rescue_valid_classes, rescue_silver_ball_cnt, rescue_black_ball_cnt
   global rescue_is_ball_caching, rescue_target_position, rescue_target_size
+  global rescue_target_y, rescue_target_w, rescue_target_h
   global rescue_cnt_turning_degrees, rescue_cnt_turning_side
   global rescue_L_Motor_Value, rescue_R_Motor_Value, rescue_Arm_Move_Flag
   #global rescue_L_U_SONIC, rescue_F_U_SONIC, rescue_R_U_SONIC
@@ -344,6 +348,7 @@ def main_loop():
             rescue_valid_classes = [ObjectClasses.GREEN_CAGE.value]
             logger.debug("Valid Class:Green Cage (default)")
         results = modules.settings.yolo_results
+        image_height = results[0].orig_shape[0]
         image_width = results[0].orig_shape[1]
         # EXPANDED FIND_BEST_TARGET LOGIC
         boxes = results[0].boxes
@@ -354,6 +359,9 @@ def main_loop():
         else:
           best_target_pos = None
           best_target_area = None
+          best_target_y = None
+          best_target_w = None
+          best_target_h = None
           min_dist = float("inf")
           cx = image_width / 2.0
           for box in boxes:
@@ -370,6 +378,9 @@ def main_loop():
                 min_dist = abs(dist)
                 best_target_pos = dist
                 best_target_area = area
+                best_target_y = y_center
+                best_target_w = w
+                best_target_h = h
               logger.debug(
                   f"Detected cls={cls}, area={area:.1f}, offset={dist:.1f}")
             elif not rescue_is_ball_caching and cls == ObjectClasses.SILVER_BALL.value:
@@ -382,10 +393,16 @@ def main_loop():
                 min_dist = abs(dist)
                 best_target_pos = dist
                 best_target_area = area
+                best_target_y = y_center
+                best_target_w = w
+                best_target_h = h
               logger.debug(
                   f"Detected cls={cls}, area={area:.1f}, offset={dist:.1f}")
           rescue_target_position = best_target_pos
           rescue_target_size = best_target_area
+          rescue_target_y = best_target_y
+          rescue_target_w = best_target_w
+          rescue_target_h = best_target_h
           if rescue_valid_classes == ObjectClasses.BLACK_BALL:
             logger.debug("Valid Class:Black Ball")
           if rescue_valid_classes == ObjectClasses.SILVER_BALL:
@@ -475,8 +492,18 @@ def main_loop():
               base_L = 1500 + diff_angle + dist_term
               base_R = 1500 - diff_angle + dist_term
 
-                # Check if robot is close enough to pick up ball (speed-based)
-              if abs(diff_angle + dist_term) < 30 and abs(rescue_target_position) <= 90 :
+              # Check if ball is in bottom 1/3 and centered horizontally
+              # Ball Y is in bottom 1/3 of image
+              is_bottom_third = rescue_target_y and rescue_target_y > (image_height * 2 / 3)
+              # Ball's left and right edges include the center X coordinate
+              if rescue_target_w:
+                ball_left = rescue_target_position - rescue_target_w / 2 + image_width / 2
+                ball_right = rescue_target_position + rescue_target_w / 2 + image_width / 2
+                includes_center = ball_left <= image_width / 2 <= ball_right
+              else:
+                includes_center = False
+
+              if is_bottom_third and includes_center:
                 logger.debug(
                     f"Robot close to ball (base_L={base_L:.1f}, base_R={base_R:.1f}). Initiating catch_ball()"
                 )
@@ -708,6 +735,9 @@ if __name__ == "__main__":
         rescue_current_ball_type = None
         rescue_target_position = None
         rescue_target_size = None
+        rescue_target_y = None
+        rescue_target_w = None
+        rescue_target_h = None
         rescue_cnt_turning_degrees = 0
         rescue_cnt_turning_side = 0
         rescue_L_Motor_Value = MOTOR_NEUTRAL
