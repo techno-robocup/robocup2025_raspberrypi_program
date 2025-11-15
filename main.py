@@ -445,21 +445,35 @@ def main_loop():
                              math.sqrt(rescue_target_size)) * AP
                 dist_term = int(max(30,dist_term))
               else:
-                  prev_time_rotarymars = time.time()
-                  if time.time() - prev_time_rotarymars < 1:
-                      send_speed(1450, 1450)
-                  else:
-                      send_speed(1500, 1500)
-                  prev_time_rotarymars = time.time()
+                prev_time_rotarymars = time.time()
+                if time.time() - prev_time_rotarymars < 1:
+                  send_speed(1450,1450)
+                send_speed(1500,1500)
+                dist_term = 0
+                diff_angle = 0
+              # reposition counter logic
+              #if BALL_CATCH_SIZE < rescue_target_size and abs(rescue_target_position) > 90:
+              #    rescue_reposition_cnt += 1
+              #    logger.debug(f"Repositioning... count={rescue_reposition_cnt}")
+              #    if rescue_target_position > 0:
+              #        send_speed(1530, 1470)
+              #    else:
+              #        send_speed(1470, 1530)
+              #    time.sleep(0.15)
+              #    send_speed(1500, 1500)
+              #    diff_angle = 0
+              #    dist_term = 0
+              #    if rescue_reposition_cnt >= 5:
+              #        logger.debug("Reposition stuck -> performing backward reset")
+              #        send_speed(1450, 1450)
+              #        time.sleep(1.5)
+              #        send_speed(1500, 1500)
+              #        rescue_reposition_cnt = 0
+              #rescue_reposition_cnt = 0
 
-                  dist_term = 0
-                  diff_angle = 0
-                  filtered_angle = 0
 
-              turn = filtered_angle * near_factor + dist_term
-
-              base_L = 1500 + turn
-              base_R = 1500 - turn
+              base_L = 1500 + diff_angle + dist_term
+              base_R = 1500 - diff_angle + dist_term
 
                 # Check if robot is close enough to pick up ball (speed-based)
               if abs(diff_angle + dist_term) < 30 and abs(rescue_target_position) <= 90 :
