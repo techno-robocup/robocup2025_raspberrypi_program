@@ -23,7 +23,7 @@ logger = modules.log.get_logger()
 logger.info("PROCESS STARTED")
 
 # Rescue constants from modules.rescue
-P = 0.6
+P = 0.5
 WP = 0.3  # Cage P
 AP = 0.9
 CP = 1
@@ -486,7 +486,7 @@ def main_loop():
                 rescue_current_ball_type = rescue_valid_classes[0]
                 logger.debug(f"Caught ball type: {rescue_current_ball_type}")
                 prev_time_rotarymars = time.time()
-                if time.time() - prev_time_rotarymars < 1.1:
+                if time.time() - prev_time_rotarymars < 1.3:
                   send_speed(1600,1600)
                 send_speed(1500, 1500)
                 send_arm(1024, 0)
@@ -520,7 +520,7 @@ def main_loop():
                 logger.debug("Executing release_ball()")
                 logger.debug("---Ball release")
                 prev_time_rotarymars = time.time()
-                if time.time() - prev_time_rotarymars < 2:
+                if time.time() - prev_time_rotarymars < 4:
                   send_speed(1600, 1600)
                 send_speed(1500, 1500)
                 prev_time_rotarymars = time.time()
