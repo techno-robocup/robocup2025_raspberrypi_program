@@ -514,7 +514,7 @@ def main_loop():
                 logger.debug(f"Caught ball type: {rescue_current_ball_type}")
                 prev_time_rotarymars = time.time()
                 if time.time() - prev_time_rotarymars < 1.3:
-                  send_speed(1600,1600)
+                  send_speed(1650,1650)
                 send_speed(1500, 1500)
                 send_arm(1024, 0)
                 time.sleep(2)
