@@ -69,7 +69,7 @@ rescue_R_U_SONIC = None
 rescue_Moving_Flag = False
 rescue_reposition_cnt = 0
 rescue_last_yolo_time = time.time()
-previous_angle = 100
+previous_angle = 0
 
 # Initialize camera objects
 Rescue_Camera = modules.camera.Camera(
