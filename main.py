@@ -515,7 +515,7 @@ def main_loop():
                 send_arm(2500, 0)
                 time.sleep(1)
                 prev_time_rotarymars = time.time()
-                if time.time() - prev_time_rotarymars < 1.3:
+                if time.time() - prev_time_rotarymars < 3:
                   send_speed(1650,1650)
                 send_speed(1500, 1500)
                 send_arm(1024, 0)
