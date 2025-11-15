@@ -512,7 +512,7 @@ def main_loop():
                 # Store which ball type we're catching
                 rescue_current_ball_type = rescue_valid_classes[0]
                 logger.debug(f"Caught ball type: {rescue_current_ball_type}")
-                send_arm(2500, 0)
+                send_arm(1300, 0)
                 time.sleep(1)
                 prev_time_rotarymars = time.time()
                 if time.time() - prev_time_rotarymars < 3:
