@@ -460,7 +460,7 @@ def main_loop():
               if BALL_CATCH_SIZE > rescue_target_size:
                 dist_term = (math.sqrt(BALL_CATCH_SIZE) -
                              math.sqrt(rescue_target_size)) * AP
-                dist_term = int(max(30,dist_term))
+                dist_term = int(max(60,dist_term))
               else:
                 prev_time_rotarymars = time.time()
                 if time.time() - prev_time_rotarymars < 1:
@@ -547,7 +547,7 @@ def main_loop():
                 logger.debug("Executing release_ball()")
                 logger.debug("---Ball release")
                 prev_time_rotarymars = time.time()
-                if time.time() - prev_time_rotarymars < 6:
+                if time.time() - prev_time_rotarymars < 8:
                   send_speed(1650, 1650)
                 send_speed(1500, 1500)
                 prev_time_rotarymars = time.time()
