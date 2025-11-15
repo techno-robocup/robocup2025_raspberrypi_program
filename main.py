@@ -523,7 +523,7 @@ def main_loop():
                 prev_time_rotarymars = time.time()
                 while time.time() - prev_time_rotarymars < 2:
                   send_speed(1600, 1600)
-                send_arm(1024, 1)
+                send_arm(1000, 1)
                 time.sleep(0.5)
                 send_arm(3072, 1)
                 time.sleep(0.5)
