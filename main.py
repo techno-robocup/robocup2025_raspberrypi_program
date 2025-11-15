@@ -450,6 +450,7 @@ def main_loop():
                   near_factor = max(0.25, min(1.0, 1.0 - (rescue_target_size / 300.0)))
 
               else:
+                  prev_time_rotarymars = time.time()
                   if time.time() - prev_time_rotarymars < 1:
                       send_speed(1450, 1450)
                   else:
