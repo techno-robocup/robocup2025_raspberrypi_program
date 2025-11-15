@@ -494,7 +494,7 @@ def main_loop():
 
               # Check if ball is in bottom 1/3 and centered horizontally
               # Ball Y is in bottom 1/3 of image
-              is_bottom_third = rescue_target_y and rescue_target_y > (image_height * 2 / 3)
+              is_bottom_third = rescue_target_y and rescue_target_y > (image_height * 3 / 4)
               # Ball's left and right edges include the center X coordinate
               if rescue_target_w:
                 ball_left = rescue_target_position - rescue_target_w / 2 + image_width / 2
